@@ -1,0 +1,40 @@
+{% extends "layout_public.html.twig" %}
+{% block meta_title %}{{ 'About us'|trans }}{% endblock %}
+{% set company = guest.system_company %}
+{% block body_class %}d-flex flex-column{% endblock %}
+{% block body %}
+<div class="page page-center">
+   <div class="container container-narrow py-4">
+      <div class="text-center mb-4">
+         <a href="{{'/'|link }}" class="navbar-brand navbar-brand-autodark"><img src="{{company.logo_url}}" alt="{{company.name}}" /></a>
+      </div>
+      <div class="card card-md">
+         <div class="card-header">
+            <div>
+               <h3 class="card-title">
+                  {{ 'About us'|trans }}
+               </h3>
+               <p class="card-subtitle">
+                  {{ company.signature }}
+               </p>
+            </div>
+         </div>
+         <div class="card-body">
+            <div class="markdown">
+               {{ company.note|markdown }}
+            </div>
+            <div class="mt-3 text-center">
+               <a href="{{ '/'|link }}" class="btn btn-primary" title="{{ 'Back to Homepage'|trans }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M9 14l-4 -4l4 -4"></path>
+                     <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
+                  </svg>
+                  {{ 'Back to Homepage'|trans }}
+               </a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

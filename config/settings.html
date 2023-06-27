@@ -1,0 +1,158 @@
+<fieldset>
+    <legend>Login page</legend>
+
+    <table>
+        <tr>
+            <td><label>Show logo</label></td>
+            <td>
+                <label><input type="radio" name="login_page_show_logo" value="1" id="login_page_show_logo_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="login_page_show_logo" value="0" id="login_page_show_logo_0"/>No</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label>Logo URL</label></td>
+            <td><input type="text" name="login_page_logo_url" id="login_page_logo_url" value=""/></td>
+        </tr>
+
+        <tr>
+            <td><label>Show password reset link</label></td>
+            <td>
+                <label><input type="radio" name="show_password_reset_link" value="1" id="show_password_reset_link_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="show_password_reset_link" value="0" id="show_password_reset_link_0"/>No</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label>Show signup link</label></td>
+            <td>
+                <label><input type="radio" name="show_signup_link" value="1" id="show_signup_link_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="show_signup_link" value="0" id="show_signup_link_0"/>No</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label>Show remember me link</label></td>
+            <td>
+                <label><input type="radio" name="login_page_show_remember_me" value="1" id="login_page_show_remember_me_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="login_page_show_remember_me" value="0" id="login_page_show_remember_me_0"/>No</label>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Breadcrumbs</legend>
+
+    <table>
+        <tr>
+            <td><label>Show breadcrumbs</label></td>
+            <td>
+                <label><input type="radio" name="show_breadcrumb" value="1" id="show_breadcrumb_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="show_breadcrumb" value="0" id="show_breadcrumb_0"/>No</label>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Hide breadcrumbs on dashboard</label></td>
+            <td>
+                <label><input type="radio" name="hide_dashboard_breadcrumb" value="1" id="hide_dashboard_breadcrumb_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="hide_dashboard_breadcrumb" value="0" id="hide_dashboard_breadcrumb_0"/>No</label>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Dashboard</legend>
+
+    <table>
+        <tr>
+            <td><label>Enable Dashboard for Guests</label></td>
+            <td>
+                <label><input type="radio" name="require_login" value="0" id="require_login_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="require_login" value="1" id="require_login_0"/>No</label>
+            </td>
+        </tr>
+    </table>
+    <h3>Showcase</h3>
+    <table>
+        <tr>
+            <td><label>Enable Showcase</label></td>
+            <td>
+                <label><input type="radio" name="showcase_enabled" value="1" id="showcase_enabled_1"/>Yes</label>
+                <label><input type="radio" name="showcase_enabled" value="0" id="showcase_enabled_0" checked="checked"/>No</label>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Showcase Size</label></td>
+            <td>
+                <label><input type="radio" name="showcase_size" value="1" id="showcase_size_1"/>Standard</label>
+                <label><input type="radio" name="showcase_size" value="2" id="showcase_size_2"/>Smaller</label>
+                <label><input type="radio" name="showcase_size" value="3" id="showcase_size_3" checked="checked"/>Smallest</label>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="showcase_text">Showcase text</label></td>
+            <td><textarea id="showcase_text" name="showcase_text"></textarea></td>
+        </tr>
+        <tr>
+            <td><label for="showcase_button_title">Showcase button title</label></td>
+            <td><input type="text" name="showcase_button_title" id="showcase_button_title" value=""/></td>
+        </tr>
+        <tr>
+            <td><label for="showcase_button_url">Showcase link URL</label></td>
+            <td><input type="text" name="showcase_button_url" id="showcase_button_url" value=""/></td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Meta fields</legend>
+
+    <table>
+        <tr>
+            <td><label for="meta_title">Meta title suffix</label></td>
+            <td><input type="text" name="meta_title" id="meta_title" value=""/></td>
+        </tr>
+
+        <tr>
+            <td><label for="meta_description">Meta description</label></td>
+            <td><input type="text" name="meta_description" id="meta_description" value=""/></td>
+        </tr>
+
+        <tr>
+            <td><label for="meta_keywords">Meta keywords</label></td>
+            <td><input type="text" name="meta_keywords" id="meta_keywords" value=""/></td>
+        </tr>
+
+        <tr>
+            <td><label for="meta_robots">Meta robots</label></td>
+            <td><input type="text" name="meta_robots" id="meta_robots" value=""/></td>
+        </tr>
+
+        <tr>
+            <td><label for="meta_author">Meta author</label></td>
+            <td><input type="text" name="meta_author" id="meta_author" value=""/></td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Footer</legend>
+
+    <table>
+    <tr>
+        <td><label for="footer_signature">Footer text (instead of company signature)</label></td>
+        <td><input type="text" name="footer_signature" id="footer_signature" value=""/></td>
+    </tr>
+    </table>
+
+    <h3>Javascript</h3>
+    <table>
+        <tr>
+            <td><label for="meta_title">Add javascript to client area footer</label></td>
+            <td><textarea name="inject_javascript" id="inject_javascript"></textarea></td>
+        </tr>
+    </table>
+
+</fieldset>

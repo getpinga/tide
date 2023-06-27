@@ -1,0 +1,192 @@
+{% import "macro_functions.html.twig" as mf %}
+<div class="row row-deck row-cards mb-3" id="register-or-login">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">
+               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+               </svg>
+               &nbsp;{{ 'Login or Register'|trans }}
+            </h3>
+         </div>
+         <div class="card-body">
+            <div class="card">
+               <div class="card-header">
+                  <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                     <li class="nav-item">
+                        <a href="#tabs-login" class="nav-link active" data-bs-toggle="tab">{{ 'Login'|trans }}</a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="#tabs-register" class="nav-link" data-bs-toggle="tab">{{ 'Register'|trans }}</a>
+                     </li>
+                  </ul>
+               </div>
+               <div class="card-body">
+                  <div class="tab-content">
+                     <div class="tab-pane active show" id="tabs-login">
+                        <h4>{{ 'Login'|trans }}</h4>
+                        <form method="post" action="" id="client-login">
+                           <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Email Address'|trans }}</label>
+                                 <input id="icon" type="email" class="form-control" placeholder="{{ 'Your email address'|trans }}" name="email" value="{{ request.email }}" required="required" data-validation-required-message="{{ 'You must fill in your email.'|trans }}" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Password'|trans }}</label>
+                                 <input id="password" type="password" class="form-control" placeholder="{{ 'Password'|trans }}" name="password" required="required" value="{{ request.password }}" data-validation-required-message="{{ 'You must fill in your password.'|trans }}" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-check">
+                                 <input class="form-check-input" id="optionsCheckbox" type="checkbox" name="remember" value="1">
+                                 <span class="form-check-label">{{ 'Remember me'|trans }}</span>
+                                 </label>
+                              </div>
+                              <div class="mb-3">
+                                 <button class="btn btn-primary" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                       <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                                    </svg>
+                                    {{ 'Log in'|trans }}
+                                 </button>
+                              </div>
+                           </fieldset>
+                        </form>
+                     </div>
+                     <div class="tab-pane" id="tabs-register">
+                        <h4>{{ 'Register'|trans }}</h4>
+                        <form action="" method="post" id="create-profile">
+                           <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                           {% set r = guest.client_required %}
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Email Address'|trans }}</label>
+                                 <input type="email" name="email" class="form-control" value="{{ request.email }}" required="required" id="reg-email">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'First Name'|trans }}</label>
+                                 <input type="text" name="first_name" class="form-control" id="first-name" value="{{ request.first_name }}" required="required">
+                              </div>
+                              {% if 'last_name' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Last Name'|trans }}</label>
+                                 <input type="text" name="last_name" class="form-control" id="last_name" value="{{ request.last_name }}" required="required">
+                              </div>
+                              {% endif %}
+                              {% if 'company' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Company'|trans }}</label>
+                                 <input type="text" name="company" class="form-control" id="company" value="{{ request.company }}" required="required">
+                              </div>
+                              {% endif %}
+                              {% if 'birthday' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Birthday'|trans }}</label>
+                                 <input type="date" class="form-control" name="birthday" id="birthday" value="">
+                              </div>
+                              {% endif %}
+                              {% if 'gender' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'You are'|trans }}</label>
+                                 <select name="gender" class="form-select" id="gender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="nonbinary">Non-binary</option>
+                                    <option value="other">Other</option>
+                                 </select>
+                              </div>
+                              {% endif %}
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Password'|trans }}</label>
+                                 <input type="password" name="password" class="form-control" value="" required="required" id="reg-password">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Password confirm'|trans }}</label>
+                                 <input type="password" name="password_confirm" class="form-control" name="password-confirm" value="" required="required">
+                              </div>
+                              {% if 'address_1' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Address'|trans }}</label>
+                                 <input type="text" name="address_1" class="form-control" id="address_1" value="{{ request.address_1 }}">
+                              </div>
+                              {% endif %}
+                              {% if 'address_2' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Address 2'|trans }}</label>
+                                 <input type="text" name="address_2" class="form-control" id="address_2" value="{{ request.address_2 }}">
+                              </div>
+                              {% endif %}
+                              {% if 'city' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'City'|trans }}</label>
+                                 <input type="text" name="city" class="form-control" id="city" value="{{ request.city }}">
+                              </div>
+                              {% endif %}
+                              {% if 'country' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Country'|trans }}</label>
+                                 <select name="country" class="form-select" required="required">
+                                    <option value="">{{ '-- Select country --'|trans }}</option>
+                                    {% for val,label in guest.system_countries %}
+                                    <option value="{{ val }}" label="{{ label|e }}">{{ label|e }}</option>
+                                    {% endfor %}
+                                 </select>
+                              </div>
+                              {% endif %}
+                              {% if 'state' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'State'|trans }}</label>
+                                 {# mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') #}
+                                 <input type="text" name="state" class="form-control" id="state" value="{{ request.state }}" />
+                              </div>
+                              {% endif %}
+                              {% if 'postcode' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Zip/Postal Code'|trans }}</label>
+                                 <input type="text" name="postcode" class="form-control" id="postcode" value="{{ request.postcode }}">
+                              </div>
+                              {% endif %}
+                              {% if 'phone' in r %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Phone Number'|trans }}</label>
+                                 <input type="text" name="phone_cc" class="form-control" value="{{ request.phone_cc }}" style="width:20%">
+                                 <input type="phone" name="phone" class="form-control" value="{{ request.phone }}" style="width: 70%">
+                              </div>
+                              {% endif %}
+                              {% set custom_fields = guest.client_custom_fields %}
+                              {% for field_name, field in custom_fields %}
+                              {% if field.active %}
+                              <div class="mb-3">
+                                 <label class="form-label">{% if field.title is not empty %}{{ field.title }}{% else %} {{ field_name | capitalize }} {% endif %}</label>
+                                 <input type="text" class="form-control" name="{{ field_name }}" id="{{ field_name }}" value="{{ attribute(request, field_name) }}" {% if field.required %}required="required"{% endif %}>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                              {{ mf.recaptcha }}
+                              <div class="mb-3">
+                                 <button class="btn btn-primary" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                       <path d="M16 19h6"></path>
+                                       <path d="M19 16v6"></path>
+                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                                    </svg>
+                                    {{ 'Register'|trans }}
+                                 </button>
+                              </div>
+                           </fieldset>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

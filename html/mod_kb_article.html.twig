@@ -1,0 +1,58 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% block meta_title %}{{ article.title }}{% endblock %}
+{% block page_header %}{{ 'Knowledge base'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Please try to read related topics in knowledge base before contacting support.'|trans }}{% endblock %}
+{% block body_class %}kb-article{% endblock %}
+{% block breadcrumb %}
+<li>
+   <a href="{{ '/kb'|link }}">{{ 'Knowledge base'|trans }}</a> <span class="divider">/</span>
+</li>
+<li>
+   <a href="{{ '/kb'|link }}/{{ article.category.slug }}">{{ article.category.title }}</a><span class="divider">/</span>
+</li>
+<li class="active">{{ article.title }}</li>
+{% endblock %}
+{% block content %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-9">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ article.title }}</a> <span class="card-subtitle">{{ 'Article views'|trans }}: {{ article.views }}</span></h3>
+            <div class="card-actions">
+               <a href="{{ 'kb'|link }}" class="btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M9 14l-4 -4l4 -4"></path>
+                     <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
+                  </svg>
+                  {{ 'Back to list'|trans }}
+               </a>
+            </div>
+         </div>
+         <div class="card-body">
+            {{ article.content|markdown }}
+         </div>
+      </div>
+   </div>
+   <div class="col-md-3">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ 'Similar articles'|trans }}</h3>
+         </div>
+         <div class="card-body">
+            <ul class="menu">
+               {% for i, kbarticle in guest.kb_article_get_list({ "kb_article_category_id": article.kb_article_category_id, "per_page": 5 }).list %}
+               <li><a href="{{ '/kb'|link }}/{{ article.category.slug }}/{{ kbarticle.slug }}">{{ kbarticle.title|truncate(45) }}</a></li>
+               {% endfor %}
+            </ul>
+            <h3 class="card-title">{{ 'Knowledge base categories'|trans }}</h3>
+            <ul class="menu">
+               {% for i, category in guest.kb_category_get_list({ "per_page": 5 }).list %}
+               <li><a href="{{ '/kb'|link }}#category-{{ category.id }}">{{ category.title }}</a></li>
+               {% endfor %}
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

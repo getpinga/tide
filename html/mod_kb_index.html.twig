@@ -1,0 +1,70 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% block meta_title %}{{ 'Knowledge base'|trans }}{% endblock %}
+{% block body_class %}kb-index{% endblock %}
+{% block breadcrumb %}{{ 'Knowledge base'|trans }}{% endblock %}
+{% block page_header %}{{ 'Knowledge base'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Please try to read related topics in knowledge base before contacting support.'|trans }}{% endblock %}
+{% block content %}
+{% if request.q %}
+{% set kbcategories = guest.kb_category_get_list({ "q": request.q }) %}
+{% else %}
+{% set kbcategories = guest.kb_category_get_list %}
+{% endif %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ 'Knowledge base'|trans }}</a></h3>
+         </div>
+         <div class="card-body">
+            <form method="get" action="" class="form form-search pull-right" style="background: none; border: 0px">
+               <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+               <input class="" name="_url" type="hidden" value="/kb">
+               <div class="mb-3">
+                  <div class="row g-2">
+                     <div class="col">
+                        <input type="text" class="form-control" value="{{ request.q }}" placeholder="{{ 'What are you looking for?'|trans }}" name="q" required="required" />
+                     </div>
+                     <div class="col-auto">
+                        <button class="btn btn-primary" aria-label="Button">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <circle cx="10" cy="10" r="7" />
+                              <line x1="21" y1="21" x2="15" y2="15" />
+                           </svg>
+                           &nbsp;{{ 'Search'|trans }}
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </form>
+            <div class="row">
+               {% for i, category in kbcategories.list %}
+               <article class="data-block">
+                  <div class="data-container">
+                     <header>
+                        <h2 id="category-{{category.id}}">
+                           <a href="{{ 'kb'|link }}/{{ category.slug }}">{{ category.title }}</a>
+                        </h2>
+                     </header>
+                     <section>
+                        <ul>
+                           {% for i, article in category.articles %}
+                           <li><a href="{{ '/kb'|link }}/{{article.category.slug}}/{{article.slug}}">{{ article.title }}</a></li>
+                           {% endfor %}
+                        </ul>
+                     </section>
+                  </div>
+               </article>
+               {% else %}
+               <p class="alert alert-block alert-danger">
+                  {{ 'Try using other keyword. No matches found for keyword:'|trans }}
+                  <strong>{{ request.q }}</strong>
+               </p>
+               {% endfor %}
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

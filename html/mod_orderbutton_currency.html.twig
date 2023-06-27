@@ -1,0 +1,12 @@
+{% set currencies = guest.currency_get_pairs %}
+
+{% if currencies|length > 1 %}
+<div class="card-actions">
+        <select name="currency" class="form-select currency_selector">
+            {% set selected = guest.cart_get_currency.code %}
+            {% for code,title in currencies %}
+            <option value="{{ code }}" class="currency_{{ code }}"{% if code == selected %} selected="selected"{% endif %}>{{ code }} - {{ title }}</option>
+            {% endfor %}
+        </select>
+</div>
+{% endif %}

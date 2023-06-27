@@ -1,0 +1,33 @@
+<div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="offcanvasBottom" aria-modal="true" role="dialog">
+   <div class="offcanvas-body">
+      <div class="container">
+         <div class="row align-items-center">
+            <div class="col">
+               {{ guest.cookieconsent_message }}
+            </div>
+            <div class="col-auto">
+               <button type="button" id="close-cookie-consent-btn" class="btn btn-primary" data-bs-dismiss="offcanvas">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+                     <path d="M10 10l4 4m0 -4l-4 4"></path>
+                  </svg>
+                  Close
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<script type="text/javascript">
+   const offcanvas = document.querySelector('#offcanvasBottom');
+   
+   if (localStorage.getItem("cookie-consent") != 1) {
+       offcanvas.classList.add('show');
+   }
+   
+   document.querySelector('#close-cookie-consent-btn').addEventListener('click', () => {
+       localStorage.setItem('cookie-consent', 1);
+       offcanvas.classList.remove('show');
+   });
+</script>

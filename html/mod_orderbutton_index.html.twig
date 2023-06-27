@@ -1,0 +1,143 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% import "macro_functions.html.twig" as mf %}
+{% block meta_title %}{{ 'Order'|trans }}{% endblock %}
+{% set loader_nr = request.loader | default("8")%}
+{% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
+{% block page_header %}{{ 'Select Product'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Choose products we offer for selling'|trans }}{% endblock %}
+{% set loader_nr = request.loader | default("8")%}
+{% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
+{% block body_class %}order-index{% endblock %}
+{% block content_before %}{% endblock %}
+{% block content %}
+{% set products = guest.product_get_list %}
+{% if request.order matches '/^\\d+$/' %}
+{% include 'mod_orderbutton_product_configuration.html.twig' %}
+{% endif %}
+{% if request.checkout matches '/^\\d+$/' %}
+{% include 'mod_orderbutton_checkout.html.twig' %}
+{% if not client %}
+{% include 'mod_orderbutton_client.html.twig' %}
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block js %}
+{% autoescape "js" %}
+<script>
+   $(function(){
+       $('.accordion-body').on('shown', function() {
+           $('#popup-iframe').height($('body').height());
+       });
+   
+       $('#client-login').on('submit', function(event) {
+           bb.post(
+               'guest/client/login',
+               $(this).serialize(),
+               function(result) {
+   
+                   bb.msg("{{ 'You logged in successfully'|trans }}");
+                   $('#register-or-login').hide(1000, function(){
+                       $('#register-or-login').remove();
+                       bb.reload();
+                   });
+   
+               }
+           );
+           return false;
+       });
+       $('#create-profile').on('submit', function(event) {
+           bb.post(
+               'guest/client/create',
+               $(this).serialize(),
+               function(result) {
+                   //login after registration
+                   var login_details = {
+                       email: $('#reg-email').val(),
+                       password: $('#reg-password').val()
+                   };
+                   bb.post(
+                       'guest/client/login',
+                       login_details,
+                       function(result) {
+                           bb.msg("{{ 'You logged in successfully'|trans }}");
+                           $('#register-or-login').hide(1000, function() {
+                               $('#register-or-login').remove();
+                               bb.reload();
+                           });
+                       }
+                   );
+               }
+           );
+           return false;
+       });
+       $('#add-to-cart').on('submit', function(event) {
+           bb.post(
+               'guest/cart/add_item',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg("{{ 'Product was added to shopping cart'|trans }}");
+                   bb.redirect("{{ 'orderbutton'|link({ 'checkout' : 1 }) }}"+"{% if request.show_custom_form_values%}&show_custom_form_values=1{% endif %}");
+               }
+           );
+   
+           return false;
+       });
+       $('#apply-promo').on('submit', function(event) {
+           bb.post(
+               'guest/cart/apply_promo',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg("{{ 'Promo code was applied for your order'|trans }}");
+                   location.reload(false);
+               }
+           );
+   
+           return false;
+       });
+   
+       $('#checkout-form').on('submit', function(event) {
+           bb.post(
+               'client/cart/checkout',
+               $(this).serialize(),
+               function(result) {
+                   if(result.invoice_hash) {
+                       bb.post('guest/invoice/payment', {hash:result.invoice_hash, gateway_id:result.gateway_id,auto_redirect:true }, function(r) {
+                           if(r.iframe) {
+                           $('#payment-html-inner').html(r.result);
+                               $('#checkout').hide();
+                               $('#checkout').on('hidden', function(){
+                                   $('#checkout').remove();
+                                   $('#payment-html').show();
+                               });
+                           } else {
+                               var link = '{{"invoice/banklink"|link}}' + '/' + result.invoice_hash + '/' + result.gateway_id;
+                               $('#payment-html-inner').html('<a href="'+link+'" target="_parent" id="redirect-to-gateway">Redirect to payment gateway</a>');
+                               $('#checkout').hide();
+                               $('#checkout-inner').remove();
+                               $('#payment-html').show();
+                               $('#redirect-to-gateway')[0].click();
+                           }
+                       });
+                   } else {
+                       window.top.location.href = ('{{"order/service/manage"|link}}' + '/' + result.order_id );
+                   }
+               }
+           );
+           return false;
+       });
+   
+       $('#show-promo-field').on('click', function(event) {
+           $('#apply-promo').show();
+           $(this).hide();
+           $('#promocode').focus();
+       });
+   
+       $('.register-login a').on('click', function (e) {
+           e.preventDefault();
+           $(this).tab('show');
+       });
+   
+   });
+</script>
+{% endautoescape %}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% block meta_title %}{{ 'Email'|trans }}{% endblock %}
+{% block breadcrumb %}
+<li><a href="{{ 'email' | link}}">{{ 'Emails'|trans }}</a><span class="divider">/</span></li>
+{{ email.subject }}
+{% endblock %}
+{% block body_class %}email-email{% endblock %}
+{% block content %}
+<div class="row row-deck row-cards">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ email.subject }}</h3>
+            <div class="card-actions">
+               <a href="{{ '/email'|link }}" class="btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M9 14l-4 -4l4 -4"></path>
+                     <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
+                  </svg>
+                  {{ 'Back to emails list'|trans }}
+               </a>
+            </div>
+         </div>
+         <div class="card-body">
+            <div class="well well-small">
+               <p><strong>{{ 'From:'|trans }}</strong> {{email.sender}}</p>
+               <p><strong>{{ 'To:'|trans }}</strong> {{email.recipients}}</p>
+               <p><strong>{{ 'Created at:'|trans }}</strong> {{ email.created_at|format_datetime }}</p>
+            </div>
+            <div class="well">
+               <h3>{{ email.subject }}</h3>
+               <p> {{email.content_html | raw}}</p>
+            </div>
+            <a class="btn btn-secondary email-resend" href="#" mail-id="{{email.id}}">{{ 'Resend'|trans }}</a>
+            <a class="btn btn-danger email-delete" href="#"  mail-id="{{email.id}}">{{ 'Delete'|trans }}</a>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block js %}
+{% autoescape "js" %}
+<script type="text/javascript">
+   $(function() {
+       $('.email-resend').on('click', function(e) {
+           e.preventDefault();
+           $('.wait').show();
+   
+           var email_id = $(this).attr('mail-id');
+   
+           bb.post(
+               'client/email/resend',
+               { id: email_id, CSRFToken: "{{ CSRFToken }}" },
+               function(result) {
+                   $('.wait').hide();
+                   bb.msg('Email resent');
+   
+                   return false;
+               }
+           );
+       });
+       $('.email-delete').on('click', function(e){
+           e.preventDefault();
+   
+           if (confirm('Are you sure?')){
+               $('.wait').show();
+   
+               var email_id = $(this).attr('mail-id');
+   
+               bb.post(
+                   'client/email/delete',
+                   { id: email_id, CSRFToken: "{{ CSRFToken }}" },
+                   function(result) {
+                       bb.msg('Email deleted');
+                       bb.redirect('{{ 'email'|link }}');
+   
+                       return false;
+                   }
+               );
+           };
+       });
+   
+   });
+</script>
+{% endautoescape %}
+{% endblock %}

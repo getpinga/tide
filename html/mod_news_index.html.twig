@@ -1,0 +1,47 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% block meta_title %}{{ 'News'|trans }}{% endblock %}
+{% block page_header %}{{ 'News & Announcements'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Track our latest information.'|trans }}{% endblock %}
+{% block body_class %}news-index{% endblock %}
+{% block breadcrumb %}{{ 'News'|trans }}{% endblock %}
+{% block content %}
+{% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
+{% for i, post in posts.list %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title"><a href="{{ '/news'|link }}/{{post.slug}}">{{ post.title }}</a> <span class="card-subtitle">{{ post.updated_at|format_datetime }}</span></h3>
+         </div>
+         <div class="card-body">
+            {% if post.excerpt %}
+            {{ post.excerpt|markdown }}
+            {% else %}
+            {{ post.content|markdown }}
+            {% endif %}
+            <a class="btn btn-primary btn-sm" href="{{ '/news'|link }}/{{post.slug}}">{{ 'Read more ...'|trans }}</a>
+         </div>
+      </div>
+   </div>
+</div>
+{% else %}
+<div class="row row-deck row-cards">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-body">
+            <p>The list is empty</p>
+         </div>
+      </div>
+   </div>
+</div>
+{% endfor %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-body">
+            {% include "partial_pagination.html.twig" with { 'list': posts } %}
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

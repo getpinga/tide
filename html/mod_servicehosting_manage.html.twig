@@ -1,0 +1,216 @@
+{% if order.status == 'active' %}
+<div class="row row-deck row-cards mt-1">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ 'Manage hosting account'|trans }}</h3>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row row-deck row-cards">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+               <li class="nav-item">
+                  <a href="#tabs-details" class="nav-link active" data-bs-toggle="tab">{{ 'Details'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tabs-change-pass" class="nav-link" data-bs-toggle="tab">{{ 'Password'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tabs-change-domain" class="nav-link" data-bs-toggle="tab">{{ 'Domain'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tabs-change-username" class="nav-link" data-bs-toggle="tab">{{ 'Username'|trans }}</a>
+               </li>
+            </ul>
+         </div>
+         <div class="card-body">
+            <div class="tab-content">
+               <div class="tab-pane active show" id="tabs-details">
+                  <h4>{{ 'Details'|trans }}</h4>
+                  {% set server = service.server %}
+                  {% set hp = service.hosting_plan %}
+                  <div class="table-responsive">
+                     <table class="table text-nowrap table-striped table-bordered">
+                        <tbody>
+                           <tr>
+                              <td>{{ 'Domain'|trans }}:</td>
+                              <td>
+                                 <a target="_blank" href="http://{{ service.domain }}">{{ service.domain }}</a>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Server IP'|trans }}:</td>
+                              <td>{{ server.ip }}</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Server Hostname'|trans }}:</td>
+                              <td>{{ server.hostname }}</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Username'|trans }}:</td>
+                              <td>{{ service.username }}</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Password'|trans }}:</td>
+                              <td>******</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Hosting plan'|trans }}:</td>
+                              <td>{{ hp.name }}</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Bandwidth'|trans }}:</td>
+                              <td>{{ hp.bandwidth }} MB / {{ 'per month'|trans }}</td>
+                           </tr>
+                           <tr>
+                              <td>{{ 'Disk quota'|trans }}:</td>
+                              <td>{{ hp.quota }} MB</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <div class="mb-3">
+                     {% if service.domain_order_id %}
+                     <a class="btn btn-primary" href="{{ '/order/service/manage'|link }}/{{ service.domain_order_id }}">{{ 'Manage domain'|trans }}</a>
+                     {% endif %}
+                     <a class="btn btn-info" href="{{ server.cpanel_url }}" target="_blank">{{ 'Jump to cPanel'|trans }}</a>
+                     {% if service.reseller %}
+                     <a class="btn btn-secondary" href="{{ server.reseller_cpanel_url }}" target="_blank">{{ 'Reseller control panel'|trans }}</a>
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="tab-pane" id="tabs-change-pass">
+                  <h4>{{ 'Change your FTP/cPanel/SSH password.'|trans }}</h4>
+                  <form action="" method="post" id="change-password">
+                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                     <fieldset class="form-fieldset">
+                        <div class="mb-3">
+                           <label class="form-label required">{{ 'Password'|trans }}: </label>
+                           <input type="password" name="password" value="{{ request.password }}" class="form-control" required="required">
+                        </div>
+                        <div class="mb-3">
+                           <label class="form-label required" >{{ 'Password Confirm'|trans }}: </label>
+                           <input type="password" name="password_confirm" value="{{ request.password_confirm }}" class="form-control" required="required">
+                        </div>
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="mb-3">
+                           <button class="btn btn-primary" type="submit" value="{{ 'Change password'|trans }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                              </svg>
+                              {{ 'Change password'|trans }}
+                           </button>
+                        </div>
+                     </fieldset>
+                  </form>
+               </div>
+               <div class="tab-pane" id="tabs-change-domain">
+                  <h4>{{ 'Change domain'|trans }}</h4>
+                  <form action="" method="post" id="change-domain">
+                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                     <fieldset class="form-fieldset">
+                        <div class="mb-3">
+                           <label class="form-label required" >{{ 'New domain'|trans }}: </label>
+                           <div class="row g-2">
+                              <div class="col-5">
+                                 <input type="text" name="sld" value="{{ request.domain|default(service.sld) }}" required="required" class="form-control">
+                              </div>
+                              <div class="col-2">
+                                 <input type="text" name="tld" value="{{ request.domain|default(service.tld) }}" required="required" class="form-control">
+                              </div>
+                           </div>
+                        </div>
+               </div>
+               <input type="hidden" name="order_id" value="{{ order.id }}">
+               <div class="mb-3">
+               <button class="btn btn-primary" type="submit" value="{{ 'Change domain'|trans }}"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+               <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+               <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+               </svg> {{ 'Change domain'|trans }}</button>
+               </div>
+               </fieldset>
+               </form>
+            </div>
+            <div class="tab-pane" id="tabs-change-username">
+               <h4>{{ 'Change username'|trans }}</h4>
+               <form action="" method="post" id="change-username">
+                  <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                  <fieldset class="form-fieldset">
+                     <div class="mb-3">
+                        <label class="form-label required">{{ 'Username'|trans }}: </label>
+                        <input type="text" class="form-control" name="username" value="{{ request.username|default(service.username) }}" required="required">
+                     </div>
+                     <input type="hidden" name="order_id" value="{{ order.id }}">
+                     <div class="mb-3">
+                        <button class="btn btn-primary" type="submit" value="{{ 'Change username'|trans }}">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                           </svg>
+                           {{ 'Change username'|trans }}
+                        </button>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</div>
+{% block js %}
+<script type="text/javascript">
+   $(function() {
+       $('.domain-tabs a').on('click', function(e) {
+           e.preventDefault();
+           $(this).tab('show');
+       });
+   
+       $('#change-domain').on('submit', function(event) {
+           bb.post(
+               'client/servicehosting/change_domain',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg('Domain name was changed');
+               }
+           );
+   
+           return false;
+       });
+   
+       $('#change-username').on('submit', function(event) {
+           bb.post(
+               'client/servicehosting/change_username',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg('Account Username was changed');
+               }
+           );
+   
+           return false;
+       });
+   
+       $('#change-password').on('submit', function(event) {
+           bb.post(
+               'client/servicehosting/change_password',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg('Account Password was changed');
+               }
+           );
+   
+           return false;
+       });
+   
+   });
+</script>
+{% endblock %}
+{% endif %}

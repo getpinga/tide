@@ -1,0 +1,32 @@
+<div class="accordion-item" id="choose-product">
+   {% set products = guest.product_get_list %}
+   <h2 class="accordion-header" id="heading-1">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#products" aria-expanded="true">
+         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M13 5h8"></path>
+            <path d="M13 9h5"></path>
+            <path d="M13 15h8"></path>
+            <path d="M13 19h5"></path>
+            <path d="M3 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
+            <path d="M3 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
+         </svg>
+         &nbsp;{{ 'Select Product'|trans }}&nbsp;<span class="status status-primary">{{ products.list|length }} {{ 'Items'|trans }}</span>
+      </button>
+   </h2>
+   <div id="products" class="accordion-collapse collapse {% if not request.order and not request.cart and not request.checkout %}show{% endif %}" data-bs-parent="#accordion1">
+      <div class="accordion-body pt-0">
+         {% for i, category in guest.product_category_get_list.list %}
+         <h2 style="margin-bottom: -5px;">{{ category.title }}</h2>
+         <span>{{ category.description|markdown }}</span>
+         <ul class="nav nav-list">
+            {% for i, product in category.products|sort((a, b) => a.priority <=> b.priority) %}
+            <li>
+               <a href="{{ 'orderbutton'|link({ 'order': product.id, 'show_custom_form_values': request.show_custom_form_values }) }}">{{ product.title }} <span class="awe-arrow-right pull-right"><span></a>
+            </li>
+            {% endfor %}
+         </ul>
+         {% endfor %}
+      </div>
+   </div>
+</div>

@@ -1,0 +1,92 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% import "macro_functions.html.twig" as mf %}
+{% block meta_title %}{{ 'Payment history'|trans }}{% endblock %}
+{% block breadcrumb %} 
+<li class="active">{{ 'Payment history'|trans }}</li>
+{% endblock %}
+{% block page_header %}{{ 'Payment history'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Here you can track what you have been charged for and add more funds to your account'|trans }}{% endblock %}
+{% set profile = client.profile_get %}
+{% block body_class %}client-balance{% endblock %}
+{% block content %}
+<div class="row row-deck row-cards">
+   <div class="col-md-9">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ 'Payment history'|trans }}</h3>
+         </div>
+         <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap table-bordered table-striped">
+               <thead>
+                  <tr>
+                     <th>{{ 'Description'|trans }}</th>
+                     <th>{{ 'Date'|trans }}</th>
+                     <th>{{ 'Amount'|trans }}</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% set transactions = client.client_balance_get_list({ "per_page": 10, "page": request.page }) %}
+                  {% for i, tx in transactions.list %}
+                  <tr class="{{ cycle(['odd', 'even'], i) }}">
+                     <td>{{ tx.description }}</td>
+                     <td>{{ tx.created_at|format_date }}</td>
+                     <td>{{ tx.amount|money(tx.currency) }}</td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                     <td colspan="3">{{ 'The list is empty'|trans }}</td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+               <tfoot>
+                  <tr>
+                     <td colspan="2">{{ 'Total:'|trans }}</td>
+                     <td><strong>{{ profile.balance | money(profile.currency) }}</strong></td>
+                  </tr>
+               </tfoot>
+            </table>
+            {% include "partial_pagination.html.twig" with { 'list': transactions } %}
+         </div>
+      </div>
+   </div>
+   <div class="col-md-3">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">{{ 'Add a deposit'|trans }}</h3>
+         </div>
+         <div class="card-body">
+            <form action="" method="post" class="form-inline api-form" data-api-url="{{ 'api/client/invoice/funds_invoice'|link }}" data-api-jsonp="onAfterInvoiceCreated">
+               <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+               <fieldset>
+                  <div class="control-group">
+                     <div class="form-controls">
+                        <div class="input-append">
+                           <input id="appendedPrependedInput" class="form-control" type="text" name="amount" placeholder="0" required="required"><br />
+                           <button class="btn btn-primary ms-auto" type="submit">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
+                                 <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                 <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2"></path>
+                              </svg>
+                              {{ 'Deposit'|trans }}
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </fieldset>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+   function onAfterInvoiceCreated(hash) {
+       var link = '{{ "invoice"|link }}/' + hash;
+   
+       bb.redirect(link);
+   }
+</script>
+{% endblock %}

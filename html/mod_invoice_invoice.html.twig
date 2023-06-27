@@ -1,0 +1,191 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% import "macro_functions.html.twig" as mf %}
+{% set nr = invoice.serie ~ "%05s"|format(invoice.nr) %}
+{% block meta_title %}{{ 'Invoice'|trans }}{% endblock %}
+{% block body_class %}invoice-invoice{% endblock %}
+{% block breadcrumb %}
+<li><a href="{{ '/invoice'|link }}">{{ 'Invoices'|trans }}</a> <span class="divider">/</span></li>
+<li class="active">{% if invoice.status == 'paid' %} {{ 'Receipt'|trans }} {% else %}  {{ 'Invoice'|trans }} {% endif %}{{ nr }}</li>
+{% endblock %}
+{% block content %}
+{% set seller = invoice.seller %}
+{% set buyer = invoice.buyer %}
+{% set company  = guest.system_company %}
+<div class="card card-lg">
+   <div class="card-body">
+      <div class="row">
+         <div class="col-12 mb-5">
+            {% if company.logo_url %}
+            <img src="{{ company.logo_url }}" style="width:30%;height;30%;" alt="Logo">
+            {% endif %}
+         </div>
+         <div class="col-6">
+            <p class="h3">{% if seller.company %}
+               {{ seller.company }}
+               {% endif %}
+            </p>
+            <address>
+               {% if seller.company_vat%}
+               VAT: {{ seller.company_vat }}<br />
+               {% endif %}
+               {% if seller.address%}
+               {{ seller.address }}<br />
+               {% endif %}
+               {% if seller.phone %}
+               {{ seller.phone }}<br />
+               {% endif %}
+               {% if seller.email %}
+               {{ seller.email }}<br />
+               {% endif %}
+               {% if seller.account_number %}
+               {{ seller.account_number }}<br />
+               {% endif %}
+               {% if seller.note %}
+               Note: {{ seller.note }}
+               {% endif %}
+            </address>
+         </div>
+         <div class="col-6 text-end">
+            <p class="h3">{% if buyer.first_name or buyer.last_name %}
+               {{ buyer.first_name }} {{ buyer.last_name }}
+               {% endif %}
+            </p>
+            <address>
+               {% if buyer.company %}
+               {{ buyer.company }}<br />
+               {% endif %}
+               {% if buyer.company_number %}
+               {{ buyer.company_number }}<br />
+               {% endif %}
+               {% if buyer.company_vat %}
+               {{ buyer.company_vat }}<br />
+               {% endif %}
+               {% if buyer.address %}
+               {{ buyer.address }}<br />
+               {{ buyer.city }}, {{ buyer.state }}<br />
+               {{ buyer.zip }}, {{ guest.system_countries[buyer.country] }}<br />
+               {% endif %}
+               {% if buyer.phone %}
+               {{ buyer.phone }}
+               {% endif %}
+            </address>
+         </div>
+         <div class="col-12 my-5">
+            <h1>{% if invoice.status == 'paid' %} {{ 'Invoice'|trans }} {% else %}  {{ 'Proforma Invoice'|trans }} {% endif %} - {{ nr }} <span class="badge bg-{% if invoice.status == 'paid' %}green{% elseif invoice.status == 'unpaid' %}red{% endif %}">
+               {{ invoice.status|capitalize }}
+               </span>
+            </h1>
+            <p class="h3">{{ 'Invoice Date'|trans }}: {% if invoice.paid_at %}
+               {{ invoice.paid_at|format_date }}
+               {% else %}
+               {{ invoice.created_at|format_date }}
+               {% endif %}
+            </p>
+            <p class="h3">{{ 'Due Date'|trans }}: {% if invoice.due_at %}
+               {{ invoice.due_at|format_date }}
+               {% else %}
+               -----
+               {% endif %}
+            </p>
+         </div>
+      </div>
+      <table class="table table-striped table-bordered table-transparent table-responsive">
+         <thead>
+            <tr>
+               <th class="text-center" style="width: 1%">{{ '#'|trans }}</th>
+               <th>{{ 'Title'|trans }}</th>
+               <th class="text-end" style="width: 1%">{{ 'Price'|trans }}</th>
+               <th class="text-end" style="width: 1%">{{ 'Total'|trans }}</th>
+            </tr>
+         </thead>
+         {% for i, item in invoice.lines %}
+         <tr>
+            <td class="text-center">{{ i+1 }}.</td>
+            <td>
+               <p class="strong mb-1">
+                  {% if item.order_id%}
+                  <a href="{{ '/order/service'|link }}/manage/{{ item.order_id }}">{{ item.title }}</a>
+                  {% else %}
+                  {{ item.title }}
+                  {% endif %}
+                  {% if item.quantity > 1 %}
+                  x {{ item.quantity }} {{ item.unit }}
+                  {% endif %}
+               </p>
+            </td>
+            <td class="text-end">
+               {{ item.price|money(invoice.currency) }}
+            </td>
+            <td class="text-end">{{ item.total|money(invoice.currency) }}</td>
+         </tr>
+         {% endfor %}
+         {% if invoice.tax > 0 %}
+         <tr>
+            <td colspan="3" class="strong text-end">{{ invoice.taxname }} {{ invoice.taxrate }}%</td>
+            <td class="text-end">{{ invoice.tax | money(invoice.currency) }}</td>
+         </tr>
+         {% endif %}
+         {% if invoice.discount > 0 %}
+         <tr>
+            <td colspan="3" class="strong text-end">{{ 'Discount'|trans }}</td>
+            <td class="text-end">{{ invoice.discount | money(invoice.currency) }}</td>
+         </tr>
+         {% endif %}
+         <tr>
+            <td colspan="3" class="font-weight-bold text-uppercase text-end">{{ 'Total'|trans }}</td>
+            <td class="font-weight-bold text-end">{{ invoice.total | money(invoice.currency) }}</td>
+         </tr>
+      </table>
+      {% if invoice.text_1 %}
+      <p class="text-muted text-center mt-5">
+         {{ invoice.text_1|markdown }}
+      </p>
+      {% endif %}
+      {% if invoice.text_2 %}
+      <p class="text-muted text-center mt-5">
+         {{ invoice.text_2|markdown }}
+      </p>
+      {% endif %}
+      {% if invoice.status == 'unpaid' %}
+      <div class="row d-print-none">
+         <header>
+            <p class="text-center mt-5">{{ 'Please choose payment type and pay for your chosen products.'|trans }}</p>
+         </header>
+         <form method="post" action="{{ 'api/guest/invoice/payment'|link }}" class="api-form" data-api-redirect="{{ ('invoice/'~invoice.hash)|link({ 'auto_redirect': 1 }) }}">
+            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+            <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
+            {% for gtw in guest.invoice_gateways %}
+            {% if invoice.currency in gtw.accepted_currencies %}
+            {% set banklink = 'invoice/banklink'|link %}
+            <button type="button"  class="hover-popover" style="background: transparent url('{{gtw.logo.logo}}') no-repeat scroll 0% 0%; height:{{gtw.logo.height}}; width:{{gtw.logo.width}}; background-size: contain; border: 0; margin: 10px;" type="radio" name="gateway_id" gateway_id="{{ gtw.id }}" data-toggle="tooltip" title="{{ 'Pay with'|trans }} {{gtw.title}}" onclick="window.location.replace('{{banklink}}/{{invoice.hash}}/{{gtw.id}}')")></button>
+            {% endif %}
+            {% endfor %}
+            <input type="hidden" name="gateway_id" id="gateway_id">
+         </form>
+      </div>
+      {% endif %}
+      <p class="text-center mt-5 d-print-none">{{ 'You can print this invoice or export it to PDF file by clicking on corresponding button.'|trans }}</p>
+      <div class="row d-print-none">
+         <div class="col-md-6 mt-2">
+            <a href="{{ 'invoice/pdf'|link }}/{{ invoice.hash }}" class="btn btn-outline-dark w-100">
+            {{ 'PDF'|trans }}
+            </a>
+         </div>
+         <div class="col-md-6 mt-2">
+            <a href="#" onclick="window.print(); return false;" class="btn btn-outline-primary w-100">
+            {{ 'Print'|trans }}
+            </a>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block js%}
+<script>
+   $(function() {
+       $(".hover-popover").tooltip({
+           placement: 'top'
+       });
+   });
+</script>
+{% endblock%}

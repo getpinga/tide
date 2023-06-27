@@ -1,0 +1,292 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% block meta_title %}{{ 'Profile details'|trans }}{% endblock %}
+{% block page_header %}{{ 'User profile settings'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Keep your personal data up to date.'|trans }}{% endblock %}
+{% block breadcrumb %} 
+<li class="active">{{ 'Profile'|trans }}</li>
+{% endblock %}
+{% block body_class %}client-profile{% endblock %}
+{% block content %}
+<div class="row row-deck row-cards">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+               <li class="nav-item">
+                  <a href="#tab1" class="nav-link active" data-bs-toggle="tab">{{ 'Details'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tab-password" class="nav-link" data-bs-toggle="tab">{{ 'Change Password'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tab3" class="nav-link" data-bs-toggle="tab">{{ 'API key'|trans }}</a>
+               </li>
+               <li class="nav-item">
+                  <a href="#tab4" class="nav-link" data-bs-toggle="tab">{{ 'Currency'|trans }}</a>
+               </li>
+            </ul>
+         </div>
+         <div class="card-body">
+            <div class="tab-content">
+               {% set required = guest.client_required %}
+               <div class="tab-pane active show" id="tab1">
+                  <h4>{{ 'Update details'|trans }}</h4>
+                  <div class="mb-3">{{ 'Keep your personal data up to date.'|trans }}</div>
+                  </header>
+                  <form method="post" action="" id="profile-update" class="form-horizontal">
+                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                     <div class="alert alert-success" role="alert">
+                        <div class="d-flex">
+                           <div>
+                              <img src="{{ profile.email|gravatar }}" alt="Gravatar" style="margin-right:5px;">
+                           </div>
+                           <div>
+                              {{ 'Please register with'|trans }} <strong>{{ profile.email }}</strong> {{ 'at '|trans }}<a target="_blank" href="https://gravatar.com">Gravatar.com</a> {{ 'to change your profile image. Gravatar image updates may not appear immediately.'|trans }}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-6">
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Email Address'|trans }}</label>
+                                 <input class="form-control" type="email" name="email" value="{{ profile.email }}" required="required" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'First Name'|trans }}</label>
+                                 <input class="form-control" type="text" name="first_name" value="{{ profile.first_name }}" required="required" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if last_name in required|keys %}required{% endif %}">{{ 'Last Name'|trans }}</label>
+                                 <input class="form-control" type="text" name="last_name" value="{{ profile.last_name }}" {% if last_name in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if birthday in required|keys %}required{% endif %}">{{ 'Birth date'|trans }}</label>
+                                 <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                       <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                          <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
+                                          <path d="M16 3v4" />
+                                          <path d="M8 3v4" />
+                                          <path d="M4 11h16" />
+                                          <path d="M11 15h1" />
+                                          <path d="M12 15v3" />
+                                       </svg>
+                                    </span>
+                                    <input class="form-control" placeholder="Select a date" id="birthday" name="birthday" value="{{ profile.birthday }}" {% if birthday in required|keys %} required="required" {% endif %} />
+                                 </div>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if gender in required|keys %}required{% endif %}">{{ 'Gender'|trans }}</label>
+                                 <select class="form-select" name="gender" id="gender" {% if gender in required|keys %} required="required" {% endif %}>
+                                 <option value="male" {{ profile.gender == 'male' ? 'selected' : '' }}>Male</option>
+                                 <option value="female" {{ profile.gender == 'female' ? 'selected' : '' }}>Female</option>
+                                 <option value="nonbinary" {{ profile.gender == 'nonbinary' ? 'selected' : '' }}>Non-binary</option>
+                                 <option value="other" {% if profile.gender not in ['male', 'female', 'nonbinary'] %} selected {% endif %}>Other</option>
+                                 </select>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if company in required|keys %}required{% endif %}">{{ 'Company Name'|trans }}</label>
+                                 <input class="form-control" type="text" name="company" value="{{ profile.company }}" {% if company in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Company VAT'|trans }}</label>
+                                 <input class="form-control" type="text" name="company_vat" value="{{ profile.company_vat }}" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Company Number'|trans }}</label>
+                                 <input class="form-control" type="text" name="company_number" value="{{ profile.company_number }}" autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <button class="btn btn-xl btn-primary" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                                       <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                                    </svg>
+                                    {{ 'Update profile'|trans }}
+                                 </button>
+                              </div>
+                           </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label {% if phone in required|keys %}required{% endif %}">{{ 'Phone Country Code'|trans }}</label>
+                                 <input class="form-control" type="text" name="phone_cc" value="{{ profile.phone_cc }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if phone in required|keys %}required{% endif %}">{{ 'Phone Number'|trans }}</label>
+                                 <input class="form-control" type="phone" name="phone" value="{{ profile.phone }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if address_1 in required|keys %}required{% endif %}">{{ 'Address'|trans }}</label>
+                                 <input class="form-control" type="text" name="address_1" value="{{ profile.address_1 }}" {% if address_1 in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if address_2 in required|keys %}required{% endif %}">{{ 'Address 2'|trans }}</label>
+                                 <input class="form-control" type="text" name="address_2" value="{{ profile.address_2 }}" {% if address_2 in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if city in required|keys %}required{% endif %}">{{ 'City'|trans }}</label>
+                                 <input class="form-control" type="text" name="city" value="{{ profile.city }}" {% if city in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if country in required|keys %}required{% endif %}">{{ 'Country'|trans }}</label>
+                                 <select class="form-select" name="country" {% if country in required|keys %} required="required" {% endif %}>
+                                 <option value="">{{ '-- Select country --'|trans }}</option>
+                                 {% for val,label in guest.system_countries %}
+                                 <option value="{{ val }}" label="{{ label|e }}" {% if val == profile.country %}selected="selected"{% endif %}>{{ label|e }}</option>
+                                 {% endfor %}
+                                 </select>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if state in required|keys %}required{% endif %}">{{ 'State'|trans }}</label>
+                                 {# mf.selectbox('state', guest.system_states, profile.state, 0, 'Select state') #}
+                                 <input class="form-control" type="text" name="state" value="{{ profile.state }}" {% if state in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label {% if postcode in required|keys %}required{% endif %}">{{ 'Zip/Postal Code'|trans }}</label>
+                                 <input class="form-control" type="text" name="postcode" value="{{ profile.postcode }}" {% if postcode in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Passport number'|trans }}</label>
+                                 <input class="form-control" type="text" name="document_nr" value="{{ profile.document_nr}}" autocomplete="off"/>
+                              </div>
+                              {% for i in 1..10 %}
+                              {% set custom = 'custom_' ~ i %}
+                              {% set current = guest.client_custom_fields[custom] %}
+                              {% if current.active %}
+                              <div class="mb-3">
+                                 <label class="form-label">{{ current.title }}</label>
+                                 <input class="form-control" type="text" name="{{ custom }}" value="{{ profile[custom] }}" {% if current.required %} required="required" {% endif %} autocomplete="off"/>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                           </fieldset>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="tab-pane" id="tab-password">
+                  <h4>{{ 'Change Password'|trans }}</h4>
+                  <div class="mb-3">{{ 'Please enter new password two times in order avoid mistypes'|trans }}</div>
+                  <form method="post" action="{{ 'api/client/profile/change_password'|link }}" class="form-horizontal api-form" data-api-msg="{{ 'Password Changed'|trans }}">
+                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                     <fieldset class="form-fieldset">
+                        <div class="mb-3">
+                           <label class="form-label required">{{ 'Current Password'|trans }}</label>
+                           <input class="form-control" type="password" name="current_password" id="current_password" required autocomplete="off"/>
+                        </div>
+                        <div class="mb-3">
+                           <label class="form-label required">{{ 'New Password'|trans }}</label>
+                           <input class="form-control" type="password" name="new_password" id="new_password" required autocomplete="off"/>
+                        </div>
+                        <div class="mb-3">
+                           <label class="form-label required">{{ 'Confirm Password'|trans }}</label>
+                           <input class="form-control" type="password" name="confirm_password" id="confirm_password" required autocomplete="off"/>
+                        </div>
+                        <div class="mb-3">
+                           <button class="btn btn-xl btn-primary" type="submit">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                                 <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                              </svg>
+                              {{ 'Change Password'|trans }}
+                           </button>
+                        </div>
+                     </fieldset>
+                  </form>
+               </div>
+               <div class="tab-pane" id="tab3">
+                  <h4>{{ 'API key'|trans }}</h4>
+                  <div class="mb-3">{{ 'API key allows integration with external applications. You will need this key for authentication.'|trans }}</div>
+                  <form method="post" action="" id="change-api-key" class="form-horizontal">
+                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                     <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-title">{{ 'Warning! Resetting the key will break existing applications using it!'|trans }}</h4>
+                     </div>
+                     <fieldset class="form-fieldset">
+                        <div class="mb-3">
+                           <label class="form-label">{{ 'Your API key'|trans }}:</label>
+                           <div class="row g-2">
+                              <div class="col">
+                                 <input type="text" class="form-control" autocomplete="off" value="{{ client.profile_api_key_get }}" id="api-key" readonly />
+                              </div>
+                              <div class="col-auto">
+                                 <button type="submit" class="btn btn-primary" aria-label="Button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                                       <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                                       <path d="M12 9l0 3"></path>
+                                       <path d="M12 15l.01 0"></path>
+                                    </svg>
+                                    {{ 'Reset key'|trans }}
+                                 </button>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </fieldset>
+                  </form>
+               </div>
+               <div class="tab-pane" id="tab4">
+                  <h4>{{ 'Currency'|trans }}</h4>
+                  <div>{{ 'Your profile currency is defined after your first order. Once your currency is set, all your profile accounting will be managed in that currency and can not be changed.'|trans }}</div>
+                  {% if profile.currency %}
+                  <div>{{ 'Your profile currency is'|trans }} <strong>{{ profile.currency }}</strong></div>
+                  <div>{{ 'Create new client profile if you want to manage your money in other currency'|trans }}</div>
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{{ 'libs/litepicker/dist/litepicker.js' | asset_url }}"></script>
+<script>
+   $(function() {
+       $('#change-api-key').on('submit', function(event) {
+           bb.post(
+               'client/profile/api_key_reset',
+               $(this).serialize(),
+               function(result) {
+                   $('#api-key').val(result);
+                   bb.msg('API key was changed');
+               }
+           );
+   
+           return false;
+       });
+   
+       $('#profile-update').on('submit', function(event) {
+           bb.post(
+               'client/profile/update',
+               $(this).serialize(),
+               function(result) {
+                   bb.msg('Profile updated');
+               }
+           );
+   
+           return false;
+       });
+   });
+   document.addEventListener("DOMContentLoaded", function () {
+       	window.Litepicker && (new Litepicker({
+       		element: document.getElementById('birthday'),
+       		buttonText: {
+       			previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+       			nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+       		},
+       	}));
+       });
+</script>
+{% endblock %}
