@@ -62,222 +62,224 @@
       {% set company = guest.system_company %}
       <div class="page">
          <!-- Navbar -->
-         <header class="navbar navbar-expand-md d-print-none">
-            <div class="container-xl">
-               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-               <span class="navbar-toggler-icon"></span>
-               </button>
-               <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                  <a href="{{'/'|link }}">
-                  <img src="{{company.logo_url}}" alt="{{company.name}}" class="navbar-brand-image">
-                  </a>
-               </h1>
-               <div class="navbar-nav flex-row order-md-last">
-                  <div class="nav-item d-none d-md-flex me-3">
-                     <div class="btn-list">
-                        {% set languages = guest.extension_languages(true) %}
-                        {% if languages|length > 1 %}
-                        {% set currentLang = guest.system_locale %}
-                        {% set countryCode = currentLang | slice(3, 2) %}
-                        <div class="dropdown">
-                           <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% for lang in languages %}
-                           {% if lang.locale == currentLang %}
-                           {{ lang.title }}
-                           {% endif %}
-                           {% endfor %}</a>
-                           <div class="dropdown-menu">
-                              {% for lang in languages %}
-                              {% set countryCode = lang.locale | slice(3, 2) %}
-                              {% if lang != currentLang %}
-                              <a href="javascript:;" class="dropdown-item language_selector" data-language-code="{{ lang.locale }}"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{{ lang.title }}</a>
-                              {% endif %}
-                              {% endfor %}
-                           </div>
-                        </div>
-                        {% endif %}
-                     </div>
-                  </div>
-                  {% if client %}
-                  <div class="nav-item dropdown">
-                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                        <span class="avatar avatar-sm" style="background-image: url({{ profile.email|gravatar(60) }})"></span>
-                        <div class="d-none d-xl-block ps-2">
-                           <div>Welcome, {{profile.first_name}}</div>
-                           <div class="mt-1 small text-muted">Balance: {{ profile.balance | money(profile.currency) }}</div>
-                        </div>
+         <div class="sticky-top">
+            <header class="navbar navbar-expand-md d-print-none">
+               <div class="container-xl">
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                     <a href="{{'/'|link }}">
+                     <img src="{{company.logo_url}}" alt="{{company.name}}" class="navbar-brand-image">
                      </a>
-                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <a href="{{ 'client/profile' | link}}" class="dropdown-item">{{ 'Profile'|trans }}</a>
-                        <a href="{{ '/email'|link }}" class="dropdown-item">{{ 'Emails'|trans }}</a>
-                        <a href="{{ '/news'|link }}" class="dropdown-item">{{ 'Announcements'|trans }}</a>
-                        <a href="{{ '/kb'|link }}" class="dropdown-item">{{ 'Knowledge base'|trans }}</a>
-                        <a href="{{ 'client/logout' | link}}" class="dropdown-item">{{ 'Sign out'|trans }}</a>
+                  </h1>
+                  <div class="navbar-nav flex-row order-md-last">
+                     <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                           {% set languages = guest.extension_languages(true) %}
+                           {% if languages|length > 1 %}
+                           {% set currentLang = guest.system_locale %}
+                           {% set countryCode = currentLang | slice(3, 2) %}
+                           <div class="dropdown">
+                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% for lang in languages %}
+                              {% if lang.locale == currentLang %}
+                              {{ lang.title }}
+                              {% endif %}
+                              {% endfor %}</a>
+                              <div class="dropdown-menu">
+                                 {% for lang in languages %}
+                                 {% set countryCode = lang.locale | slice(3, 2) %}
+                                 {% if lang != currentLang %}
+                                 <a href="javascript:;" class="dropdown-item language_selector" data-language-code="{{ lang.locale }}"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{{ lang.title }}</a>
+                                 {% endif %}
+                                 {% endfor %}
+                              </div>
+                           </div>
+                           {% endif %}
+                        </div>
+                     </div>
+                     {% if client %}
+                     <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                           <span class="avatar avatar-sm" style="background-image: url({{ profile.email|gravatar(60) }})"></span>
+                           <div class="d-none d-xl-block ps-2">
+                              <div>Welcome, {{profile.first_name}}</div>
+                              <div class="mt-1 small text-muted">Balance: {{ profile.balance | money(profile.currency) }}</div>
+                           </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                           <a href="{{ 'client/profile' | link}}" class="dropdown-item">{{ 'Profile'|trans }}</a>
+                           <a href="{{ '/email'|link }}" class="dropdown-item">{{ 'Emails'|trans }}</a>
+                           <a href="{{ '/news'|link }}" class="dropdown-item">{{ 'Announcements'|trans }}</a>
+                           <a href="{{ '/kb'|link }}" class="dropdown-item">{{ 'Knowledge base'|trans }}</a>
+                           <a href="{{ 'client/logout' | link}}" class="dropdown-item">{{ 'Sign out'|trans }}</a>
+                        </div>
+                     </div>
+                     {% endif %}
+                  </div>
+               </div>
+            </header>
+            <header class="navbar-expand-md d-print-none">
+               <div class="collapse navbar-collapse" id="navbar-menu">
+                  <div class="navbar">
+                     <div class="container-xl">
+                        <ul class="navbar-nav">
+                           {% if client %}
+                           <li class="nav-item{% if request._url == '' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                       <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                       <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                       <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Dashboard'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% else %}
+                           <li class="nav-item{% if request._url == '' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                       <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                       <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                       <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Home'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% endif %}
+                           <li class="nav-item{% if request._url == '/order' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/order'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                       <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                       <path d="M17 17h-11v-14h-2"></path>
+                                       <path d="M6 5l14 1l-1 7h-13"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Order'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% if client %}
+                           <li class="nav-item{% if request._url == '/order/service' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/order/service'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
+                                       <path d="M3 12m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
+                                       <path d="M7 8l0 .01"></path>
+                                       <path d="M7 16l0 .01"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Services'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           <li class="nav-item{% if request._url == '/invoice' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/invoice'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                       <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                       <path d="M9 7l1 0"></path>
+                                       <path d="M9 13l6 0"></path>
+                                       <path d="M13 17l2 0"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Invoices'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           <li class="nav-item{% if request._url == '/client/balance' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/client/balance'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                                       <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                                       <path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
+                                       <path d="M12 17v1m0 -8v1"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Payment history'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           <li class="nav-item{% if request._url == '/support' %} active{% endif %}">
+                              <a class="nav-link" href="{{ '/support'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                                       <path d="M12 17l0 .01"></path>
+                                       <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Support'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% else %}
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ 'login'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                       <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Login'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% endif %}
+                           {% if not client %}
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ 'signup'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                       <path d="M16 19h6"></path>
+                                       <path d="M19 16v6"></path>
+                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Register'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           {% endif %}
+                        </ul>
                      </div>
                   </div>
-                  {% endif %}
                </div>
-            </div>
-         </header>
-         <header class="navbar-expand-md d-print-none">
-            <div class="collapse navbar-collapse" id="navbar-menu">
-               <div class="navbar">
-                  <div class="container-xl">
-                     <ul class="navbar-nav">
-                        {% if client %}
-                        <li class="nav-item{% if request._url == '' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Dashboard'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item{% if request._url == '' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Home'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% endif %}
-                        <li class="nav-item{% if request._url == '/order' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/order'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M17 17h-11v-14h-2"></path>
-                                    <path d="M6 5l14 1l-1 7h-13"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Order'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% if client %}
-                        <li class="nav-item{% if request._url == '/order/service' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/order/service'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                                    <path d="M3 12m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                                    <path d="M7 8l0 .01"></path>
-                                    <path d="M7 16l0 .01"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Services'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        <li class="nav-item{% if request._url == '/invoice' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/invoice'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
-                                    <path d="M9 7l1 0"></path>
-                                    <path d="M9 13l6 0"></path>
-                                    <path d="M13 17l2 0"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Invoices'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        <li class="nav-item{% if request._url == '/client/balance' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/client/balance'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
-                                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                    <path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
-                                    <path d="M12 17v1m0 -8v1"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Payment history'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        <li class="nav-item{% if request._url == '/support' %} active{% endif %}">
-                           <a class="nav-link" href="{{ '/support'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                                    <path d="M12 17l0 .01"></path>
-                                    <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Support'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                           <a class="nav-link" href="{{ 'login'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                    <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Login'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% endif %}
-                        {% if not client %}
-                        <li class="nav-item">
-                           <a class="nav-link" href="{{ 'signup'|link }}">
-                              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                    <path d="M16 19h6"></path>
-                                    <path d="M19 16v6"></path>
-                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
-                                 </svg>
-                              </span>
-                              <span class="nav-link-title">
-                              {{ 'Register'|trans }}
-                              </span>
-                           </a>
-                        </li>
-                        {% endif %}
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </header>
+            </header>
+         </div>
          <div class="page-wrapper">
             <!-- Page header -->
             <div class="page-header d-print-none">
