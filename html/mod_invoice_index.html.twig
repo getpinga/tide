@@ -30,25 +30,25 @@
                <div class="card-body">
                   <div class="tab-content">
                      <div class="tab-pane active show" id="tabs-unpaid">
-                        <div class="table-responsive">
+                        <div id="invoices-table-unpaid" class="table-responsive">
                            <table class="table table-vcenter text-nowrap table-hover table-bordered table-striped">
                               <thead>
                                  <tr>
-                                    <th>{{ 'Title'|trans }}</th>
-                                    <th>{{ 'Invoice Date'|trans }}</th>
-                                    <th>{{ 'Due Date'|trans }}</th>
-                                    <th>{{ 'Total'|trans }}</th>
+                                    <th><button class="table-sort" data-sort="sort-title-u">{{ 'Title'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-date-u">{{ 'Invoice Date'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-due-u">{{ 'Due Date'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-total-u">{{ 'Total'|trans }}</button></th>
                                     <th>&nbsp;</th>
                                  </tr>
                               </thead>
-                              <tbody>
+                              <tbody class="table-tbody">
                                  {% if unpaid_invoices.total > 0 %}
                                  {% for i, invoice in unpaid_invoices.list %}
                                  <tr class="{{ cycle(['odd', 'even'], i) }}">
-                                    <td>{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
-                                    <td>{{ invoice.created_at|format_date }}</td>
-                                    <td>{{ invoice.due_at|format_date }}</td>
-                                    <td>{{ invoice.total | money(invoice.currency) }}</td>
+                                    <td class="sort-title-u">{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
+                                    <td class="sort-date-u">{{ invoice.created_at|format_date }}</td>
+                                    <td class="sort-due-u">{{ invoice.due_at|format_date }}</td>
+                                    <td class="sort-total-u">{{ invoice.total | money(invoice.currency) }}</td>
                                     <td><a class="btn btn-small btn-primary" href="{{ 'invoice'|link }}/{{ invoice.hash }}">{{ 'Pay'|trans }}</a></td>
                                  </tr>
                                  {% endfor %}
@@ -62,25 +62,25 @@
                         </div>
                      </div>
                      <div class="tab-pane" id="tabs-paid">
-                        <div class="table-responsive">
+                        <div id="invoices-table-paid" class="table-responsive">
                            <table class="table table-bordered table-vcenter text-nowrap table-hover table-striped">
                               <thead>
                                  <tr>
-                                    <th>{{ 'Title'|trans }}</th>
-                                    <th>{{ 'Invoice Date'|trans }}</th>
-                                    <th>{{ 'Paid Date'|trans }}</th>
-                                    <th>{{ 'Total'|trans }}</th>
-                                    <th>&nbsp</th>
+                                    <th><button class="table-sort" data-sort="sort-title-p">{{ 'Title'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-date-p">{{ 'Invoice Date'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-due-p">{{ 'Paid Date'|trans }}</button></th>
+                                    <th><button class="table-sort" data-sort="sort-total-p">{{ 'Total'|trans }}</button></th>
+                                    <th>&nbsp;</th>
                                  </tr>
                               </thead>
-                              <tbody>
+                              <tbody class="table-tbody">
                                  {% if paid_invoices.total > 0 %}
                                  {% for i, invoice in paid_invoices.list %}
                                  <tr class="{{ cycle(['odd', 'even'], i) }}">
-                                    <td>{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
-                                    <td>{{ invoice.created_at|format_date }}</td>
-                                    <td>{{ invoice.paid_at|format_date }}</td>
-                                    <td>{{ invoice.total | money(invoice.currency) }}</td>
+                                    <td class="sort-title-p">{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
+                                    <td class="sort-date-p">{{ invoice.created_at|format_date }}</td>
+                                    <td class="sort-due-p">{{ invoice.paid_at|format_date }}</td>
+                                    <td class="sort-total-p">{{ invoice.total | money(invoice.currency) }}</td>
                                     <td><a href="{{ 'invoice'|link }}/{{ invoice.hash }}" class="btn btn-primary btn-small">{{ 'View'|trans }}</a></td>
                                  </tr>
                                  {% endfor %}
@@ -105,3 +105,22 @@
    </div>
 </div>
 {% endblock %}
+{% block footerjs %}
+<script src="{{ 'libs/list.js/dist/list.min.js' | asset_url }}" defer></script>
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+   const list = new List('invoices-table-unpaid', {
+   	sortClass: 'table-sort',
+   	listClass: 'table-tbody',
+   	valueNames: [ 'sort-title-u', 'sort-due-u', 'sort-date-u', 'sort-total-u'
+   	]
+   });
+   
+   const list2 = new List('invoices-table-paid', {
+   	sortClass: 'table-sort',
+   	listClass: 'table-tbody',
+   	valueNames: [ 'sort-title-p', 'sort-due-p', 'sort-date-p', 'sort-total-p'
+   	]
+   }); 
+   })
+</script>{% endblock %}

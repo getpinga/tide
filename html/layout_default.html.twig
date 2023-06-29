@@ -500,6 +500,7 @@
       {{ settings.inject_javascript | raw}}
       {% endif %}
       {% include 'partial_pending_messages.html.twig' ignore missing %}
+	  {% block footerjs %}{% endblock %}
       <script src="{{ 'js/tabler.min.js' | asset_url }}" defer></script>
    </body>
 </html>
