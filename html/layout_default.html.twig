@@ -330,7 +330,7 @@
                      {% include "partial_message.html.twig" %}
                      {% if not client %}
                      <div class="col-md-6">
-                        <div class="card">
+                        <div class="card d-print-none">
                            <div class="card-status-top bg-blue"></div>
                            <div class="card-body">
                               <h3 class="card-title">{{ 'Profile'|trans }}</h3>
@@ -351,7 +351,7 @@
                         </div>
                      </div>
                      <div class="col-md-6">
-                        <div class="card">
+                        <div class="card d-print-none">
                            <div class="card-status-top bg-red"></div>
                            <div class="card-body">
                               <h3 class="card-title">{{ 'Order'|trans }}</h3>
@@ -369,7 +369,7 @@
                      {% endif %}
                      {% if not client %}
                      <div class="col-md-6">
-                        <div class="card bg-green text-green-fg">
+                        <div class="card bg-green text-green-fg d-print-none">
                            <div class="card-stamp">
                               <div class="card-stamp-icon bg-white text-green">
                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -395,7 +395,7 @@
                         </div>
                      </div>
                      <div class="col-md-6">
-                        <div class="card bg-orange text-orange-fg">
+                        <div class="card bg-orange text-orange-fg d-print-none">
                            <div class="card-stamp">
                               <div class="card-stamp-icon bg-white text-orange">
                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

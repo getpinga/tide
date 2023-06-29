@@ -11,7 +11,52 @@
 {% set seller = invoice.seller %}
 {% set buyer = invoice.buyer %}
 {% set company  = guest.system_company %}
-<div class="card card-lg">
+{% if invoice.status == 'unpaid' %}
+<div class="card mb-3 d-print-none bg-yellow-lt">
+   <div class="card-header">
+      <h3 class="card-title">{{ 'Please choose payment type and pay for your chosen products.'|trans }}</h3>
+   </div>
+   <div class="card-body p-2">
+      <div class="row">
+         <form method="post" action="{{ 'api/guest/invoice/payment'|link }}" class="api-form" data-api-redirect="{{ ('invoice/'~invoice.hash)|link({ 'auto_redirect': 1 }) }}">
+            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+            <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
+            {% for gtw in guest.invoice_gateways %}
+            {% if invoice.currency in gtw.accepted_currencies %}
+            {% set banklink = 'invoice/banklink'|link %}
+            <button type="button" class="hover-popover" style="background: transparent url('{{gtw.logo.logo}}') no-repeat scroll 0% 0%; height:{{gtw.logo.height}}; width:{{gtw.logo.width}}; background-size: contain; border: 0; margin: 10px;" type="radio" name="gateway_id" gateway_id="{{ gtw.id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'Pay with'|trans }} {{gtw.title}}" onclick="window.location.replace('{{banklink}}/{{invoice.hash}}/{{gtw.id}}')")></button>
+            {% endif %}
+            {% endfor %}
+            <input type="hidden" name="gateway_id" id="gateway_id">
+         </form>
+      </div>
+   </div>
+</div>
+{% endif %}
+<div class="card card-lg mb-3">
+   <div class="card-header d-print-none">
+      <div class="card-actions">
+         <a href="{{ 'invoice/pdf'|link }}/{{ invoice.hash }}" class="btn btn-outline-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+               <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z"></path>
+               <path d="M3 12h2a2 2 0 1 0 0 -4h-2v8"></path>
+               <path d="M17 12h3"></path>
+               <path d="M21 8h-4v8"></path>
+            </svg>
+            {{ 'PDF'|trans }}
+         </a>
+         <a href="#" onclick="window.print(); return false;" class="btn btn-outline-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+               <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
+               <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
+               <path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z"></path>
+            </svg>
+            {{ 'Print'|trans }}
+         </a>
+      </div>
+   </div>
    <div class="card-body">
       <div class="row">
          <div class="col-12 mb-5">
@@ -146,37 +191,6 @@
          {{ invoice.text_2|markdown }}
       </p>
       {% endif %}
-      {% if invoice.status == 'unpaid' %}
-      <div class="row d-print-none">
-         <header>
-            <p class="text-center mt-5">{{ 'Please choose payment type and pay for your chosen products.'|trans }}</p>
-         </header>
-         <form method="post" action="{{ 'api/guest/invoice/payment'|link }}" class="api-form" data-api-redirect="{{ ('invoice/'~invoice.hash)|link({ 'auto_redirect': 1 }) }}">
-            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-            <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
-            {% for gtw in guest.invoice_gateways %}
-            {% if invoice.currency in gtw.accepted_currencies %}
-            {% set banklink = 'invoice/banklink'|link %}
-            <button type="button"  class="hover-popover" style="background: transparent url('{{gtw.logo.logo}}') no-repeat scroll 0% 0%; height:{{gtw.logo.height}}; width:{{gtw.logo.width}}; background-size: contain; border: 0; margin: 10px;" type="radio" name="gateway_id" gateway_id="{{ gtw.id }}" data-toggle="tooltip" title="{{ 'Pay with'|trans }} {{gtw.title}}" onclick="window.location.replace('{{banklink}}/{{invoice.hash}}/{{gtw.id}}')")></button>
-            {% endif %}
-            {% endfor %}
-            <input type="hidden" name="gateway_id" id="gateway_id">
-         </form>
-      </div>
-      {% endif %}
-      <p class="text-center mt-5 d-print-none">{{ 'You can print this invoice or export it to PDF file by clicking on corresponding button.'|trans }}</p>
-      <div class="row d-print-none">
-         <div class="col-md-6 mt-2">
-            <a href="{{ 'invoice/pdf'|link }}/{{ invoice.hash }}" class="btn btn-outline-dark w-100">
-            {{ 'PDF'|trans }}
-            </a>
-         </div>
-         <div class="col-md-6 mt-2">
-            <a href="#" onclick="window.print(); return false;" class="btn btn-outline-primary w-100">
-            {{ 'Print'|trans }}
-            </a>
-         </div>
-      </div>
    </div>
 </div>
 {% endblock %}
