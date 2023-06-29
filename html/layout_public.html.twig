@@ -21,7 +21,7 @@
       <meta name="robots" content="{{ settings.meta_robots }}">
       <meta name="author" content="{{ settings.meta_author }}">
       <meta name="generator" content="FOSSBilling {{ guest.system_version }}">
-      <meta name="canonical" content="https://preview.tabler.io/layout-fluid.html">
+      <meta name="canonical" content="{{ constant('BB_URL') }}">
       {% block opengraph %}{% endblock %}
       <!-- CSS files -->
       <link href="{{ 'css/tabler.min.css' | asset_url }}" rel="stylesheet"/>
