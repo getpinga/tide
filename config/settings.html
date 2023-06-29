@@ -142,9 +142,41 @@
 
     <table>
     <tr>
+        <td><label>Show Footer</label></td>
+        <td>
+            <label><input type="radio" name="footer_enabled" value="1" id="footer_enabled_1" checked="checked"/>Yes</label>
+            <label><input type="radio" name="footer_enabled" value="0" id="footer_enabled_0"/>No</label>
+        </td>
+    </tr>
+
+    <tr>
         <td><label for="footer_signature">Footer text (instead of company signature)</label></td>
         <td><input type="text" name="footer_signature" id="footer_signature" value=""/></td>
     </tr>
+    </table>
+
+    <h3>Links</h3>
+    <table>
+        <tr>
+            <td><label>Footer link #1</label></td>
+            <td><label><input type="checkbox" name="footer_link_1_enabled"/></label><input type="text" name="footer_link_1_title" value=""/><span> -> </span><input type="text" name="footer_link_1_page"/></td>
+        </tr>
+
+        <tr>
+            <td><label>Footer link #2</label></td>
+            <td><label><input type="checkbox" name="footer_link_2_enabled"/></label><input type="text" name="footer_link_2_title" value=""/><span> -> </span><input type="text" name="footer_link_2_page"/></td>
+        </tr>
+
+        <tr>
+            <td><label>Footer link #3</label></td>
+            <td><label><input type="checkbox" name="footer_link_3_enabled"/></label><input type="text" name="footer_link_3_title" value=""/><span> -> </span><input type="text" name="footer_link_3_page"/></td>
+        </tr>
+
+        <tr>
+            <td><label>Footer link #4</label></td>
+            <td><label><input type="checkbox" name="footer_link_4_enabled"/></label><input type="text" name="footer_link_4_title" value=""/><span> -> </span><input type="text" name="footer_link_4_page"/></td>
+        </tr>
+
     </table>
 
     <h3>Javascript</h3>

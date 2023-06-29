@@ -425,9 +425,50 @@
                </div>
             </div>
             <div id="push"></div>
+            {% if settings.footer_enabled %}
             <footer class="footer footer-transparent d-print-none">
                <div class="container-xl">
                   <div class="row text-center align-items-center flex-row-reverse">
+                     {% set linksAvailable = false %}
+                     {% for i in 1..4 %}
+                     {% if attribute(settings, 'footer_link_' ~ i ~ '_enabled') %}
+                     {% set linksAvailable = true %}
+                     {% endif %}
+                     {% endfor %}
+                     {% if linksAvailable %}
+                     <div class="col-lg-auto ms-lg-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+                           {% if settings.footer_link_1_enabled %}
+                           {% if 'http://' in settings.footer_link_1_page or  'https://' in settings.footer_link_1_page%}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a></li>
+                           {% else %}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_1_page | link }}" class="link-secondary">{{ settings.footer_link_1_title }}</a></li>
+                           {% endif %}
+                           {% endif %}	  
+                           {% if settings.footer_link_2_enabled %}
+                           {% if 'http://' in settings.footer_link_2_page or  'https://' in settings.footer_link_2_page%}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a></li>
+                           {% else %}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_2_page | link }}" class="link-secondary">{{ settings.footer_link_2_title }}</a></li>
+                           {% endif %}
+                           {% endif %}	
+                           {% if settings.footer_link_3_enabled %}
+                           {% if 'http://' in settings.footer_link_3_page or  'https://' in settings.footer_link_3_page%}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a></li>
+                           {% else %}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_3_page | link }}" class="link-secondary">{{ settings.footer_link_3_title }}</a></li>
+                           {% endif %}
+                           {% endif %}	
+                           {% if settings.footer_link_4_enabled %}
+                           {% if 'http://' in settings.footer_link_4_page or  'https://' in settings.footer_link_4_page%}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a></li>
+                           {% else %}
+                           <li class="list-inline-item"><a href="{{ settings.footer_link_4_page | link }}" class="link-secondary">{{ settings.footer_link_4_title }}</a></li>
+                           {% endif %}
+                           {% endif %}	
+                        </ul>
+                     </div>
+                     {% endif %}	
                      <div class="col-12 col-lg-auto mt-3 mt-lg-0">
                         <ul class="list-inline list-inline-dots mb-0">
                            <li class="list-inline-item">
@@ -443,6 +484,7 @@
                   </div>
                </div>
             </footer>
+            {% endif %}
          </div>
       </div>
       <div class="wait" style="display:none" onclick="$(this).hide();">
