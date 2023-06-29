@@ -20,7 +20,7 @@
             <div class="alert alert-info alert-dismissible" role="alert" style="display: none" id="account-created-info-block">
                <div class="d-flex">
                   <div>
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-octagon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M9.103 2h5.794a3 3 0 0 1 2.122 .879l4.101 4.1a3 3 0 0 1 .88 2.125v5.794a3 3 0 0 1 -.879 2.122l-4.1 4.101a3 3 0 0 1 -2.123 .88h-5.795a3 3 0 0 1 -2.122 -.88l-4.101 -4.1a3 3 0 0 1 -.88 -2.124v-5.794a3 3 0 0 1 .879 -2.122l4.1 -4.101a3 3 0 0 1 2.125 -.88z"></path>
                         <path d="M12 9h.01"></path>
@@ -135,8 +135,7 @@
                <div class="input-group input-group-flat">
                   <input type="password" class="form-control" name="password" value="" required="required" id="reg-password" autocomplete="off">
                   <span class="input-group-text">
-                     <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                     <a href="#" class="link-secondary" title="Show password" id="reveal1" data-bs-toggle="tooltip">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -149,10 +148,9 @@
             <div class="mb-3">
                <label class="form-label">{{ 'Password confirm'|trans }}</label>
                <div class="input-group input-group-flat">
-                  <input type="password" class="form-control" name="password_confirm" name="password-confirm" value="" required="required" autocomplete="off">
+                  <input type="password" class="form-control" name="password_confirm" name="password-confirm" value="" id="reg-password2" required="required" autocomplete="off">
                   <span class="input-group-text">
-                     <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                     <a href="#" class="link-secondary" title="Show password" id="reveal2" data-bs-toggle="tooltip">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -177,6 +175,39 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+    function togglePasswordVisibility(buttonId, passwordFieldId, showIconSvg, hideIconSvg) {
+        var button = document.getElementById(buttonId);
+        var passwordField = document.getElementById(passwordFieldId);
+        var tooltip = new bootstrap.Tooltip(button);
+    
+        button.addEventListener("click", function() {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                button.innerHTML = hideIconSvg;
+                tooltip.dispose();
+                tooltip = new bootstrap.Tooltip(button, {
+                    title: "Hide password"
+                });
+            } else {
+                passwordField.type = "password";
+                button.innerHTML = showIconSvg;
+                tooltip.dispose();
+                tooltip = new bootstrap.Tooltip(button, {
+                    title: "Show password"
+                });
+            }
+        });
+    }
+
+    var showIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>';
+    var hideIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"></path><path d="M3 3l18 18"></path></svg>';
+    
+    togglePasswordVisibility("reveal1", "reg-password", showIconSvg, hideIconSvg);
+    togglePasswordVisibility("reveal2", "reg-password2", showIconSvg, hideIconSvg);
+});
+
+
    $(function () {
        $('#client-signup').on('submit', function (event) {
            $.ajax({
