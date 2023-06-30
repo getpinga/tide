@@ -1,7 +1,7 @@
 {% if order.status == 'active' or order.status == 'failed_renew' %}
 <div class="row row-deck row-cards mt-1">
    <div class="col-md-12">
-      <div class="card">
+      <div class="card border border-bottom-0">
          <div class="card-header">
             <h3 class="card-title">{{ 'Domain management'|trans }}</h3>
          </div>
@@ -10,7 +10,7 @@
 </div>
 <div class="row row-deck row-cards">
    <div class="col-md-12">
-      <div class="card">
+      <div class="card border border-top-0">
          <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                <li class="nav-item">
@@ -46,11 +46,11 @@
                            </tr>
                            <tr>
                               <td>{{ 'Registration date'|trans }}</td>
-                              <td>{{ service.registered_at|format_date }}</td>
+                              <td>{{ service.registered_at|date('Y-m-d H:i:s') }}</td>
                            </tr>
                            <tr>
                               <td>{{ 'Expires at'|trans }}</td>
-                              <td>{{ service.expires_at|format_date }}</td>
+                              <td>{{ service.expires_at|date('Y-m-d H:i:s') }}</td>
                            </tr>
                         </tbody>
                      </table>
@@ -61,26 +61,24 @@
                      <h4 class="alert-title">{{ 'Domain Protection'|trans }}</h4>
                      <div class="text-muted">{{ 'Domain locking is a security enhancement to prevent unauthorized transfers of your domain to another registrar or web host by "locking" your domain name servers.'|trans }}</div>
                   </div>
-                  <div class="control-group">
-                     <div class="controls">
-                        <button class="btn btn-primary" type="button" id="domain-unlock" {% if service.locked == 0 %}style="display:none;"{% endif %}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                           <path d="M15 11h2a2 2 0 0 1 2 2v2m0 4a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h4"></path>
-                           <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
-                           <path d="M8 11v-3m.719 -3.289a4 4 0 0 1 7.281 2.289v4"></path>
-                           <path d="M3 3l18 18"></path>
-                        </svg>
-                        {{ 'Unlock'|trans }}</button>
-                        <button class="btn btn-primary" type="button" id="domain-lock" {% if service.locked == 1 %}style="display:none;"{% endif %}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                           <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
-                           <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
-                           <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
-                        </svg>
-                        {{ 'Lock'|trans }}</button>
-                     </div>
+                  <div class="mb-3">
+                     <button class="btn btn-primary" type="button" id="domain-unlock" {% if service.locked == 0 %}style="display:none;"{% endif %}>
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M15 11h2a2 2 0 0 1 2 2v2m0 4a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h4"></path>
+                        <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
+                        <path d="M8 11v-3m.719 -3.289a4 4 0 0 1 7.281 2.289v4"></path>
+                        <path d="M3 3l18 18"></path>
+                     </svg>
+                     {{ 'Unlock'|trans }}</button>
+                     <button class="btn btn-primary" type="button" id="domain-lock" {% if service.locked == 1 %}style="display:none;"{% endif %}>
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
+                        <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
+                        <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
+                     </svg>
+                     {{ 'Lock'|trans }}</button>
                   </div>
                </div>
                <div class="tab-pane" id="tabs-privacy">
@@ -88,32 +86,28 @@
                      <h4 class="alert-title">{{ 'Domain Privacy Settings'|trans }}</h4>
                      <div class="text-muted">{{ 'If you would like to hide domain contact information which is shown on WHOIS you can enable privacy protection. Once domain privacy protection is enabled no one will know who registered this service. And once you decide to disable privacy protection, information that is listed above on "Update Domain Contact Details" section will be seen on domain WHOIS again.'|trans }}</div>
                   </div>
-                  <div class="block">
-                     <div class="control-group">
-                        <div class="controls">
-                           <button class="btn btn-primary" type="button" id="domain-disable-pp" {% if service.privacy == 0 %}style="display:none;"{% endif %}>
-                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-spy-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path d="M3 11h8m4 0h6"></path>
-                              <path d="M5 11v-4c0 -.571 .16 -1.105 .437 -1.56m2.563 -1.44h8a3 3 0 0 1 3 3v4"></path>
-                              <path d="M7 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                              <path d="M14.88 14.877a3 3 0 1 0 4.239 4.247m.59 -3.414a3.012 3.012 0 0 0 -1.425 -1.422"></path>
-                              <path d="M10 17h4"></path>
-                              <path d="M3 3l18 18"></path>
-                           </svg>
-                           {{ 'Disable Privacy protection'|trans }}</button>
-                           <button class="btn btn-primary" type="button" id="domain-enable-pp" {% if service.privacy == 1 %}style="display:none;"{% endif %}>
-                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-spy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path d="M3 11h18"></path>
-                              <path d="M5 11v-4a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v4"></path>
-                              <path d="M7 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                              <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                              <path d="M10 17h4"></path>
-                           </svg>
-                           {{ 'Enable Privacy protection'|trans }}</button>
-                        </div>
-                     </div>
+                  <div class="mb-3">
+                     <button class="btn btn-primary" type="button" id="domain-disable-pp" {% if service.privacy == 0 %}style="display:none;"{% endif %}>
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M3 11h8m4 0h6"></path>
+                        <path d="M5 11v-4c0 -.571 .16 -1.105 .437 -1.56m2.563 -1.44h8a3 3 0 0 1 3 3v4"></path>
+                        <path d="M7 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                        <path d="M14.88 14.877a3 3 0 1 0 4.239 4.247m.59 -3.414a3.012 3.012 0 0 0 -1.425 -1.422"></path>
+                        <path d="M10 17h4"></path>
+                        <path d="M3 3l18 18"></path>
+                     </svg>
+                     {{ 'Disable Privacy protection'|trans }}</button>
+                     <button class="btn btn-primary" type="button" id="domain-enable-pp" {% if service.privacy == 1 %}style="display:none;"{% endif %}>
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M3 11h18"></path>
+                        <path d="M5 11v-4a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v4"></path>
+                        <path d="M7 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                        <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                        <path d="M10 17h4"></path>
+                     </svg>
+                     {{ 'Enable Privacy protection'|trans }}</button>
                   </div>
                </div>
                <div class="tab-pane" id="tabs-nameservers">
@@ -127,27 +121,19 @@
                      <fieldset class="form-fieldset">
                         <div class="mb-3">
                            <label class="form-label required">{{ 'Nameserver 1'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="ns1" value="{{ request.ns1|default(service.ns1) }}" required="required">
-                           </div>
+                           <input type="text" class="form-control" name="ns1" value="{{ request.ns1|default(service.ns1) }}" required="required">
                         </div>
                         <div class="mb-3">
                            <label class="form-label required">{{ 'Nameserver 2'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="ns2" value="{{ request.ns2|default(service.ns2) }}" required="required">
-                           </div>
+                           <input type="text" class="form-control" name="ns2" value="{{ request.ns2|default(service.ns2) }}" required="required">
                         </div>
                         <div class="mb-3">
                            <label class="form-label">{{ 'Nameserver 3'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="ns3" value="{{ request.ns3|default(service.ns3) }}">
-                           </div>
+                           <input type="text" class="form-control" name="ns3" value="{{ request.ns3|default(service.ns3) }}">
                         </div>
                         <div class="mb-3">
                            <label class="form-label">{{ 'Nameserver 4'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="ns4" value="{{ request.ns4|default(service.ns4) }}">
-                           </div>
+                           <input type="text" class="form-control" name="ns4" value="{{ request.ns4|default(service.ns4) }}">
                         </div>
                         <div class="mb-3">
                            <div>
@@ -172,92 +158,74 @@
                   <form method="post" action="" id="update-contact" class="form-horizontal">
                      <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                      <input type="hidden" name="order_id" value="{{ order.id }}">
-                     <fieldset class="form-fieldset">
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'First Name'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[first_name]" value="{{ request.first_name|default(service.contact.first_name) }}" required="required">
-                           </div>
+                     <div class="row">
+                        <div class="col-md-6">
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'First Name'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[first_name]" value="{{ request.first_name|default(service.contact.first_name) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Last Name'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[last_name]" value="{{ request.last_name|default(service.contact.last_name) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Email'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[email]" value="{{ request.email|default(service.contact.email) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Company'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[company]" value="{{ request.company|default(service.contact.company) }}">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Address Line 1'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[address1]" value="{{ request.address1|default(service.contact.address1) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label">{{ 'Address Line 2'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[address2]" value="{{ request.address2|default(service.contact.address2) }}">
+                              </div>
+                           </fieldset>
                         </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Last Name'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[last_name]" value="{{ request.last_name|default(service.contact.last_name) }}" required="required">
-                           </div>
+                        <div class="col-md-6">
+                           <fieldset class="form-fieldset">
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Country'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[country]" value="{{ request.country|default(service.contact.country) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'City'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[city]" value="{{ request.city|default(service.contact.city) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'State'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[state]" value="{{ request.state|default(service.contact.state) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Zip'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[postcode]" value="{{ request.postcode|default(service.contact.postcode) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Phone Country Code'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[phone_cc]" value="{{ request.phone_cc|default(service.contact.phone_cc) }}" required="required">
+                              </div>
+                              <div class="mb-3">
+                                 <label class="form-label required">{{ 'Phone number'|trans }}:</label>
+                                 <input type="text" class="form-control" name="contact[phone]" value="{{ request.phone|default(service.contact.phone) }}" required="required">
+                              </div>
+                           </fieldset>
                         </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Email'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[email]" value="{{ request.email|default(service.contact.email) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label">{{ 'Company'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[company]" value="{{ request.company|default(service.contact.company) }}">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Address Line 1'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[address1]" value="{{ request.address1|default(service.contact.address1) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label">{{ 'Address Line 2'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[address2]" value="{{ request.address2|default(service.contact.address2) }}">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Country'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[country]" value="{{ request.country|default(service.contact.country) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'City'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[city]" value="{{ request.city|default(service.contact.city) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'State'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[state]" value="{{ request.state|default(service.contact.state) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Zip'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[postcode]" value="{{ request.postcode|default(service.contact.postcode) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Phone Country Code'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[phone_cc]" value="{{ request.phone_cc|default(service.contact.phone_cc) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <label class="form-label required">{{ 'Phone number'|trans }}:</label>
-                           <div>
-                              <input type="text" class="form-control" name="contact[phone]" value="{{ request.phone|default(service.contact.phone) }}" required="required">
-                           </div>
-                        </div>
-                        <div class="mb-3">
-                           <div>
-                              <button type="submit" class="btn btn-primary" value="{{ 'Update'|trans }}">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
-                                    <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
-                                 </svg>
-                                 {{ 'Update'|trans }}
-                              </button>
-                           </div>
-                        </div>
-                     </fieldset>
+                     </div>
+                     <div class="mb-3">
+                        <button type="submit" class="btn btn-primary" value="{{ 'Update'|trans }}">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                           </svg>
+                           {{ 'Update'|trans }}
+                        </button>
+                     </div>
                   </form>
                </div>
                <div class="tab-pane" id="tabs-transfer">
@@ -265,15 +233,17 @@
                      <h4 class="alert-title">{{ 'Domain Secret'|trans }}</h4>
                      <div class="text-muted">{{ 'All domain names (except a .EU, .UK domain name) have a Domain (Transfer) Secret Key/Authorization Code (EPP Code) associated with them. This would be required if you want to transfer service.'|trans }}</div>
                   </div>
-                  <button class="btn btn-primary" type="button" id="get-epp">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M4 19v2h16v-14l-8 -4l-8 4v2"></path>
-                        <path d="M13 14h-9"></path>
-                        <path d="M7 11l-3 3l3 3"></path>
-                     </svg>
-                     {{ 'Get EPP code'|trans }}
-                  </button>
+                  <div class="mb-3">
+                     <button class="btn btn-primary" type="button" id="get-epp">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                           <path d="M4 19v2h16v-14l-8 -4l-8 4v2"></path>
+                           <path d="M13 14h-9"></path>
+                           <path d="M7 11l-3 3l3 3"></path>
+                        </svg>
+                        {{ 'Get EPP code'|trans }}
+                     </button>
+                  </div>
                </div>
             </div>
          </div>
