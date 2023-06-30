@@ -6,7 +6,7 @@
 <fieldset class="form-fieldset">
    {% for field in form.fields %}
    {% if form.style.type == 'horizontal' %}
-   <div class="control-group">
+   <div class="mb-3">
       {% endif %}
       {% if field.hide_label!=1 %}<label {% if form.style.type == 'horizontal' %}class="form-label"{% endif %}>{{ field.label }}</label>{% endif %}
       {% if form.style.type == 'horizontal' %}
@@ -54,7 +54,7 @@
          {% if field.readonly==1%}readonly="readonly"{% endif %}
          >{{field.default_value}}</textarea>
          {% endif %}
-         <span class="help-block">{{field.description}}</span>
+         <span class="form-check-description">{{field.description|raw}}</span>
          {% if form.style.type == 'horizontal' %}
       </div>
    </div>
