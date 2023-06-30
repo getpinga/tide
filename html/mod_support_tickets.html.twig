@@ -3,15 +3,22 @@
 {% block meta_title %}{{ 'Support tickets'|trans }}{% endblock %}
 {% block page_header %}{{ 'Support tickets'|trans }}{% endblock %}
 {% block page_subheader %}{{ 'Need an answer? We are here to help!'|trans }}{% endblock %}
-{% block modal_href %}{{ '#submit-ticket' }}{% endblock %}
-{% block modal_title %}{{ 'New ticket'|trans }}{% endblock %}
-{% block modal_id %}{{ 'new-ticket-button' }}{% endblock %}
 {% block content %}
 <div class="row row-deck row-cards">
    <div class="col-md-12">
       <div class="card">
          <div class="card-header">
             <h3 class="card-title">{{ 'Support tickets'|trans }}</h3>
+            <div class="card-actions">
+               <a href="#submit-ticket" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#new-ticket-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                     <path d="M12 5l0 14" />
+                     <path d="M5 12l14 0" />
+                  </svg>
+                  {{ 'New ticket'|trans }}
+               </a>
+            </div>
          </div>
          <div class="table-responsive">
             <table class="table card-table table-vcenter text-nowrap table-hover table-bordered table-striped">
