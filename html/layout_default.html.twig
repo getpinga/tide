@@ -146,7 +146,6 @@
                            <li class="nav-item{% if request._url == '' %} active{% endif %}">
                               <a class="nav-link" href="{{ '/'|link }}">
                                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
@@ -163,7 +162,6 @@
                            <li class="nav-item{% if request._url == '' %} active{% endif %}">
                               <a class="nav-link" href="{{ '/'|link }}">
                                  <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
@@ -294,6 +292,36 @@
                                  </a>
                               </div>
                            </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ 'login'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                       <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Login'|trans }}
+                                 </span>
+                              </a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ 'signup'|link }}">
+                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                       <path d="M16 19h6"></path>
+                                       <path d="M19 16v6"></path>
+                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="nav-link-title">
+                                 {{ 'Register'|trans }}
+                                 </span>
+                              </a>
+                           </li>
                            {% endif %}
                         </ul>
                      </div>
@@ -338,7 +366,7 @@
                               </div>
                            </div>
                            <div class="card-body">
-                              <h3 class="card-title">{{ 'Order'|trans }}</h3>
+                              <h2>{{ 'Order'|trans }}</h2>
                               <p>{{ 'Products and services'|trans }}</p>
                               <div class="row">
                                  <div class="mt-2">
@@ -362,7 +390,7 @@
                               </div>
                            </div>
                            <div class="card-body">
-                              <h3 class="card-title">{{ 'Profile'|trans }}</h3>
+                              <h2>{{ 'Profile'|trans }}</h2>
                               <p>{{ 'You are logged out'|trans }}</p>
                               <div class="row">
                                  <div class="col-md-6 mt-2">
@@ -393,7 +421,7 @@
                               </div>
                            </div>
                            <div class="card-body">
-                              <h3 class="card-title">{{ 'News'|trans }}</h3>
+                              <h2 >{{ 'News'|trans }}</h2>
                               <p>{{ 'Latest news and announcements' | trans }}</p>
                               <div class="row">
                                  <div class="mt-2">
