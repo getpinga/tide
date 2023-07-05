@@ -96,6 +96,26 @@
                               </div>
                            </div>
                            {% endif %}
+                           {% if not client %}
+                           <a href="{{ 'login'|link }}" class="btn btn-secondary">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                 <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                              </svg>
+                              {{ 'Login'|trans }}
+                           </a>
+                           <a href="{{ 'signup'|link }}" class="btn btn-primary">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                 <path d="M16 19h6"></path>
+                                 <path d="M19 16v6"></path>
+                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                              </svg>
+                              {{ 'Register'|trans }}
+                           </a>
+                           {% endif %}
                         </div>
                      </div>
                      {% if client %}
@@ -110,8 +130,6 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                            <a href="{{ 'client/profile' | link}}" class="dropdown-item">{{ 'Profile'|trans }}</a>
                            <a href="{{ '/email'|link }}" class="dropdown-item">{{ 'Emails'|trans }}</a>
-                           <a href="{{ '/news'|link }}" class="dropdown-item">{{ 'Announcements'|trans }}</a>
-                           <a href="{{ '/kb'|link }}" class="dropdown-item">{{ 'Knowledge base'|trans }}</a>
                            <a href="{{ 'client/logout' | link}}" class="dropdown-item">{{ 'Sign out'|trans }}</a>
                         </div>
                      </div>
@@ -225,8 +243,8 @@
                                  </span>
                               </a>
                            </li>
-                           <li class="nav-item{% if request._url == '/support' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/support'|link }}">
+                           <li class="nav-item dropdown{% if request._url == '/support' %} active{% endif %}">
+                              <a class="nav-link dropdown-toggle" href="#support" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
                                  <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -239,39 +257,42 @@
                                  {{ 'Support'|trans }}
                                  </span>
                               </a>
-                           </li>
-                           {% else %}
-                           <li class="nav-item">
-                              <a class="nav-link" href="{{ 'login'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                       <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Login'|trans }}
-                                 </span>
-                              </a>
+                              <div class="dropdown-menu">
+                                 <a class="dropdown-item" href="{{ '/support'|link }}">
+                                 {{ 'Support'|trans }}
+                                 </a>
+                                 <a class="dropdown-item" href="{{ '/news'|link }}">
+                                 {{ 'Announcements'|trans }}
+                                 </a>
+                                 <a class="dropdown-item" href="{{ '/kb'|link }}">
+                                 {{ 'Knowledge base'|trans }}
+                                 </a>
+                              </div>
                            </li>
                            {% endif %}
                            {% if not client %}
-                           <li class="nav-item">
-                              <a class="nav-link" href="{{ 'signup'|link }}">
+                           <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
                                  <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                       <path d="M16 19h6"></path>
-                                       <path d="M19 16v6"></path>
-                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                                       <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                                       <path d="M12 17l0 .01"></path>
+                                       <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path>
                                     </svg>
                                  </span>
                                  <span class="nav-link-title">
-                                 {{ 'Register'|trans }}
+                                 {{ 'Support'|trans }}
                                  </span>
                               </a>
+                              <div class="dropdown-menu">
+                                 <a class="dropdown-item" href="{{ '/news'|link }}">
+                                 {{ 'Announcements'|trans }}
+                                 </a>
+                                 <a class="dropdown-item" href="{{ '/kb'|link }}">
+                                 {{ 'Knowledge base'|trans }}
+                                 </a>
+                              </div>
                            </li>
                            {% endif %}
                         </ul>
@@ -302,36 +323,26 @@
                   <div class="row row-deck row-cards">
                      {% include "partial_message.html.twig" %}
                      {% if not client %}
-                     <div class="col-md-6">
-                        <div class="card d-print-none">
-                           <div class="card-status-top bg-blue"></div>
-                           <div class="card-body">
-                              <h3 class="card-title">{{ 'Profile'|trans }}</h3>
-                              <p class="text-muted">{{ 'You are logged out'|trans }}</p>
-                              <div class="row">
-                                 <div class="col-md-6 mt-2">
-                                    <a href="{{ '/login'|link }}" class="btn btn-outline-primary w-100">
-                                    {{ 'Login'|trans }}
-                                    </a>
-                                 </div>
-                                 <div class="col-md-6 mt-2">
-                                    <a href="{{ '/signup'|link }}" class="btn btn-outline-primary w-100">
-                                    {{ 'Register'|trans }}
-                                    </a>
-                                 </div>
+                     {% if request._url is empty %}
+                     <div class="col-md-4">
+                        <div class="card bg-red text-red-fg d-print-none">
+                           <div class="card-stamp">
+                              <div class="card-stamp-icon bg-white text-red">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                    <path d="M17 17h-11v-14h-2"></path>
+                                    <path d="M6 5l14 1l-1 7h-13"></path>
+                                 </svg>
                               </div>
                            </div>
-                        </div>
-                     </div>
-                     <div class="col-md-6">
-                        <div class="card d-print-none">
-                           <div class="card-status-top bg-red"></div>
                            <div class="card-body">
                               <h3 class="card-title">{{ 'Order'|trans }}</h3>
-                              <p class="text-muted">{{ 'Products and services'|trans }}</p>
+                              <p>{{ 'Products and services'|trans }}</p>
                               <div class="row">
                                  <div class="mt-2">
-                                    <a href="{{ '/order'|link }}" class="btn btn-outline-primary w-100">
+                                    <a href="{{ '/order'|link }}" class="btn btn-outline-light w-100">
                                     {{ 'Order'|trans }}
                                     </a>
                                  </div>
@@ -339,9 +350,36 @@
                            </div>
                         </div>
                      </div>
-                     {% endif %}
-                     {% if not client %}
-                     <div class="col-md-6">
+                     <div class="col-md-4">
+                        <div class="card bg-blue text-blue-fg d-print-none">
+                           <div class="card-stamp">
+                              <div class="card-stamp-icon bg-white text-blue">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                 </svg>
+                              </div>
+                           </div>
+                           <div class="card-body">
+                              <h3 class="card-title">{{ 'Profile'|trans }}</h3>
+                              <p>{{ 'You are logged out'|trans }}</p>
+                              <div class="row">
+                                 <div class="col-md-6 mt-2">
+                                    <a href="{{ '/login'|link }}" class="btn btn-outline-light w-100">
+                                    {{ 'Login'|trans }}
+                                    </a>
+                                 </div>
+                                 <div class="col-md-6 mt-2">
+                                    <a href="{{ '/signup'|link }}" class="btn btn-outline-light w-100">
+                                    {{ 'Register'|trans }}
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
                         <div class="card bg-green text-green-fg d-print-none">
                            <div class="card-stamp">
                               <div class="card-stamp-icon bg-white text-green">
@@ -367,31 +405,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="col-md-6">
-                        <div class="card bg-orange text-orange-fg d-print-none">
-                           <div class="card-stamp">
-                              <div class="card-stamp-icon bg-white text-orange">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9.103 2h5.794a3 3 0 0 1 2.122 .879l4.101 4.1a3 3 0 0 1 .88 2.125v5.794a3 3 0 0 1 -.879 2.122l-4.1 4.101a3 3 0 0 1 -2.123 .88h-5.795a3 3 0 0 1 -2.122 -.88l-4.101 -4.1a3 3 0 0 1 -.88 -2.124v-5.794a3 3 0 0 1 .879 -2.122l4.1 -4.101a3 3 0 0 1 2.125 -.88z"></path>
-                                    <path d="M12 16v.01"></path>
-                                    <path d="M12 13a2 2 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483"></path>
-                                 </svg>
-                              </div>
-                           </div>
-                           <div class="card-body">
-                              <h3 class="card-title">{{ 'Knowledge base'|trans }}</h3>
-                              <p>{{ 'Browse our KB for answers and FAQ' | trans }}</p>
-                              <div class="row">
-                                 <div class="mt-2">
-                                    <a href="{{ '/kb'|link }}" class="btn btn-outline-light w-100">
-                                    {{ 'Knowledge base'|trans }}
-                                    </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
+                     {% endif %}
                      {% endif %}
                      {% block content_after %}{% endblock %}
                   </div>
@@ -471,7 +485,7 @@
       {{ settings.inject_javascript | raw}}
       {% endif %}
       {% include 'partial_pending_messages.html.twig' ignore missing %}
-	  {% block footerjs %}{% endblock %}
+      {% block footerjs %}{% endblock %}
       <script src="{{ 'js/tabler.min.js' | asset_url }}" defer></script>
    </body>
 </html>
