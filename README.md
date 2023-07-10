@@ -6,6 +6,7 @@
 1. Clone the repository, or download the latest version
 2. Extract and move the tide directory into `FOSSBilling directory`/themes
 3. Chmod 777 `FOSSBilling directory`/themes/tide/assets and `FOSSBilling directory`/themes/tide/config/settings_data.json
+4. Go to Admin panel -> Settings -> Themes and select tide as default
 
 ## How to upgrade
 
