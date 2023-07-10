@@ -36,34 +36,34 @@
             </div>
             {% set r = guest.client_required %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Email Address'|trans }}</label>
+               <label class="form-label required">{{ 'Email Address'|trans }}</label>
                <input type="email" class="form-control" placeholder="Enter email" name="email" value="{{ request.email }}" required="required" id="reg-email">
             </div>
             <div class="mb-3">
-               <label class="form-label">{{ 'First Name'|trans }}</label>
+               <label class="form-label required">{{ 'First Name'|trans }}</label>
                <input type="text" class="form-control" name="first_name" id="first-name" value="{{ request.first_name }}" required="required">
             </div>
             {% if 'last_name' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Last Name'|trans }}</label>
+               <label class="form-label required">{{ 'Last Name'|trans }}</label>
                <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.last_name }}" required="required">
             </div>
             {% endif %}
             {% if 'company' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Company'|trans }}</label>
+               <label class="form-label required">{{ 'Company'|trans }}</label>
                <input type="text" class="form-control" name="company" id="company" value="{{ request.company }}" required="required">
             </div>
             {% endif %}
             {% if 'birthday' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Birthday'|trans }}</label>
-               <input type="date" name="birthday" id="birthday" value="">
+               <label class="form-label required">{{ 'Birthday'|trans }}</label>
+               <input type="date" class="form-control" name="birthday" id="birthday" value="">
             </div>
             {% endif %}
             {% if 'gender' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'You are'|trans }}</label>
+               <label class="form-label required">{{ 'You are'|trans }}</label>
                <select class="form-select" name="gender" id="gender">
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -74,19 +74,19 @@
             {% endif %}
             {% if 'address_1' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Address'|trans }}</label>
+               <label class="form-label required">{{ 'Address'|trans }}</label>
                <input type="text" class="form-control" name="address_1" id="address_1" value="{{ request.address_1 }}">
             </div>
             {% endif %}
             {% if 'address_2' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Address 2'|trans }}</label>
+               <label class="form-label required">{{ 'Address 2'|trans }}</label>
                <input type="text" class="form-control" name="address_2" id="address_2" value="{{ request.address_2 }}">
             </div>
             {% endif %}
             {% if 'city' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'City'|trans }}</label>
+               <label class="form-label required">{{ 'City'|trans }}</label>
                <input type="text" class="form-control" name="city" id="city" value="{{ request.city }}">
             </div>
             {% endif %}
@@ -103,22 +103,30 @@
             {% endif %}
             {% if 'state' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'State'|trans }}</label>
+               <label class="form-label required">{{ 'State'|trans }}</label>
                {# mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') #}
                <input type="text" class="form-control" name="state" id="state" value="{{ request.state }}" />
             </div>
             {% endif %}
             {% if 'postcode' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Zip/Postal Code'|trans }}</label>
+               <label class="form-label required">{{ 'Zip/Postal Code'|trans }}</label>
                <input type="text" class="form-control" name="postcode" id="postcode" value="{{ request.postcode }}">
             </div>
             {% endif %}
             {% if 'phone' in r %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Phone Number'|trans }}</label>
-               <input type="text" class="form-control" name="phone_cc" value="" style="width:20%">
-               <input id="phone" class="form-control" type="text" name="phone" value="{{ request.phone }}" style="width:70%">
+               <div class="row">
+                  <label class="form-label required">{{ 'Phone Number'|trans }}</label>
+               </div>
+               <div class="row">
+			      <div class="col-4">
+                     <input type="text" class="form-control" name="phone_cc" value="+">
+			      </div>
+			      <div class="col-8">
+                     <input id="phone" class="form-control" type="text" name="phone" value="{{ request.phone }}">
+			      </div>
+               </div>
             </div>
             {% endif %}
             {% set custom_fields = guest.client_custom_fields %}
@@ -131,7 +139,7 @@
             {% endif %}
             {% endfor %}
             <div class="mb-3">
-               <label class="form-label">{{ 'Password'|trans }}</label>
+               <label class="form-label required">{{ 'Password'|trans }}</label>
                <div class="input-group input-group-flat">
                   <input type="password" class="form-control" name="password" value="" required="required" id="reg-password" autocomplete="off">
                   <span class="input-group-text">
@@ -146,7 +154,7 @@
                </div>
             </div>
             <div class="mb-3">
-               <label class="form-label">{{ 'Password confirm'|trans }}</label>
+               <label class="form-label required">{{ 'Password confirm'|trans }}</label>
                <div class="input-group input-group-flat">
                   <input type="password" class="form-control" name="password_confirm" name="password-confirm" value="" id="reg-password2" required="required" autocomplete="off">
                   <span class="input-group-text">
