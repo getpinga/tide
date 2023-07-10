@@ -81,7 +81,7 @@
                            {% if paid_invoices.total > 0 %}
                            {% for i, invoice in paid_invoices.list %}
                            <tr class="{{ cycle(['odd', 'even'], i) }}">
-                              <td class="sort-title-p">{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
+                              <td class="sort-title-p">{{ "Invoice #%05s"|format(invoice.id) }}</td>
                               <td class="sort-date-p">{{ invoice.created_at|format_date }}</td>
                               <td class="sort-due-p">{{ invoice.paid_at|format_date }}</td>
                               <td class="sort-total-p">{{ invoice.total | money(invoice.currency) }}</td>
