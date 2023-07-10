@@ -115,7 +115,10 @@ var bb = {
         });
     },
     msg: function(txt, type) {
-        $.jGrowl(txt);
+       let toastEl = document.querySelector('.toast');
+       toastEl.querySelector('.toast-body').textContent = txt;
+       let toast = new bootstrap.Toast(toastEl);
+       toast.show();
     },
     apiForm: function() {
         $("form.api_form, form.api-form").bind('submit', function(){

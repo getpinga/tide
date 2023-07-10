@@ -28,11 +28,9 @@
       <link href="{{ 'css/tabler-flags.min.css' | asset_url }}" rel="stylesheet"/>
       <link href="{{ 'css/tabler-payments.min.css' | asset_url }}" rel="stylesheet"/>
       <link href="{{ 'css/tabler-vendors.min.css' | asset_url }}" rel="stylesheet"/>
-      <link href="{{ 'css/jquery.jgrowl.css' | asset_url }}" rel="stylesheet"/>
       <script src="{{ "Api/API.js?v=#{guest.system_version}" | library_url }}"></script>
       <script src="{{ 'js/jquery-3.7.0.min.js' | asset_url }}"></script>
       <script src="{{ 'js/bb-jquery.js' | asset_url }}"></script>
-      <script src="{{ 'js/jquery.jgrowl.js' | asset_url }}"></script>
       <style>
          @import url('https://rsms.me/inter/inter.css');
          :root {
@@ -41,6 +39,12 @@
          body {
          font-feature-settings: "cv03", "cv04", "cv11";
          }
+		 .toast-container {
+		 position: fixed;
+		 top: 1em;
+		 right: 1em;
+		 z-index: 99999;
+		 }
       </style>
       {% block head %}{% endblock %}
       {% block js %}{% endblock %}
@@ -555,6 +559,14 @@
       {% endif %}
       {% include 'partial_pending_messages.html.twig' ignore missing %}
       {% block footerjs %}{% endblock %}
+      <div class="toast-container"><div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-toggle="toast">
+         <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="ms-2 btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+         </div>
+         <div class="toast-body">
+         </div>
+      </div></div>
       <script src="{{ 'js/tabler.min.js' | asset_url }}" defer></script>
    </body>
 </html>
