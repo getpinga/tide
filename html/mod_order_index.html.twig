@@ -7,6 +7,14 @@
 {% block page_header %}{{ 'Select Product'|trans }}&nbsp;<span class="badge bg-blue-lt">{{ products.list|length }} {{ 'Items'|trans }}</span>{% endblock %}
 {% block page_subheader %}{{ 'Choose products we offer for selling'|trans }}{% endblock %}
 {% block body_class %}order-index{% endblock %}
+{% block breadcrumbs %}
+<div class="mb-1">
+   <ol class="breadcrumb" aria-label="breadcrumbs">
+      <li class="breadcrumb-item"><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Order'|trans }}</a></li>
+   </ol>
+</div>
+{% endblock %}
 {% block content_before %}{% endblock %}
 {% block content %}
 <div class="row row-deck row-cards">

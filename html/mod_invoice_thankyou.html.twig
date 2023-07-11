@@ -1,8 +1,6 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% block meta_title %}{{ 'Thank you'|trans }}{% endblock %}
-{% block breadcrumb %}
-<li class="active">{{ 'Thank you'|trans }}</li>
-{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Thank you'|trans }}</a></li>{% endblock %}
 {% block content %}
 <div class="row row-deck row-cards">
    <div class="col-md-12">

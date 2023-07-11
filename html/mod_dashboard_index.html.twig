@@ -4,10 +4,12 @@
 {% block body_class %}dashboard{% endblock %}
 {% block breadcrumbs %}
 {% if not settings.hide_dashboard_breadcrumb %}
-<ul class="breadcrumb">
-   <li><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a> <span class="divider">/</span></li>
-   <li class="active">{{ 'Dashboard'|trans }}</li>
-</ul>
+<div class="mb-1">
+   <ol class="breadcrumb" aria-label="breadcrumbs">
+      <li class="breadcrumb-item"><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Dashboard'|trans }}</a></li>
+   </ol>
+</div>
 {% endif %}
 {% endblock %}
 {% import "macro_functions.html.twig" as mf %}

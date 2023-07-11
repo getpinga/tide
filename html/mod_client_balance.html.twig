@@ -1,9 +1,7 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% import "macro_functions.html.twig" as mf %}
 {% block meta_title %}{{ 'Payment history'|trans }}{% endblock %}
-{% block breadcrumb %} 
-<li class="active">{{ 'Payment history'|trans }}</li>
-{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Payment history'|trans }}</a></li>{% endblock %}
 {% block page_header %}{{ 'Payment history'|trans }}{% endblock %}
 {% block page_subheader %}{{ 'Here you can track what you have been charged for and add more funds to your account'|trans }}{% endblock %}
 {% set profile = client.profile_get %}

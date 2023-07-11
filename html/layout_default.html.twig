@@ -372,10 +372,22 @@
             <!-- Page header -->
             <div class="page-header d-print-none">
                <div class="container-xl">
-                  <div class="row g-2 align-items-center">
+                  <div class="row g-2 align-items-center mw-100">
                      <div class="col">
+                        {% if settings.show_breadcrumb %}
+                        {% block breadcrumbs %}
+                        <div class="mb-1">
+                           <ol class="breadcrumb" aria-label="breadcrumbs">
+                              <li class="breadcrumb-item"><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a></li>
+                              {% block breadcrumb %}
+                              <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Dashboard'|trans }}</a></li>
+                              {% endblock %}
+                           </ol>
+                        </div>
+                        {% endblock %}
+                        {% endif %}
                         <h2 class="page-title">
-                           {% block page_header %}{% endblock %}
+                           <span class="text-truncate">{% block page_header %}{% endblock %}</span>
                         </h2>
                         <div class="text-muted mt-1">{% block page_subheader %}{% endblock %}</div>
                      </div>

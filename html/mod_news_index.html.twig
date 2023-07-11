@@ -3,7 +3,7 @@
 {% block page_header %}{{ 'News & Announcements'|trans }}{% endblock %}
 {% block page_subheader %}{{ 'Track our latest information.'|trans }}{% endblock %}
 {% block body_class %}news-index{% endblock %}
-{% block breadcrumb %}{{ 'News'|trans }}{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'News'|trans }}</a></li>{% endblock %}
 {% block content %}
 {% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
 {% for i, post in posts.list %}

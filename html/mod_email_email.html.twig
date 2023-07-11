@@ -1,8 +1,8 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% block meta_title %}{{ 'Email'|trans }}{% endblock %}
 {% block breadcrumb %}
-<li><a href="{{ 'email' | link}}">{{ 'Emails'|trans }}</a><span class="divider">/</span></li>
-{{ email.subject }}
+<li class="breadcrumb-item"><a href="{{ 'email' | link}}">{{ 'Emails'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ email.subject }}</a></li>
 {% endblock %}
 {% block body_class %}email-email{% endblock %}
 {% block content %}

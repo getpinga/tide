@@ -6,8 +6,8 @@
 {% set addons = client.order_addons({ "id": order.id }) %}
 {% block body_class %}order-manage{% endblock %}
 {% block breadcrumb %}
-<li><a href="{{ 'service' | link}}">{{ 'Orders'|trans }}</a><span class="divider">/</span></li>
-{{ order.title }}
+<li class="breadcrumb-item"><a href="{{ 'service' | link}}">{{ 'Services'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ order.title }}</a></li>
 {% endblock %}
 {% set service_partial = "mod_service" ~ order.service_type ~ "_manage.html.twig" %}
 {% set upgradables = client.order_upgradables({ 'id': order.id }) %}

@@ -4,10 +4,9 @@
 
 {% block body_class %}kb-category{% endblock %}
 {% block breadcrumb %}
-<li><a href="{{ '/kb'|link }}">{{ 'Knowledge base'|trans }}</a> <span class="divider">/</span></li>
-<li class="active">{{ category.title }}</li>
+<li class="breadcrumb-item"><a href="{{ '/kb'|link }}">{{ 'Knowledge base'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ article.title }}</a></li>
 {% endblock %}
-
 {% block content %}
 <div class="content-block" role="main">
     <div class="row">

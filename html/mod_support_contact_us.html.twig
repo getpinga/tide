@@ -4,7 +4,7 @@
 {% block page_header %}{{ 'Contact us'|trans }}{% endblock %}
 {% block page_subheader %}{{ company.signature }}{% endblock %}
 {% block body_class %}support-contact-us{% endblock %}
-{% block breadcrumb %}{{ 'Contact us'|trans }}{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Contact us'|trans }}</a></li>{% endblock %}
 {% block content %}
 {% set company = guest.system_company %}
 <div class="row row-deck row-cards mb-3 d-flex justify-content-center">
