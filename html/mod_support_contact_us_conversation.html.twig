@@ -1,156 +1,160 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
-
 {% import "macro_functions.html.twig" as mf %}
-
 {% block meta_title %}{{ ticket.subject }}{% endblock %}
-
+{% block page_header %}{{ 'Ticket information'|trans }}{% endblock %}
+{% block page_subheader %}{{ 'Need an answer? We are here to help!'|trans }}{% endblock %}
 {% block body_class %}support-contact-us-conversation{% endblock %}
 {% block breadcrumb %}
 <li><a href="{{ 'support/contact-us' | link}}">{{ 'Contact us'|trans }}</a><span class="divider">/</span></li>
 <li class="active">{{ ticket.subject }}</li>
 {% endblock %}
-
 {% block content_before %}
-
-<div class="row">
-    <article class="span12 data-block">
-        <div class="data-container">
-            <header>
-                <h2>{{ 'Ticket information'|trans }}</h2>
-                <div class="pull-right">
-                    {% if ticket.status != 'closed' %}
-                        <button class="btn btn-small" href="{{ 'api/guest/support/ticket_close'|link({ 'hash': ticket.hash, 'CSRFToken': CSRFToken })}}" id="new-ticket-button" data-api-reload="1"> {{ 'Close ticket'|trans }}</button>
-                    {% endif %}
-                </div>
-            </header>
-            <section>
-                <table class="table table-striped table-bordered table-condensed">
-                    <tbody>
-                    <tr>
-                        <td>{{ 'Subject'|trans }}</td>
-                        <td><b>{{ ticket.subject }}</b></td>
-                    </tr>
-
-                    <tr>
-                        <td>{{ 'Author'|trans }}</td>
-                        <td>{{ ticket.author.name }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>{{ 'Email'|trans }}</td>
-                        <td>{{ ticket.author.email }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>{{ 'Status'|trans }}</td>
-                        <td>
-                            <div class="label {% if ticket.status=='open' %}label-success{% elseif ticket.status == 'on_hold' %}label-warning{% endif %}">{{ mf.status_name(ticket.status) }}</div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>{{ 'Time opened'|trans }}</td>
-                        <td>{{ ticket.created_at|format_date }}</td>
-                    </tr>
-                    </tbody>
-
-                    {% if ticket.status != 'closed' %}
-                    {% endif %}
-                </table>
-            </section>
-        </div>
-    </article>
-</div>
-{% endblock %}
-
-{% block content %}
-<div class="row">
-    <article class="span12 data-block">
-        <div class="data-container">
-            <header>
-                <h1>{{ ticket.subject }}</h1>
-                <p>{{ 'by '|trans }} {{ ticket.author_email }}</p>
-            </header>
-            <section>
-                {% for i, message in ticket.messages %}
-                <div class="row-fluid">
-                    <div class="span3">
-                        <div class="thumbnails">
-                            <img src="{{ message.author.email|gravatar }}?size=60" alt="{{ message.author.name }}" class="gravatar">
-                            <h3>
-                                {{ message.author.name }}
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="span9">
-                        <header>{{ message.created_at|format_date }}
-                            <div class="pull-right">
-                                <a href="#" class="btn btn-inverse reply-to-message" message-quote="{{ mf.markdown_quote(message.content) }}">{{ 'Reply'|trans }}</a>
-                            </div>
-                        </header>
-                        <section>
-                            <div class="well" id="message-{{ message.id }}">{{ message.content|markdown }}</div>
-                        </section>
-                    </div>
-                </div>
-                <hr/>
-                {% endfor %}
-                <div class="row-fluid">
-                    <div class="span3"></div>
-                    <div class="span9">
+<div class="row row-deck row-cards">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="card-header">
+            <h3 class="card-title">
+               <span class="text-muted">Ticket {{ ticket.id }}:</span> {{ ticket.subject }} 
+            </h3>
+            {% if ticket.status != 'closed' %}
+            <div class="card-actions">
+               <button class="btn btn-ghost-danger" href="{{ 'api/guest/support/ticket_close'|link({ 'hash': ticket.hash, 'CSRFToken': CSRFToken })}}" id="new-ticket-button" data-api-reload="1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                     <path d="M10 10l4 4m0 -4l-4 4"></path>
+                  </svg>
+                  {{ 'Close ticket'|trans }}
+               </button>
+            </div>
+            {% endif %}
+         </div>
+         <div class="card-body">
+            <div class="datagrid">
+               <div class="datagrid-item">
+                  <div class="datagrid-title">{{ 'Ticket ID'|trans }}</div>
+                  <div class="datagrid-content">#{{ ticket.id }}</div>
+               </div>
+               <div class="datagrid-item">
+                  <div class="datagrid-title">{{ 'Author'|trans }}</div>
+                  <div class="datagrid-content">{{ ticket.author.name }} ({{ ticket.author.email }})</div>
+               </div>
+               <div class="datagrid-item">
+                  <div class="datagrid-title">{{ 'Status'|trans }}</div>
+                  <div class="datagrid-content"><span class="status {% if ticket.status == 'open' %}status-info{% elseif ticket.status == 'closed' %}status-danger{% elseif ticket.status == 'on_hold' %}status-warning{% endif %}">{{ mf.status_name(ticket.status) }}</span></div>
+               </div>
+               <div class="datagrid-item">
+                  <div class="datagrid-title">{{ 'Time opened'|trans }}</div>
+                  <div class="datagrid-content">{{ ticket.created_at|format_date }}</div>
+               </div>
+            </div>
+            {% for i, message in ticket.messages %}
+            <div class="row row-cards mt-5">
+               <div class="col-md-3">
+                  <div class="card">
+                     <div class="card-header">
+                        <h3 class="card-title">{{ message.author.name }} ({{ ticket.author_email }})</h3>
+                     </div>
+                     <div class="card-body">
+                        <img src="{{ message.author.email|gravatar }}&size=60" alt="{{ message.author.name }}" class="gravatar">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-9">
+                  <div class="card">
+                     <div class="card-header">
+                        <h3 class="card-title">#{{ i+1 }} | {{ message.created_at|format_date }}</h3>
                         {% if ticket.status != 'closed' %}
-                        <form method="post" action="" class="api_form" data-api-url="guest/support/ticket_reply" data-api-reload="1">
-                            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-                            <fieldset>
-                                <textarea name="message" cols="5" rows="10" class="span12" required="required" id="ticket-reply-text"></textarea>
-                                <button class="btn btn-primary btn-large" type="submit" value="{{ 'Post'|trans }}" onclick="$('.wait').show()">{{ 'Post'|trans }}</button>
-                                <input type="hidden" name="hash" value="{{ ticket.hash }}" />
-                            </fieldset>
-                        </form>
-                        {% elseif ticket.status == 'closed' %}
-                        <div class="alert alert-white">{{ 'Ticket was closed and cannot be reopened.'|trans }}</div>
+                        <div class="card-actions">
+                           <button type="button" id="ticket-close" class="btn btn btn-outline-dark reply-to-message" message-quote="{{ mf.markdown_quote(message.content) }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                 <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"></path>
+                                 <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"></path>
+                              </svg>
+                              {{ 'Quote'|trans }}
+                           </button>
+                        </div>
                         {% endif %}
-                    </div>
-                </div>
-            </section>
-        </div>
-    </article>
+                     </div>
+                     <div class="card-body">
+                        <pre id="message-{{message.id}}">{{ message.content|markdown }}</pre>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {% endfor %}
+            {% if ticket.status != 'closed' %}
+            <div class="row row-cards mt-1">
+               <div class="col-md-12">
+                  <div class="card">
+                     <div class="card-body">
+                        <form method="post" action="" class="api_form" data-api-url="guest/support/ticket_reply" data-api-reload="1">
+                           <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                           <fieldset>
+                              <textarea name="message" cols="10" rows="10" class="form-control" required="required" id="ticket-reply-text"></textarea>
+                              <br />
+                              <button class="btn btn-primary btn-large" type="submit" id="submit-support-message" value="{{ 'Post'|trans }}" onclick="">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M8 9h8"></path>
+                                    <path d="M8 13h6"></path>
+                                    <path d="M12.01 18.594l-4.01 2.406v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v5.5"></path>
+                                    <path d="M16 19h6"></path>
+                                    <path d="M19 16v6"></path>
+                                 </svg>
+                                 {{ 'Reply'|trans }}
+                              </button>
+                              <input type="hidden" name="hash" value="{{ ticket.hash }}" />
+                           </fieldset>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            {% elseif ticket.status == 'closed' %}
+            <div class="alert alert-info mt-3" role="alert">
+               <h4 class="alert-title">{{ 'Ticket was closed and cannot be reopened.'|trans }}</h4>
+            </div>
+            {% endif %}
+         </div>
+      </div>
+   </div>
 </div>
 {% endblock %}
-
 {% block js %}
 <script>
-$(function() {
-    $('.reply-to-message').on('click', function(event) {
-        event.preventDefault();
-
-        var quote = $(this).attr('message-quote');
-
-        $('#ticket-reply-text').text(quote);
-        $('#ticket-reply-text').focus();
-    });
-
-    $('#public-ticket-reply').on('submit', function(event) {
-        $('.wait').show();
-        bb.post(
-            'guest/support/ticket_reply',
-            $(this).serialize(),
-            function(result) {
-                bb.reload();
-            }
-        );
-
-        return false;
-    });
-
-    $('#new-ticket-button').on('click', function(e) {
-        e.preventDefault();
-
-        bb.post("guest/support/ticket_close", { hash: '{{ ticket.hash }}', CSRFToken: "{{ CSRFToken }}" }, function(r) {
-            bb.msg("Ticket was closed");
-            bb.reload();
-        });
-    });
-});
+   $(function() {
+       $('.reply-to-message').on('click', function(event) {
+           event.preventDefault();
+   
+           var quote = $(this).attr('message-quote');
+   
+           $('#ticket-reply-text').text(quote);
+           $('#ticket-reply-text').focus();
+       });
+   
+       $('#public-ticket-reply').on('submit', function(event) {
+           $('.wait').show();
+           bb.post(
+               'guest/support/ticket_reply',
+               $(this).serialize(),
+               function(result) {
+                   bb.reload();
+               }
+           );
+   
+           return false;
+       });
+   
+       $('#new-ticket-button').on('click', function(e) {
+           e.preventDefault();
+   
+           bb.post("guest/support/ticket_close", { hash: '{{ ticket.hash }}', CSRFToken: "{{ CSRFToken }}" }, function(r) {
+               bb.msg("Ticket was closed");
+               bb.reload();
+           });
+       });
+   });
 </script>
 {% endblock %}
