@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %}>
    <head>
       <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
@@ -24,10 +24,10 @@
       <meta name="canonical" content="{{ constant('BB_URL') }}">
       {% block opengraph %}{% endblock %}
       <!-- CSS files -->
-      <link href="{{ 'css/tabler.min.css' | asset_url }}" rel="stylesheet"/>
-      <link href="{{ 'css/tabler-flags.min.css' | asset_url }}" rel="stylesheet"/>
-      <link href="{{ 'css/tabler-payments.min.css' | asset_url }}" rel="stylesheet"/>
-      <link href="{{ 'css/tabler-vendors.min.css' | asset_url }}" rel="stylesheet"/>
+      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-flags.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-flags.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-payments.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-payments.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
       <script src="{{ "Api/API.js?v=#{guest.system_version}" | library_url }}"></script>
       <script src="{{ 'js/jquery-3.7.0.min.js' | asset_url }}"></script>
       <script src="{{ 'js/bb-jquery.js' | asset_url }}"></script>
