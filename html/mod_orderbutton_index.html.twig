@@ -1,10 +1,43 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% import "macro_functions.html.twig" as mf %}
-{% block meta_title %}{{ 'Order'|trans }}{% endblock %}
+{% block meta_title %}
+{% if request.order matches '/^\\d+$/' %}
+{{ 'Product Configuration'|trans }}
+{% elseif request.checkout matches '/^\\d+$/' %}
+{{ 'Cart'|trans }}
+{% else %}
+{{ 'Choose products we offer for selling'|trans }}
+{% endif %}
+{% endblock %}
 {% set loader_nr = request.loader | default("8")%}
 {% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
-{% block page_header %}{{ 'Select Product'|trans }}{% endblock %}
-{% block page_subheader %}{{ 'Choose products we offer for selling'|trans }}{% endblock %}
+{% block page_header %}
+{% if request.order matches '/^\\d+$/' %}
+{{ 'Product Configuration'|trans }}
+{% elseif request.checkout matches '/^\\d+$/' %}
+{{ 'Cart'|trans }}
+{% else %}
+{{ 'Select Product'|trans }}
+{% endif %}
+{% endblock %}
+{% block page_subheader %}
+{% if request.order matches '/^\\d+$/' %}
+{{ 'Configure Your Product'|trans }}
+{% elseif request.checkout matches '/^\\d+$/' %}
+{{ 'Your Shopping Cart'|trans }}
+{% else %}
+{{ 'Choose products we offer for selling'|trans }}
+{% endif %}
+{% endblock %}
+{% block breadcrumb %}
+{% if request.order matches '/^\\d+$/' %}
+<li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Product Configuration'|trans }}</a></li>
+{% elseif request.checkout matches '/^\\d+$/' %}
+<li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Cart'|trans }}</a></li>
+{% endif %}
+{% endblock %}
 {% set loader_nr = request.loader | default("8")%}
 {% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
 {% block body_class %}order-index{% endblock %}
