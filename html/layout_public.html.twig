@@ -28,11 +28,9 @@
       <link href="{{ 'css/tabler-flags.min.css' | asset_url }}" rel="stylesheet"/>
       <link href="{{ 'css/tabler-payments.min.css' | asset_url }}" rel="stylesheet"/>
       <link href="{{ 'css/tabler-vendors.min.css' | asset_url }}" rel="stylesheet"/>
-      <link href="{{ 'css/jquery.jgrowl.css' | asset_url }}" rel="stylesheet"/>
       <script src="{{ "Api/API.js?v=#{guest.system_version}" | library_url }}"></script>
       <script src="{{ 'js/jquery-3.7.0.min.js' | asset_url }}"></script>
       <script src="{{ 'js/bb-jquery.js' | asset_url }}"></script>
-      <script src="{{ 'js/jquery.jgrowl.js' | asset_url }}"></script>
       <style>
          @import url('https://rsms.me/inter/inter.css');
          :root {
@@ -48,7 +46,6 @@
    <body class="{% block body_class %}{% endblock %}">
       {% block body %}{% endblock %}
       {% include 'partial_pending_messages.html.twig' ignore missing %}
-      <!-- Tabler Core -->
       <script src="{{ 'js/tabler.min.js' | asset_url }}" defer></script>
    </body>
 </html>

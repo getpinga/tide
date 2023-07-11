@@ -115,7 +115,49 @@ var bb = {
         });
     },
     msg: function(txt, type) {
-        $.jGrowl(txt);
+        let color;
+        switch (type) {
+          case 'error':
+            color = 'danger';
+            break;
+          case 'warning':
+            color = 'warning';
+            break;
+          default:
+            color = 'primary';
+        }
+
+        const container = document.createElement('div');
+        container.classList.add('position-fixed', 'bottom-0', 'end-0', 'p-3');
+        container.style.zIndex = 1070;
+
+        const element = document.createElement('div');
+        element.setAttribute('id', 'liveToast');
+        element.classList.add('toast');
+        element.setAttribute('role', 'alert');
+        element.setAttribute('aria-live', 'assertive');
+        element.setAttribute('aria-atomic', 'true');
+
+        element.innerHTML = `
+                <div class="toast-header">
+                    <span class="p-2 border border-light bg-${color} rounded-circle me-2"></span>
+                    <strong class="me-auto">System message</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">${txt}</div>
+            `;
+
+        element.addEventListener('hidden.bs.toast', () => {
+          container.remove();
+        });
+
+        const toast = new bootstrap.Toast(element);
+
+        container.appendChild(element);
+
+        document.querySelector('body').appendChild(container);
+
+        toast.show();
     },
     apiForm: function() {
         $("form.api_form, form.api-form").bind('submit', function(){

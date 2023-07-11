@@ -5,8 +5,7 @@
 
 1. Clone the repository, or download the latest version
 2. Extract and move the tide directory into `FOSSBilling directory`/themes
-3. Change directory owner to the user your webserver is running under. F.ex: `chown -Rf www-data:www-data tide/`
-4. Set permissions to 750 using chmod `chmod -Rf 750 tide/`
+
 
 ## How to upgrade
 

@@ -1,4 +1,26 @@
 <fieldset>
+    <legend>General</legend>
+
+    <table>
+        <tr>
+            <td><label>Show company logo</label></td>
+            <td>
+                <label><input type="radio" name="show_company_logo" value="1" id="show_company_logo_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="show_company_logo" value="0" id="show_company_logo_0"/>No</label>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Show company name</label></td>
+            <td>
+                <label><input type="radio" name="show_company_name" value="1" id="show_company_name_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="show_company_name" value="0" id="show_company_name_0"/>No</label>
+            </td>
+        </tr>
+    </table>
+
+</fieldset>
+
+<fieldset>
     <legend>Login page</legend>
 
     <table>
@@ -84,14 +106,6 @@
             </td>
         </tr>
         <tr>
-            <td><label>Showcase Size</label></td>
-            <td>
-                <label><input type="radio" name="showcase_size" value="1" id="showcase_size_1"/>Standard</label>
-                <label><input type="radio" name="showcase_size" value="2" id="showcase_size_2"/>Smaller</label>
-                <label><input type="radio" name="showcase_size" value="3" id="showcase_size_3" checked="checked"/>Smallest</label>
-            </td>
-        </tr>
-        <tr>
             <td><label for="showcase_text">Showcase text</label></td>
             <td><textarea id="showcase_text" name="showcase_text"></textarea></td>
         </tr>
@@ -102,6 +116,57 @@
         <tr>
             <td><label for="showcase_button_url">Showcase link URL</label></td>
             <td><input type="text" name="showcase_button_url" id="showcase_button_url" value=""/></td>
+        </tr>
+    </table>
+</fieldset>
+
+<fieldset>
+    <legend>Main Menu</legend>
+
+    <table>
+        <tr>
+            <td><label>Select menu items</label></td>
+            <td>
+                <label for="main_menu_home"><input type="checkbox" name="main_menu_home" value="1" id="main_menu_home"/> Show home link</label>
+                <label for="main_menu_order"><input type="checkbox" name="main_menu_order" value="1" id="main_menu_order"/> Show order link</label>
+                <label for="main_menu_services"><input type="checkbox" name="main_menu_services" value="1" id="main_menu_services"/> Show services link</label>
+                <label for="main_menu_invoices"><input type="checkbox" name="main_menu_invoices" value="1" id="main_menu_invoices"/> Show invoices link</label>
+                <label for="main_menu_payments"><input type="checkbox" name="main_menu_payments" value="1" id="main_menu_payments"/> Show payments link</label>
+                <label for="main_menu_support"><input type="checkbox" name="main_menu_support" value="1" id="main_menu_support"/> Show support menu</label>
+                <label for="main_menu_tickets"><input type="checkbox" name="main_menu_tickets" value="1" id="main_menu_tickets"/> Show support link</label>
+                <label for="main_menu_news"><input type="checkbox" name="main_menu_news" value="1" id="main_menu_news"/> Show news link</label>
+                <label for="main_menu_kb"><input type="checkbox" name="main_menu_kb" value="1" id="main_menu_kb"/> Show knowledge base link</label>
+                <label for="main_menu_login"><input type="checkbox" name="main_menu_login" value="1" id="main_menu_login"/> Show login link</label>
+                <label for="main_menu_register"><input type="checkbox" name="main_menu_register" value="1" id="main_menu_register"/> Show register link</label>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Announcement Bar</h3>
+    <table>
+        <tr>
+            <td><label>Show announcement bar</label></td>
+            <td>
+                <label><input type="radio" name="announcement_bar_enabled" value="1" id="announcement_bar_enabled_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="announcement_bar_enabled" value="0" id="announcement_bar_enabled_0"/>No</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="announcement_bar_text">Announcement text</label></td>
+            <td><input type="text" name="announcement_bar_text" id="announcement_bar_text" value=""/></td>
+        </tr>
+		
+        <tr>
+            <td><label>Announcement bar color</label></td>
+            <td>
+                <label><input type="radio" name="announcement_bar_color" value="1" id="announcement_bar_color_1" checked="checked"/>Blue</label>
+                <label><input type="radio" name="announcement_bar_color" value="2" id="announcement_bar_color_2"/>Purple</label>
+                <label><input type="radio" name="announcement_bar_color" value="3" id="announcement_bar_color_3"/>Red</label>
+                <label><input type="radio" name="announcement_bar_color" value="4" id="announcement_bar_color_4"/>Orange</label>
+                <label><input type="radio" name="announcement_bar_color" value="5" id="announcement_bar_color_5"/>Yellow</label>
+                <label><input type="radio" name="announcement_bar_color" value="6" id="announcement_bar_color_6"/>Green</label>
+            </td>
         </tr>
     </table>
 </fieldset>

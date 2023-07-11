@@ -64,7 +64,6 @@
                                  <label class="form-label {% if birthday in required|keys %}required{% endif %}">{{ 'Birth date'|trans }}</label>
                                  <div class="input-icon">
                                     <span class="input-icon-addon">
-                                       <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                           <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
@@ -99,27 +98,22 @@
                                  <label class="form-label">{{ 'Company Number'|trans }}</label>
                                  <input class="form-control" type="text" name="company_number" value="{{ profile.company_number }}" autocomplete="off"/>
                               </div>
-                              <div class="mb-3">
-                                 <button class="btn btn-xl btn-primary" type="submit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
-                                       <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
-                                    </svg>
-                                    {{ 'Update profile'|trans }}
-                                 </button>
-                              </div>
                            </fieldset>
                         </div>
                         <div class="col-md-6">
                            <fieldset class="form-fieldset">
                               <div class="mb-3">
-                                 <label class="form-label {% if phone in required|keys %}required{% endif %}">{{ 'Phone Country Code'|trans }}</label>
-                                 <input class="form-control" type="text" name="phone_cc" value="{{ profile.phone_cc }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
-                              </div>
-                              <div class="mb-3">
-                                 <label class="form-label {% if phone in required|keys %}required{% endif %}">{{ 'Phone Number'|trans }}</label>
-                                 <input class="form-control" type="phone" name="phone" value="{{ profile.phone }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
+                                 <div class="row">
+                                    <label class="form-label {% if phone in required|keys %}required{% endif %}">{{ 'Phone Number'|trans }}</label>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-4">
+									   <input class="form-control" type="text" name="phone_cc" value="{{ profile.phone_cc }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
+									</div>
+                                    <div class="col-8">
+									   <input class="form-control" type="phone" name="phone" value="{{ profile.phone }}" {% if phone in required|keys %} required="required" {% endif %} autocomplete="off"/>
+									</div>
+                                 </div>
                               </div>
                               <div class="mb-3">
                                  <label class="form-label {% if address_1 in required|keys %}required{% endif %}">{{ 'Address'|trans }}</label>
@@ -167,6 +161,12 @@
                               {% endfor %}
                            </fieldset>
                         </div>
+                           <div class="mb-3">
+                              <button class="btn btn-xl btn-primary" type="submit">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path></svg>
+                                 {{ 'Update profile'|trans }}
+                              </button>
+                           </div>
                      </div>
                   </form>
                </div>
@@ -281,10 +281,8 @@
        	window.Litepicker && (new Litepicker({
        		element: document.getElementById('birthday'),
        		buttonText: {
-       			previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
-       			nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+       			previousMonth: `<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+       			nextMonth: `<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
        		},
        	}));
        });

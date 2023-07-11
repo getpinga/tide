@@ -153,9 +153,17 @@
                               {% endif %}
                               {% if 'phone' in r %}
                               <div class="mb-3">
-                                 <label class="form-label">{{ 'Phone Number'|trans }}</label>
-                                 <input type="text" name="phone_cc" class="form-control" value="{{ request.phone_cc }}" style="width:20%">
-                                 <input type="phone" name="phone" class="form-control" value="{{ request.phone }}" style="width: 70%">
+                                 <div class="row">
+                                    <label class="form-label required">{{ 'Phone Number'|trans }}</label>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-4">
+                                       <input type="text" class="form-control" name="phone_cc" value="{{ request.phone_cc }}">
+                                    </div>
+                                    <div class="col-8">
+                                       <input id="phone" class="form-control" type="text" name="phone" value="{{ request.phone }}">
+                                    </div>
+                                 </div>
                               </div>
                               {% endif %}
                               {% set custom_fields = guest.client_custom_fields %}
