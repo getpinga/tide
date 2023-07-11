@@ -284,13 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#login-form').style.display = 'block';
     });
 
-    // Tipsy
-    if(jQuery().tipsy) {
-        document.querySelectorAll('a.show-tip').forEach(element => {
-            new Tipsy(element, {fade: true, delayIn: 500});
-        });
-    }
-
     // Language selector
     document.querySelectorAll('a.language_selector').forEach(selector => {
         selector.addEventListener('click', function(e) {
