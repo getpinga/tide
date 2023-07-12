@@ -267,6 +267,16 @@ var bb = {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.js-theme-toggler').forEach(element => {
+        element.addEventListener('click', event => {
+            event.preventDefault();
+            localStorage.setItem('theme', element.getAttribute('href').split('=')[1]);
+            document.body.setAttribute("data-bs-theme", localStorage.getItem('theme'))
+        });
+    });
+});
+
 //===== Placeholder for all browsers =====//
 
 $("input").each(
