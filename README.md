@@ -1,28 +1,39 @@
-# Tide
- Tide client area theme for FOSSBilling
+# Tide Theme for FOSSBilling
 
-## How to install
+## Overview
 
-1. Clone the repository, or download the latest version
-2. Extract and move the tide directory into `FOSSBilling directory`/themes
-3. Change directory owner to the user your webserver is running under. F.ex: `chown -Rf www-data:www-data tide/`
-4. Set permissions to 750 using chmod `chmod -Rf 750 tide/`
-5. Go to Admin panel -> Settings -> Themes and select tide as default
+Tide is a client area theme for FOSSBilling. It's designed to enhance your user interface with a clean, modern aesthetic. This guide provides steps on how to install, upgrade, secure, and customize the Tide theme.
 
-## How to upgrade
+## Installation
 
-1. Clone the repository, or download the latest version
-2. Backup to another location `FOSSBilling directory`/themes/tide/config/settings_data.json and any custom assets that you have uploaded at `FOSSBilling directory`/themes/tide/assets. Pay special attention if you customized the CSS at `FOSSBilling directory`/themes/tide/assets/css/custom.css
-3. Extract and move the tide directory into `FOSSBilling directory`/themes, overwrite everything.
-4. Copy back your version of `FOSSBilling directory`/themes/tide/config/settings_data.json and any custom assets that you have uploaded at `FOSSBilling directory`/themes/tide/assets
-5. Change directory owner to the user your webserver is running under. F.ex: `chown -Rf www-data:www-data tide/`
-6. Set permissions to 750 using chmod `chmod -Rf 750 tide/`
+Follow these steps to install the Tide theme:
 
-## Security settings for Tide installations prior to 0.9.5
+1. Clone this repository or download the latest version.
+2. Extract the files and move the `tide` directory into the `FOSSBilling directory/themes`.
+3. Change the directory owner to the user your web server runs under. For example: `chown -Rf www-data:www-data tide/`.
+4. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
+5. Navigate to `Settings -> Themes` in the FOSSBilling admin panel and select `tide` as the default theme.
 
-1. Change directory owner to the user your webserver is running under. F.ex: `chown -Rf www-data:www-data tide/`
-2. Set permissions to 750 using chmod `chmod -Rf 750 tide/`
+## Upgrade
 
-## Theme colour customization
+To upgrade to a newer version of the Tide theme, perform the following:
 
-Now you can replace the default colours with your custom colours, to match your branding. Please edit `FOSSBilling directory`/themes/tide/assets/css/custom.css according to the comments there.
+1. Clone this repository or download the latest version.
+2. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/custom.css`.
+3. Extract the latest version and move the `tide` directory into `FOSSBilling directory/themes`, overwriting all files.
+4. Restore your `settings_data.json` and any custom assets from the backup.
+5. Change the directory owner to the web server user. For example: `chown -Rf www-data:www-data tide/`.
+6. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
+
+## Security Measures for Prior Installations (Before 0.9.5)
+
+For versions of Tide installed prior to 0.9.5, implement these security measures:
+
+1. Change the directory owner to the web server user. For example: `chown -Rf www-data:www-data tide/`.
+2. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
+
+## Theme Customization
+
+Tide now allows you to replace default colours with custom ones, enabling you to align the theme with your branding. To make these changes, edit the `FOSSBilling directory/themes/tide/assets/css/custom.css` file as per the comments provided within it.
+
+Please remember to regularly update your theme to receive the latest enhancements and security patches. Enjoy using Tide!
