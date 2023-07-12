@@ -1,7 +1,9 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% block meta_title %}{{ 'Invoice management'|trans }}{% endblock %}
 {% block body_class %}invoice-index{% endblock %}
-{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Invoices'|trans }}</a></li>{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Invoices'|trans }}</a></li>
+{% endblock %}
 {% block page_header %}{{ 'List of invoices'|trans }}{% endblock %}
 {% block page_subheader %}{{ 'All of your invoices can be found here. You can choose to see either paid or unpaid invoices by clicking corresponding button.'|trans }}{% endblock %}
 {% block content %}
@@ -22,10 +24,25 @@
          <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                <li class="nav-item">
-                  <a href="#tabs-unpaid" class="nav-link active" data-bs-toggle="tab">Unpaid</a>
+                  <a href="#tabs-unpaid" class="nav-link active bg-red-lt" data-bs-toggle="tab">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M6.5 7h11"></path>
+                        <path d="M6 20v-2a6 6 0 1 1 12 0v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1z"></path>
+                        <path d="M6 4v2a6 6 0 1 0 12 0v-2a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1z"></path>
+                     </svg>
+                     Unpaid
+                  </a>
                </li>
                <li class="nav-item">
-                  <a href="#tabs-paid" class="nav-link" data-bs-toggle="tab">Paid</a>
+                  <a href="#tabs-paid" class="nav-link bg-green-lt" data-bs-toggle="tab">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"></path>
+                        <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"></path>
+                     </svg>
+                     Paid
+                  </a>
                </li>
             </ul>
          </div>
@@ -33,7 +50,7 @@
             <div class="tab-content">
                <div class="tab-pane active show" id="tabs-unpaid">
                   <div id="invoices-table-unpaid" class="table-responsive">
-                     <table class="table table-vcenter text-nowrap table-hover table-bordered table-striped">
+                     <table class="table table-vcenter text-nowrap table-bordered table-striped">
                         <thead>
                            <tr>
                               <th><button class="table-sort" data-sort="sort-title-u">{{ 'Title'|trans }}</button></th>
@@ -47,11 +64,22 @@
                            {% if unpaid_invoices.total > 0 %}
                            {% for i, invoice in unpaid_invoices.list %}
                            <tr class="{{ cycle(['odd', 'even'], i) }}">
-                              <td class="sort-title-u">{{ "Proforma invoice #%05s"|format(invoice.id) }}</td>
+                              <td class="sort-title-u"><a href="{{ 'invoice'|link }}/{{ invoice.hash }}">{{ "Proforma invoice #%05s"|format(invoice.id) }}</a></td>
                               <td class="sort-date-u">{{ invoice.created_at|format_date }}</td>
                               <td class="sort-due-u">{{ invoice.due_at|format_date }}</td>
                               <td class="sort-total-u">{{ invoice.total | money(invoice.currency) }}</td>
-                              <td><a class="btn btn-small btn-primary" href="{{ 'invoice'|link }}/{{ invoice.hash }}">{{ 'Pay'|trans }}</a></td>
+                              <td>
+                                 <a class="btn btn-small btn-outline-red btn-icon" href="{{ 'invoice'|link }}/{{ invoice.hash }}" title="{{ 'Pay'|trans }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z"></path>
+                                       <path d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4"></path>
+                                       <path d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z"></path>
+                                       <path d="M3 6v10c0 .888 .772 1.45 2 2"></path>
+                                       <path d="M3 11c0 .888 .772 1.45 2 2"></path>
+                                    </svg>
+                                 </a>
+                              </td>
                            </tr>
                            {% endfor %}
                            {% else %}
@@ -65,7 +93,7 @@
                </div>
                <div class="tab-pane" id="tabs-paid">
                   <div id="invoices-table-paid" class="table-responsive">
-                     <table class="table table-bordered table-vcenter text-nowrap table-hover table-striped">
+                     <table class="table table-bordered table-vcenter text-nowrap table-striped">
                         <thead>
                            <tr>
                               <th><button class="table-sort" data-sort="sort-title-p">{{ 'Title'|trans }}</button></th>
@@ -79,11 +107,19 @@
                            {% if paid_invoices.total > 0 %}
                            {% for i, invoice in paid_invoices.list %}
                            <tr class="{{ cycle(['odd', 'even'], i) }}">
-                              <td class="sort-title-p">{{ "Invoice #%05s"|format(invoice.id) }}</td>
+                              <td class="sort-title-p"><a href="{{ 'invoice'|link }}/{{ invoice.hash }}">{{ "Invoice #%05s"|format(invoice.id) }}</a></td>
                               <td class="sort-date-p">{{ invoice.created_at|format_date }}</td>
                               <td class="sort-due-p">{{ invoice.paid_at|format_date }}</td>
                               <td class="sort-total-p">{{ invoice.total | money(invoice.currency) }}</td>
-                              <td><a href="{{ 'invoice'|link }}/{{ invoice.hash }}" class="btn btn-primary btn-small">{{ 'View'|trans }}</a></td>
+                              <td>
+                                 <a href="{{ 'invoice'|link }}/{{ invoice.hash }}" class="btn btn-outline-green btn-small btn-icon" title="{{ 'View'|trans }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                       <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                    </svg>
+                                 </a>
+                              </td>
                            </tr>
                            {% endfor %}
                            {% else %}
