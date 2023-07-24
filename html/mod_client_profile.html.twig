@@ -25,6 +25,15 @@
             </ul>
          </div>
          <div class="card-body">
+         {% if (guest.client_is_email_validation_required) and (not profile.email_approved) %}
+         <div class="alert alert-danger" role="alert">
+             <div class="alert-title">
+                 <span>You must verify your email address before you may access our services.</span>
+             </div>
+             <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+             <a href="{{ 'api/client/client/resend_email_verification'|link({ 'CSRFToken': CSRFToken }) }}" class="btn btn-danger api-link" data-api-msg="{{ 'Verification email has been resent'|trans }}">{{ 'Resend verification email'|trans }}</a>
+         </div>
+         {% endif %}
             <div class="tab-content">
                {% set required = guest.client_required %}
                <div class="tab-pane active show" id="tab1">
