@@ -1,4 +1,10 @@
+  
 {% set cart = guest.cart_get%}
+
+
+
+ 
+{% if client %}
 <div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
       <div class="card">
@@ -262,6 +268,12 @@
       </div>
    </div>
 </div>
+{% else %} 
+   <h2>{{ 'Login or register to continue'|trans}}</h2>
+{% endif %}
+
+
+
 <script type="text/javascript">
    $('#remove-promo').on('click', function(e) {
        e.preventDefault();
