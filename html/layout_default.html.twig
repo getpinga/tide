@@ -15,13 +15,13 @@
       <link rel="icon" href="{{ guest.system_company.favicon_url }}" type="image/x-icon"/>
       <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}" type="image/x-icon"/>
       <meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}"/>
-      <meta property="bb:url" content="{{ constant('BB_URL') }}">
+      <meta property="bb:url" content="{{ constant('SYSTEM_URL') }}">
       <meta property="bb:client_area" content="{{ '/'|link }}">
       <meta name="csrf-token" content="{{ CSRFToken }}">
       <meta name="robots" content="{{ settings.meta_robots }}">
       <meta name="author" content="{{ settings.meta_author }}">
       <meta name="generator" content="FOSSBilling {{ guest.system_version }}">
-      <meta name="canonical" content="{{ constant('BB_URL') }}">
+      <meta name="canonical" content="{{ constant('SYSTEM_URL') }}">
       {% block opengraph %}{% endblock %}
       <!-- CSS files -->
       <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
