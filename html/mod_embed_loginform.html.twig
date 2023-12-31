@@ -27,7 +27,7 @@
              form.addEventListener('submit', function(event) {
                  event.preventDefault();
                  var formData = new FormData(form);
-                 fetch("{{ constant('BB_URL_API') }}guest/client/login", {
+                 fetch("{{ constant('SYSTEM_URL') }}api/guest/client/login", {
                      method: 'POST',
                      body: new URLSearchParams(formData)
                  })
@@ -36,7 +36,7 @@
                      if(json.error) {
                          alert(json.error.message);
                      } else {
-                         window.location = "{{ constant('BB_URL') }}";
+                         window.location = "{{ constant('SYSTEM_URL') }}";
                      }
                  });
              });

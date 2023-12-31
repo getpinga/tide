@@ -13,9 +13,9 @@
 {% block page_subheader %}{{ 'Please try to read related topics in knowledge base before contacting support.'|trans }}{% endblock %}
 {% block content %}
 {% if request.q %}
-{% set kbcategories = guest.kb_category_get_list({ "q": request.q }) %}
+{% set kbcategories = guest.support_kb_category_get_list({ "q": request.q }) %}
 {% else %}
-{% set kbcategories = guest.kb_category_get_list %}
+{% set kbcategories = guest.support_kb_category_get_list %}
 {% endif %}
 <div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
@@ -26,7 +26,7 @@
          <div class="card-body">
             <form method="get" action="" class="form form-search pull-right" style="background: none; border: 0px">
                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-               <input class="" name="_url" type="hidden" value="/kb">
+               <input class="" name="_url" type="hidden" value="/support/kb">
                <div class="mb-3">
                   <div class="row g-2">
                      <div class="col">
@@ -51,13 +51,13 @@
                   <div class="data-container">
                      <header>
                         <h2 id="category-{{category.id}}">
-                           <a href="{{ 'kb'|link }}/{{ category.slug }}">{{ category.title }}</a>
+                           <a href="{{ 'support/kb'|link }}/{{ category.slug }}">{{ category.title }}</a>
                         </h2>
                      </header>
                      <section>
                         <ul>
                            {% for i, article in category.articles %}
-                           <li><a href="{{ '/kb'|link }}/{{article.category.slug}}/{{article.slug}}">{{ article.title }}</a></li>
+                           <li><a href="{{ 'support/kb'|link }}/{{article.category.slug}}/{{article.slug}}">{{ article.title }}</a></li>
                            {% endfor %}
                         </ul>
                      </section>

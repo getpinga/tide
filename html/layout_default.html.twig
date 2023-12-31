@@ -313,8 +313,8 @@
                                  {{ 'Announcements'|trans }}
                                  </a>
                                  {% endif %}
-                                 {% if (guest.extension_is_on({"mod":"kb"}) and settings.main_menu_kb) %}
-                                 <a class="dropdown-item" href="{{ '/kb'|link }}">
+                                 {% if (guest.support_kb_enabled() and settings.main_menu_kb) %}
+                                 <a class="dropdown-item" href="{{ 'support/kb'|link }}">
                                  {{ 'Knowledge base'|trans }}
                                  </a>
                                  {% endif %}
@@ -344,8 +344,8 @@
                                  {{ 'Announcements'|trans }}
                                  </a>
                                  {% endif %}
-                                 {% if (guest.extension_is_on({"mod":"kb"}) and settings.main_menu_kb) %}
-                                 <a class="dropdown-item" href="{{ '/kb'|link }}">
+                                 {% if (guest.support_kb_enabled() and settings.main_menu_kb) %}
+                                 <a class="dropdown-item" href="{{ 'support/kb'|link }}">
                                  {{ 'Knowledge base'|trans }}
                                  </a>
                                  {% endif %}
