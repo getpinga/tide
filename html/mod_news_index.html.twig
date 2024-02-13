@@ -25,17 +25,17 @@
    </div>
 </div>
 {% else %}
-<div class="row row-deck row-cards">
+<div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
       <div class="card">
          <div class="card-body">
-            <p>The list is empty</p>
+            <p>No News Is Good News!</p>
          </div>
       </div>
    </div>
 </div>
 {% endfor %}
-{% if posts.list is empty %}
+{% if posts.list is not empty %}
 <div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
       <div class="card">
