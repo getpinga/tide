@@ -1,16 +1,25 @@
 {% if order.status == 'active' %}
 <div class="row row-deck row-cards mt-1">
    <div class="col-md-12">
-      <div class="card">
+      <div class="card border border-bottom-0">
          <div class="card-header">
             <h3 class="card-title">{{ 'Manage hosting account'|trans }}</h3>
+            <div class="card-actions">
+                {% if service.domain_order_id %}
+                <a class="btn btn-primary" href="{{ '/order/service/manage'|link }}/{{ service.domain_order_id }}">{{ 'Manage domain'|trans }}</a>
+                {% endif %}
+                <a class="btn btn-info api-link" href="{{ 'api/client/servicehosting/get_login_url'|link({ 'order_id':  order.id, 'CSRFToken': CSRFToken }) }}" data-api-jsonp="onAfterLoginLinkCreated" target="_blank">{{ 'Jump to cPanel'|trans }}</a>
+                {% if service.reseller %}
+                <a class="btn btn-secondary" href="{{ server.reseller_cpanel_url }}" target="_blank">{{ 'Reseller control panel'|trans }}</a>
+                {% endif %}
+            </div>
          </div>
       </div>
    </div>
 </div>
 <div class="row row-deck row-cards">
    <div class="col-md-12">
-      <div class="card">
+      <div class="card border border-top-0">
          <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                <li class="nav-item">
@@ -73,15 +82,6 @@
                         </tbody>
                      </table>
                   </div>
-                  <div class="mb-3">
-                     {% if service.domain_order_id %}
-                     <a class="btn btn-primary" href="{{ '/order/service/manage'|link }}/{{ service.domain_order_id }}">{{ 'Manage domain'|trans }}</a>
-                     {% endif %}
-                     <a class="btn btn-info" href="{{ server.cpanel_url }}" target="_blank">{{ 'Jump to cPanel'|trans }}</a>
-                     {% if service.reseller %}
-                     <a class="btn btn-secondary" href="{{ server.reseller_cpanel_url }}" target="_blank">{{ 'Reseller control panel'|trans }}</a>
-                     {% endif %}
-                  </div>
                </div>
                <div class="tab-pane" id="tabs-change-pass">
                   <h4>{{ 'Change your FTP/cPanel/SSH password.'|trans }}</h4>
@@ -110,11 +110,11 @@
                      </fieldset>
                   </form>
                </div>
-               <div class="tab-pane" id="tabs-change-domain">
-                  <h4>{{ 'Change domain'|trans }}</h4>
-                  <form action="" method="post" id="change-domain">
-                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-                     <fieldset class="form-fieldset">
+            <div class="tab-pane" id="tabs-change-domain">
+                <h4>{{ 'Change domain'|trans }}</h4>
+                <form action="" method="post" id="change-domain">
+                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                    <fieldset class="form-fieldset">
                         <div class="mb-3">
                            <label class="form-label required" >{{ 'New domain'|trans }}: </label>
                            <div class="row g-2">
@@ -126,17 +126,12 @@
                               </div>
                            </div>
                         </div>
-               </div>
-               <input type="hidden" name="order_id" value="{{ order.id }}">
-               <div class="mb-3">
-               <button class="btn btn-primary" type="submit" value="{{ 'Change domain'|trans }}"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-               <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
-               <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
-               </svg> {{ 'Change domain'|trans }}</button>
-               </div>
-               </fieldset>
-               </form>
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="mb-3">
+                            <button class="btn btn-primary" type="submit" value="{{ 'Change domain'|trans }}"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path></svg> {{ 'Change domain'|trans }}</button>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
             <div class="tab-pane" id="tabs-change-username">
                <h4>{{ 'Change username'|trans }}</h4>
