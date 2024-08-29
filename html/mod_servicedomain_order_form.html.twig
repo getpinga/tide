@@ -35,7 +35,7 @@
         <form id="domain-search-transfer-form">
             <div class="row g-0 mb-3">
                 <div class="col-12 col-md-8">
-                    <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" required>
+                    <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
                 </div>
                 <div class="col-12 col-md-4 d-md-flex">
                     <button class="btn btn-primary btn-lg w-100 mt-2 mt-md-0 ms-md-2" type="button" id="domain-check">{{ 'Search'|trans }}</button>
