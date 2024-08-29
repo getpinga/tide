@@ -1,6 +1,35 @@
 {% set periods = guest.system_periods %}
 {% set pricing = product.pricing %}
 {% set transfer_tlds = guest.serviceDomain_tlds({ "allow_transfer": 1 })%}
+<style>
+@media (max-width: 768px) {
+    .table thead {
+        display: none;
+    }
+    .table td {
+        display: block;
+        width: 100%;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+    }
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+        white-space: nowrap;
+    }
+    .table td:last-child {
+        border-bottom: 1px solid #dee2e6;
+    }
+}
+</style>
+
 <div class="card">
     <div class="card-body" id="register">
         <form id="domain-search-transfer-form">
@@ -68,8 +97,50 @@
         </form>
     </div>
 </div>
-
 {% set currency = guest.cart_get_currency %}
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Domain Extension</th>
+                        <th>Registration</th>
+                        <th>Renewal</th>
+                        <th>Transfer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tld, details in pricing %}
+                        {% if details.active == 1 %}
+                            <tr>
+                                <td>{{ tld }}</td>
+                                <td>
+                                    {% if details.allow_register == 1 %}
+                                        {{ currency.format|replace({'{{price}}': details.price_registration}) }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ currency.format|replace({'{{price}}': details.price_renew}) }}
+                                </td>
+                                <td>
+                                    {% if details.allow_transfer == 1 %}
+                                        {{ currency.format|replace({'{{price}}': details.price_transfer}) }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
    $(function() {
        $('#config-next').hide();
