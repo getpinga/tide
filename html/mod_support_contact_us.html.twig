@@ -53,8 +53,14 @@
             </form>
          </div>
          <div class="card-footer text-center">
-            <address><strong>{{ company.name }} <br>
-               </strong>{{ company.address_1 }} <br>
+            <address><strong>{{ company.name }}</strong> <br>
+               {% if company.number is not null %}
+                {{ company.number }} <br>
+               {% endif %}
+               {% if company.vat_number is not null %}
+                {{ company.vat_number }} <br>
+               {% endif %}
+               {{ company.address_1 }} <br>
                {{ company.address_2 }} <br>
                {{ company.address_3 }} <br>
                <abbr title="Phone">P: </abbr>{{ company.tel }}<br>
