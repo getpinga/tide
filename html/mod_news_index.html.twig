@@ -19,6 +19,8 @@
             {% else %}
             {{ post.content|markdown }}
             {% endif %}
+         </div>
+         <div class="card-footer">
             <a class="btn btn-primary btn-sm" href="{{ '/news'|link }}/{{post.slug}}">{{ 'Read more ...'|trans }}</a>
          </div>
       </div>
@@ -35,7 +37,7 @@
    </div>
 </div>
 {% endfor %}
-{% if posts.list is not empty %}
+{% if posts.list|length >= 5 %}
 <div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
       <div class="card">
