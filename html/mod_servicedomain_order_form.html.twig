@@ -168,12 +168,14 @@
            const parts = domain.split('.');
            let sld = '';
            let tld = '';
-           if (parts.length === 2) {
-            sld = parts[0];
-            tld = '.' + parts[1];
-           } else if (parts.length === 3) {
-             sld = parts.slice(0, 2).join('.');
-            tld = '.' + parts[2];
+           if (parts.length >= 3) {
+               // Assume the last two parts make up the TLD (e.g., .in.ua, .co.uk)
+               sld = parts.slice(0, -2).join('.');
+               tld = '.' + parts.slice(-2).join('.');
+           } else if (parts.length === 2) {
+               // For typical two-part domains (e.g., example.com)
+               sld = parts[0];
+               tld = '.' + parts[1];
            }
            $('input[name="transfer_sld"]').val(sld);
            $('input[name="transfer_tld"]').val(tld);
@@ -202,12 +204,14 @@
            const parts = domain.split('.');
            let sld = '';
            let tld = '';
-           if (parts.length === 2) {
-            sld = parts[0];
-            tld = '.' + parts[1];
-           } else if (parts.length === 3) {
-             sld = parts.slice(0, 2).join('.');
-            tld = '.' + parts[2];
+           if (parts.length >= 3) {
+               // Assume the last two parts make up the TLD (e.g., .in.ua, .co.uk)
+               sld = parts.slice(0, -2).join('.');
+               tld = '.' + parts.slice(-2).join('.');
+           } else if (parts.length === 2) {
+               // For typical two-part domains (e.g., example.com)
+               sld = parts[0];
+               tld = '.' + parts[1];
            }
            $('input[name="register_sld"]').val(sld);
            $('input[name="register_tld"]').val(tld);
