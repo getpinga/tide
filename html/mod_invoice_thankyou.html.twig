@@ -1,27 +1,29 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+
 {% block meta_title %}{{ 'Thank you'|trans }}{% endblock %}
 {% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Thank you'|trans }}</a></li>{% endblock %}
+
 {% block content %}
-<div class="row row-deck row-cards">
+<div class="row row-cards">
    <div class="col-md-12">
-      <div class="card">
+      <div class="card ms-0 ms-md-3 w-100">
          <div class="card-header">
             <div>
                <h3 class="card-title">
                   {{ 'Thank you'|trans }}
                </h3>
                <p class="card-subtitle">
-                  {{ 'Your payment is being processed right now. It can take up 5 minutes to complete.'|trans }}
+                  {{ 'Your payment has been submitted and will be processed shortly. It may take some time for your invoice to be marked as paid.'|trans }}
                </p>
             </div>
          </div>
          <div class="card-body">
             <p>{{ 'Payment for invoice received'|trans }}</p>
-            <p>{{ 'You will be automatically redirected to invoice page after 5 minutes.'|trans }}</p>
+            <p>{{ 'You will be automatically redirected back to the invoice after 1 minute.'|trans }}</p>
             <script type="text/javascript">
                setTimeout(function() {
                    bb.redirect("{{ ('/invoice/'~invoice.hash)|link }}");
-               }, 5 * 60 * 1000);
+               }, 1 * 60 * 1000);
             </script>
          </div>
       </div>

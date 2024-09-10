@@ -2,32 +2,25 @@
 {% set pricing = product.pricing %}
 {% set transfer_tlds = guest.serviceDomain_tlds({ "allow_transfer": 1 })%}
 <style>
-@media (max-width: 768px) {
-    .table thead {
-        display: none;
-    }
-    .table td {
-        display: block;
-        width: 100%;
-        text-align: right;
+    .table-responsive {
         position: relative;
-        padding-left: 50%;
-        white-space: normal;
     }
-    .table td::before {
-        content: attr(data-label);
+    .table-scroll-hint::after {
+        content: '';
         position: absolute;
-        left: 0;
-        width: 50%;
-        padding-left: 15px;
-        font-weight: bold;
-        text-align: left;
-        white-space: nowrap;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 100%;
+        background: linear-gradient(to left, white, transparent);
+        pointer-events: none;
     }
-    .table td:last-child {
-        border-bottom: 1px solid #dee2e6;
+    .table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: white;
     }
-}
 </style>
 
 <div class="card">
@@ -244,7 +237,7 @@
                    var s = $("#registration-years");
                    s.find('option').remove();
                    for (i = 1; i < 6; i++) {
-                       var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "{{ currency.code }}", i);
+                       var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "₴", i);
    
                        s.append(new Option(i + "{{ ' Year/s @ '|trans }}" + price, i));
                    }
