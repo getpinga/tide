@@ -65,8 +65,16 @@
 
 <div class="card">
     <div class="card-body" id="register">
+    {% if guest.extension_is_on({"mod":"domainsbot"}) %}
+        <div class="text-center mt-3">
+            <p class="text-muted d-inline">{{ 'Need ideas? Explore:'|trans }}</p>
+            <a href="/domainsbot" class="btn btn-sm btn-outline-primary ms-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7" /><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3" /><path d="M9.7 17l4.6 0" /></svg> {{ 'Domain Suggestions'|trans }}
+            </a>
+        </div>
+    {% endif %}
         <form id="domain-search-transfer-form">
-            <div class="row g-0 mb-3">
+            <div class="row g-0 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
                 </div>
@@ -175,6 +183,19 @@
 </div>
 
 <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // Prefill the search input on domain checker page
+        let storedDomain = localStorage.getItem("selected_domain");
+
+        if (storedDomain) {
+            let searchInput = document.querySelector("input[name='domain_name']");
+            if (searchInput) {
+                searchInput.value = storedDomain; // Autofill the input field
+                localStorage.removeItem("selected_domain"); // Clear after use
+            }
+        }
+    });
+
    $(function() {
        $('#config-next').hide();
        $('#config-next-domain').hide();
