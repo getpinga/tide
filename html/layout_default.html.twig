@@ -430,7 +430,7 @@
                   <div class="row row-deck row-cards">
                      {% include "partial_message.html.twig" %}
                      {% if not client %}
-                     {% if request._url is empty %}
+                     {% if request._url == "/" %}
                      <div class="col-md-4">
                         <div class="card card-lg bg-red text-red-fg d-print-none">
                            <div class="card-stamp">
