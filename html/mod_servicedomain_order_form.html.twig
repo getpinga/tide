@@ -158,17 +158,17 @@
                                 <td data-label="{{ 'Domain'|trans }}">{{ tld }}</td>
                                 <td data-label="{{ 'Registration'|trans }}">
                                     {% if details.allow_register == 1 %}
-                                        {{ currency.format|replace({'{{price}}': details.price_registration}) }}
+                                        {{ currency.format|replace({'{{price}}': (details.price_registration * currency.conversion_rate)|number_format(2, '.', ',') }) }}
                                     {% else %}
                                         N/A
                                     {% endif %}
                                 </td>
                                 <td data-label="{{ 'Renewal'|trans }}">
-                                    {{ currency.format|replace({'{{price}}': details.price_renew}) }}
+                                    {{ currency.format|replace({'{{price}}': (details.price_renew * currency.conversion_rate)|number_format(2, '.', ',') }) }}
                                 </td>
                                 <td data-label="{{ 'Transfer'|trans }}">
                                     {% if details.allow_transfer == 1 %}
-                                        {{ currency.format|replace({'{{price}}': details.price_transfer}) }}
+                                        {{ currency.format|replace({'{{price}}': (details.price_transfer * currency.conversion_rate)|number_format(2, '.', ',') }) }}
                                     {% else %}
                                         N/A
                                     {% endif %}
@@ -321,3 +321,4 @@
        }
    });
 </script>
+
