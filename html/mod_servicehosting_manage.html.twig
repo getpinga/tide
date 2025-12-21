@@ -163,6 +163,10 @@
 </div>
 {% block js %}
 <script type="text/javascript">
+   function onAfterLoginLinkCreated(url){
+       window.open(url, "_blank");
+   };
+
    $(function() {
        $('.domain-tabs a').on('click', function(e) {
            e.preventDefault();
