@@ -289,23 +289,48 @@
            return false;
        });
    
-       function setPricing(tld)
-       {
-           bb.post(
-               'guest/servicedomain/pricing',
-               { tld: tld },
-               function(result) {
-                   var s = $("#registration-years");
-                   s.find('option').remove();
-                   for (i = 1; i < 6; i++) {
-                       var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "₴", i);
-   
-                       s.append(new Option(i + "{{ ' Year/s @ '|trans }}" + price, i));
-                   }
-                   $('#config-next-domain').show();
-               }
-           );
-       }
+        function setPricing(tld) {
+            bb.post(
+                'guest/servicedomain/pricing',
+                { tld },
+                function (result) {
+                    const $select = $('#registration-years');
+                    $select.empty();
+
+                    const regPrice = Number(result.price_registration);
+                    let renewPrice = Number(result.price_renew);
+
+                    // Fallback to registration price if renew is missing/invalid
+                    if (!Number.isFinite(renewPrice)) {
+                        renewPrice = regPrice;
+                    }
+
+                    for (let years = 1; years <= 5; years++) {
+                        const totalPrice =
+                            years === 1
+                                ? regPrice
+                                : regPrice + (years - 1) * renewPrice;
+
+                        // IMPORTANT: multiplier must be 1 (price already calculated)
+                        const formattedPrice = bb.currency(
+                            totalPrice,
+                            {{ currency.conversion_rate }},
+                            "₴",
+                            1
+                        );
+
+                        $select.append(
+                            new Option(
+                                `${years}{{ ' Year/s @ '|trans }}${formattedPrice}`,
+                                years
+                            )
+                        );
+                    }
+
+                    $('#config-next-domain').show();
+                }
+            );
+        }
    
        function setTransferPricing(tld) {
            bb.post(
