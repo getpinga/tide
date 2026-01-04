@@ -8,7 +8,7 @@
                 {% if service.domain_order_id %}
                 <a class="btn btn-primary" href="{{ '/order/service/manage'|link }}/{{ service.domain_order_id }}">{{ 'Manage domain'|trans }}</a>
                 {% endif %}
-                <a class="btn btn-info api-link" href="{{ 'api/client/servicehosting/get_login_url'|link({ 'order_id':  order.id, 'CSRFToken': CSRFToken }) }}" data-api-jsonp="onAfterLoginLinkCreated" target="_blank">{{ 'Jump to control panel'|trans }}</a>
+                <a class="btn btn-outline-primary api-link" href="{{ 'api/client/servicehosting/get_login_url'|link({ 'order_id':  order.id, 'CSRFToken': CSRFToken }) }}" data-api-jsonp="onAfterLoginLinkCreated" target="_blank">{{ 'Jump to control panel'|trans }}</a>
                 {% if service.reseller %}
                 <a class="btn btn-secondary" href="{{ server.reseller_cpanel_url }}" target="_blank">{{ 'Reseller control panel'|trans }}</a>
                 {% endif %}
