@@ -1,5 +1,9 @@
 # Tide Theme for FOSSBilling
 
+[![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
+
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
+
 ## Overview
 
 Tide is a client area theme for FOSSBilling. It's designed to enhance your user interface with a clean, modern aesthetic. This guide provides steps on how to install, upgrade, secure, and customize the Tide theme.
@@ -38,4 +42,26 @@ For versions of Tide installed prior to 0.9.5, implement these security measures
 
 Tide now allows you to replace default colours with custom ones, enabling you to align the theme with your branding. To make these changes, edit the `FOSSBilling directory/themes/tide/assets/css/custom.css` file as per the comments provided within it.
 
-Please remember to regularly update your theme to receive the latest enhancements and security patches. Enjoy using Tide!
+## Support
+
+Your feedback and inquiries are invaluable to Namingo's evolutionary journey. If you need support, have questions, or want to contribute your thoughts:
+
+- **Email**: Feel free to reach out directly at [help@namingo.org](mailto:help@namingo.org).
+
+- **Discord**: Or chat with us on our [Discord](https://discord.gg/97R9VCrWgc) channel.
+  
+- **GitHub Issues**: For bug reports or feature requests, please use the [Issues](https://github.com/getpinga/tide/issues) section of our GitHub repository.
+
+We appreciate your involvement and patience as Namingo continues to grow and adapt.
+
+## 💖 Support This Project
+
+If you find Tide useful, consider donating:
+
+- [Donate via Stripe](https://donate.stripe.com/7sI2aI4jV3Offn28ww)
+- BTC: `bc1q9jhxjlnzv0x4wzxfp8xzc6w289ewggtds54uqa`
+- ETH: `0x330c1b148368EE4B8756B176f1766d52132f0Ea8`
+
+## Licensing
+
+Tide is licensed under the MIT license.
