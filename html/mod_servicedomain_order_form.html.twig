@@ -315,7 +315,7 @@
                         const formattedPrice = bb.currency(
                             totalPrice,
                             {{ currency.conversion_rate }},
-                            "₴",
+                            "{{ currency.code }}",
                             1
                         );
 
@@ -346,4 +346,3 @@
        }
    });
 </script>
-
