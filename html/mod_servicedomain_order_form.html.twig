@@ -298,7 +298,7 @@
                    var s = $("#registration-years");
                    s.find('option').remove();
                    for (i = 1; i < 6; i++) {
-                       var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "₴", i);
+                       var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "{{ currency.code }}", i);
    
                        s.append(new Option(i + "{{ ' Year/s @ '|trans }}" + price, i));
                    }
@@ -321,4 +321,3 @@
        }
    });
 </script>
-
