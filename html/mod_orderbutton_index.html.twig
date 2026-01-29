@@ -1,176 +1,482 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+
 {% import "macro_functions.html.twig" as mf %}
+
 {% block meta_title %}
 {% if request.order matches '/^\\d+$/' %}
-{{ 'Product Configuration'|trans }}
+{{ 'Order'|trans }}
 {% elseif request.checkout matches '/^\\d+$/' %}
 {{ 'Cart'|trans }}
 {% else %}
 {{ 'Choose products we offer for selling'|trans }}
 {% endif %}
 {% endblock %}
+
 {% set loader_nr = request.loader | default("8")%}
 {% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
-{% block page_header %}
-{% if request.order matches '/^\\d+$/' %}
-{{ 'Product Configuration'|trans }}
-{% elseif request.checkout matches '/^\\d+$/' %}
-{{ 'Cart'|trans }}
-{% else %}
-{{ 'Select Product'|trans }}
-{% endif %}
-{% endblock %}
-{% block page_subheader %}
-{% if request.order matches '/^\\d+$/' %}
-{{ 'Configure Your Product'|trans }}
-{% elseif request.checkout matches '/^\\d+$/' %}
-{{ 'Your Shopping Cart'|trans }}
-{% else %}
-{{ 'Choose products we offer for selling'|trans }}
-{% endif %}
-{% endblock %}
+{% set product = request.order ? guest.product_get({"id":request.order}) : null %}
+
+{% block body_class %}order-index{% endblock %}
 {% block breadcrumb %}
 {% if request.order matches '/^\\d+$/' %}
 <li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
-<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Product Configuration'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ 'Product Configuration'|trans }}</li>
 {% elseif request.checkout matches '/^\\d+$/' %}
 <li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
-<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Cart'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ 'Cart'|trans }}</li>
 {% endif %}
 {% endblock %}
-{% set loader_nr = request.loader | default("8")%}
-{% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
-{% block body_class %}order-index{% endblock %}
 {% block content_before %}{% endblock %}
+
+{% if not product %}
+    {% set product = request.product ? guest.product_get({"id":request.product}) : null %}
+{% endif %}
+
 {% block content %}
-{% set products = guest.product_get_list %}
 {% if request.order matches '/^\\d+$/' %}
-{% include 'mod_orderbutton_product_configuration.html.twig' %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-12">
+      <div class="card card-md">
+        <div class="card-header py-3 py-3">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div>
+                    <h2 class="mb-1">{{ 'Product Configuration'|trans }}</h2>
+                    {% set currencies = guest.currency_get_pairs %}
+
+                    {% if currencies|length > 1 %}
+                    <label for="currency" class="mt-2">
+                        <select id="currency" name="currency" class="currency_selector form-select ms-2">
+                            {% set selected = guest.cart_get_currency.code %}
+                            {% for code,title in currencies %}
+                            <option value="{{ code }}" class="currency_{{ code }}"{% if code == selected %} selected="selected"{% endif %}>{{ code }} - {{ title }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    {% endif %}
+                </div>
+                <div>
+                    {% set cart = guest.cart_get %}
+                    <a href="{{ 'orderbutton?checkout=1'|link }}" class="btn btn-light position-relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>&nbsp;{{ 'Cart'|trans }}
+                        <span class="badge bg-green text-green-fg ms-1">
+                            {{ cart.items | length }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+         </div>
+         <div class="card-body">
+            {% if product %}
+            <form method="post" style="background:none;" class="api-form form-{{ product.form_id ? guest.formbuilder_get( {"id":product.form_id}).style.type : 0 }}" action="{{ 'api/guest/cart/add_item'|link }}" data-api-msg="{{ 'Product was added to shopping cart'|trans }}" data-api-redirect="{{ 'orderbutton'|link({ 'checkout' : 1 }) }}" + "{% if request.show_custom_form_values %}&show_custom_form_values=1{% endif %}">
+                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                {% set product_details %}
+                <div class="card bg-primary-lt mb-4">
+                  <div class="card-body">
+                    <h3 class="card-title">{{ product.title }} <span class="card-subtitle">{% if product.description %}{{ product.description | markdown }}{% endif %}</span></h3>
+                    <p class="text-secondary">
+                        <h5 class="mt-4 mb-1"><strong>{{ 'Billing'|trans }}</strong></h5>
+
+                        <div class="row">
+                            <div class="col-12 col-md-4 col-xl-3">
+                                {% if product.pricing.type == 'recurrent' %}
+                                <span>{{ 'Billing cycle'|trans }}</span>
+                                {% else %}
+                                <span>{{ 'One-time payment'|trans }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if product.pricing.type == 'recurrent' %}
+                                {% set periods = guest.system_periods %}
+                                <select class="form-select" name="period" id="period-selector">
+                                    {% for code,prices in product.pricing.recurrent %}
+                                        {% if prices.enabled %}
+                                            <option value="{{code}}" data-bb-price="{{ prices.price | money_convert }}" name="period">{{ prices.price | money_convert }} ({{ periods[code] }})</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% elseif product.pricing.type == 'free' %}
+                                <span class="badge bg-success text-success-fg">{{ 0 | money_convert }}</span>
+                                {% else %}
+                                <span class="badge bg-success text-success-fg">{{ product.pricing.once.price | money_convert }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {# TODO: This does not seem to be implemented on the back-end
+                        {% if product.allow_quantity_select %}
+                        <div class="row mt-3">
+                            <div class="col-12 col-md-4 col-xl-3">
+                                <span>{{ 'Quantity'|trans }}</span>
+                            </div>
+                            <div class="col">
+                                <input type="number" name="quantity" value="1" min="1" class="form-control w-50" style="max-width: 120px; text-align: center;">
+                            </div>
+                        </div>
+                        {% endif %}
+                        #}
+                    </p>
+                  </div>
+                </div>
+                {% endset %}
+
+                {% set tpl = "mod_service"~product.type~"_order_form.html.twig" %}
+                {% if guest.system_template_exists({"file":tpl}) %}
+                    {{ include(tpl, product) }}
+                {% elseif product.form_id and guest.extension_is_on({"mod":"formbuilder"}) %}
+                    {{ product_details }}
+                    {% set form = guest.formbuilder_get({"id":product.form_id}) %}
+                    {{ include('mod_formbuilder_build.html.twig', product) }}
+                {% else %}
+                    {{ product_details }}
+                {% endif %}
+
+                {{ include('mod_orderbutton_addons.html.twig', product) }}
+
+                <input type="hidden" name="multiple" value="1" />
+                <input type="hidden" name="id" value="{{ product.id }}" />
+                <div class="mt-2 mb-0">
+                    <button type="submit" class="btn btn-primary" id="config-next">{{ 'Next'|trans }}</button>
+                </div>
+            </form>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+</div>
 {% endif %}
 {% if request.checkout matches '/^\\d+$/' %}
-{% include 'mod_orderbutton_checkout.html.twig' %}
-{% if not client %}
+{% set cart = guest.cart_get%}
+{% if client %}
+<div class="row row-deck row-cards mb-3">
+   <div class="col-md-12">
+      <div class="card">
+        <div class="card-header py-3 py-3">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div>
+                    <h2 class="mb-1">{{ 'Cart'|trans }}</h2>
+                </div>
+            </div>
+        </div>
+         <div class="card-body">
+            {% if cart.items %}
+            <div id="checkout">
+               <div class="table-responsive">
+                  <table class="table table-striped table-bordered table-condensed">
+                     <thead>
+                        <tr>
+                           <th>{{ 'Product'|trans }}</th>
+                           <th>{{ 'Price'|trans }}</th>
+                           <th style="width: 3%; text-align: center"></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for i, item in cart.items %}
+                        <tr>
+                           <td>
+                              {{ item.title }}
+                              {% if item.quantity > 1 %}
+                              x {{ item.quantity }}
+                              {% endif %}
+                              {% if item.period %}
+                              ({{ item.period | period_title }})
+                              {% endif %}
+                           </td>
+                           <td>
+                              {% if item.discount_price %}
+                              <del>{{ item.total | money_convert }}</del>
+                              <strong class="text-success">{{ (item.total-item.discount_price) | money_convert }}</strong>
+                              {% else %}
+                              {{ (item.total) | money_convert }}
+                              {% endif %}
+                           </td>
+                           <td>
+                              <button data-cart-item-id="{{ item.id }}" class="btn btn-warning btn-icon remove-cart-item" title="{{ 'Remove item'|trans }}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+                                    <path d="M10 10l4 4m0 -4l-4 4"></path>
+                                 </svg>
+                              </button>
+                           </td>
+                        </tr>
+                        {% if request.show_custom_form_values %}
+                        <tr>
+                           <td>
+                              {% if item.form_id and guest.extension_is_on({"mod":"formbuilder"}) %}
+                              {% set form = guest.formbuilder_get({"id": item.form_id}) %}
+                              {# debug form #}
+                              <div class="well">
+                                 <dl class="dl-horizontal">
+                                    {% for field, value in item %}
+                                    {% for form_field in form.fields %}
+                                    {% if value is not empty %}
+                                    {% if form_field.name == field%}
+                                    <dt>
+                                       {{form_field.label}}
+                                    </dt>
+                                    <dd>
+                                       {% if form_field.type == "checkbox"%}
+                                       {% for selection in value %}
+                                       {% for field_key,field_value in form_field.options%}
+                                       {% if field_value == selection %}
+                                       {{ field_key }}
+                                       {% endif %}
+                                       {% endfor %}
+                                       {% endfor%}
+                                       {% elseif form_field.type == "select" or form_field.type == "radio" %}
+                                       {% for field_key,field_value in form_field.options%}
+                                       {% if field_value == value %}
+                                       {{ field_key }}
+                                       {% endif %}
+                                       {% endfor %}
+                                       {% else %}
+                                       {{value}}
+                                       {% endif %}
+                                    </dd>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                 </dl>
+                              </div>
+                              {% endif %}
+                           </td>
+                           <td></td>
+                        </tr>
+                        {% endif %}
+                        {% if item.setup_price != 0 %}
+                        <tr>
+                           <td>{{ item.title }} {{ 'setup'|trans }}</td>
+                           <td>
+                              {% if item.discount_setup %}
+                              <del>{{ item.setup_price | money_convert }}</del>
+                              {{ (item.setup_price - item.discount_setup) | money_convert }}
+                              {% else %}
+                              {{ item.setup_price | money_convert }}
+                           </td>
+                           {% endif %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+               {% if not cart.promocode %}
+               <div class="mb-3 mt-3">
+                  <a href="#" id="show-promo-field">{{ 'Have a coupon code?'|trans }}</a>
+               </div>
+               {% endif %}
+               <form action="{{ 'api/guest/cart/apply_promo'|link }}" method="post" class="api-form well" data-api-msg="{{ 'Promo code was applied for your order'|trans }}" data-api-reload="1" {% if not cart.promocode %}style="display:none"{% endif %} id="apply-promo">
+                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-8 col-md-8">
+                                <input class="form-control" type="text" name="promocode" id="promocode" value="{{ request.promocode|default(cart.promocode) }}" {% if promo.required %}required="required"{% endif %} placeholder="{{ 'Enter code'|trans }}">
+                            </div>
+                            <div class="col-4 col-md-4">
+                                {% if cart.promocode %}
+                                    <a class="btn btn-warning mb-1 api-link" href="{{ 'api/guest/cart/remove_promo'|link({ 'CSRFToken': CSRFToken }) }}" type="button" data-api-reload="1"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                   <path d="M12 8h8a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4m-4 0h-8a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h4"></path>
+                                   <path d="M12 12v9"></path>
+                                   <path d="M19 12v3m0 4a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7"></path>
+                                   <path d="M7.5 8a2.5 2.5 0 0 1 -2.457 -2.963m2.023 -2c.14 -.023 .286 -.037 .434 -.037c1.974 -.034 3.76 1.95 4.5 5c.74 -3.05 2.526 -5.034 4.5 -5a2.5 2.5 0 1 1 0 5"></path>
+                                   <path d="M3 3l18 18"></path>
+                                </svg> {{ 'Remove'|trans }}</a>
+                                {% else %}
+                                    <button class="btn btn-secondary mb-1" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M3 8m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"></path>
+                                       <path d="M12 8l0 13"></path>
+                                       <path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7"></path>
+                                       <path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5"></path>
+                                    </svg>
+                                    {{ 'Apply'|trans }}</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+               </form>
+               <div class="table-responsive">
+                  <table class="table table-bordered table-striped">
+                     {% if cart.discount >0 %}
+                     <tr>
+                        <td><strong>{{ 'Subtotal:'|trans }}</strong></td>
+                        <td><strong>{{ (cart.subtotal)| money_convert }}</strong></td>
+                     </tr>
+                     <tr>
+                        <td><strong>{{ 'Discount:'|trans }}</strong></td>
+                        <td><strong>- {{ cart.discount | money_convert }}</strong></td>
+                     </tr>
+                     {% endif %}
+                     {% set tax_amount = 0 %}
+                     {% if client.client_is_taxable %}
+                     {% set tax_rate = client.invoice_get_tax_rate %}
+                     {% set tax_amount = cart.total * tax_rate / 100 %}
+                     <tr>
+                        <td><strong>{{ 'VAT'|trans }} ({{ tax_rate }}%) :</strong></td>
+                        <td><strong>{{ tax_amount | money_convert }}</strong></td>
+                     </tr>
+                     {% endif %}
+                     <tr>
+                        <td><strong>{{ 'Total:'|trans }}</strong></td>
+                        <td><strong>{{ (cart.total + tax_amount) | money_convert }}</strong></td>
+                     </tr>
+                  </table>
+               </div>
+               <form class="api-form" method="post" action="{{ 'api/client/cart/checkout'|link }}" data-api-jsonp="onOrderCheckout">
+                  <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                  <fieldset class="form-fieldset mt-3">
+                     {% set enough_in_balance = client.client_balance_get_total >= cart.total %}
+                     {% if cart.total and not enough_in_balance %}
+                     <div class="mb-3">
+                        <div class="form-label">Payment Options</div>
+                        <div>
+                           {% for gtw in guest.invoice_gateways %}
+                           {% if cart.currency.code in gtw.accepted_currencies %}
+                           <label class="form-check form-check-inline">
+                           <input class="form-check-input" type="radio" 
+                           name="gateway_id" id={{gtw.id}} value="{{gtw.id}}" {{ loop.first ? 'checked' : '' }}>
+                           <span class="form-check-label">{{ 'Pay by'|trans }} {{ gtw.title }}</span>
+                           </label>
+                           {% endif %}
+                           {% endfor %}
+                        </div>
+                     </div>
+                     {% endif %}
+                     <div class="mb-3">
+                        {% if enough_in_balance %}
+                        <p>{{ 'Total amount will be deducted from account balance'|trans }}</p>
+                        {% endif %}
+                        <button class="btn btn-primary" type="submit">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                              <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                              <path d="M17 17h-11v-14h-2"></path>
+                              <path d="M6 5l14 1l-1 7h-13"></path>
+                           </svg>
+                           {{ 'Checkout'|trans }}
+                        </button>
+                     </div>
+                  </fieldset>
+               </form>
+            </div>
+            <div id="payment-html">
+               <div id="payment-html-inner"></div>
+            </div>
+            {% else %}
+            <p>Your Shopping Cart is Empty!</p>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+</div>
+{% else %}
 {% include 'mod_orderbutton_client.html.twig' %}
 {% endif %}
 {% endif %}
 {% endblock %}
+
 {% block js %}
-{% autoescape "js" %}
 <script>
-   $(function(){
-       $('.accordion-body').on('shown', function() {
-           $('#popup-iframe').height($('body').height());
-       });
-   
-       $('#client-login').on('submit', function(event) {
-           bb.post(
-               'guest/client/login',
-               $(this).serialize(),
-               function(result) {
-   
-                   bb.msg("{{ 'You logged in successfully'|trans }}");
-                   $('#register-or-login').hide(1000, function(){
-                       $('#register-or-login').remove();
-                       bb.reload();
-                   });
-   
-               }
-           );
-           return false;
-       });
-       $('#create-profile').on('submit', function(event) {
-           bb.post(
-               'guest/client/create',
-               $(this).serialize(),
-               function(result) {
-                   //login after registration
-                   var login_details = {
-                       email: $('#reg-email').val(),
-                       password: $('#reg-password').val()
-                   };
-                   bb.post(
-                       'guest/client/login',
-                       login_details,
-                       function(result) {
-                           bb.msg("{{ 'You logged in successfully'|trans }}");
-                           $('#register-or-login').hide(1000, function() {
-                               $('#register-or-login').remove();
-                               bb.reload();
-                           });
-                       }
-                   );
-               }
-           );
-           return false;
-       });
-       $('#add-to-cart').on('submit', function(event) {
-           bb.post(
-               'guest/cart/add_item',
-               $(this).serialize(),
-               function(result) {
-                   bb.msg("{{ 'Product was added to shopping cart'|trans }}");
-                   bb.redirect("{{ 'orderbutton'|link({ 'checkout' : 1 }) }}"+"{% if request.show_custom_form_values%}&show_custom_form_values=1{% endif %}");
-               }
-           );
-   
-           return false;
-       });
-       $('#apply-promo').on('submit', function(event) {
-           bb.post(
-               'guest/cart/apply_promo',
-               $(this).serialize(),
-               function(result) {
-                   bb.msg("{{ 'Promo code was applied for your order'|trans }}");
-                   location.reload(false);
-               }
-           );
-   
-           return false;
-       });
-   
-       $('#checkout-form').on('submit', function(event) {
-           bb.post(
-               'client/cart/checkout',
-               $(this).serialize(),
-               function(result) {
-                   if(result.invoice_hash) {
-                       bb.post('guest/invoice/payment', {hash:result.invoice_hash, gateway_id:result.gateway_id,auto_redirect:true }, function(r) {
-                           if(r.iframe) {
-                           $('#payment-html-inner').html(r.result);
-                               $('#checkout').hide();
-                               $('#checkout').on('hidden', function(){
-                                   $('#checkout').remove();
-                                   $('#payment-html').show();
-                               });
-                           } else {
-                               var link = '{{"invoice/banklink"|link}}' + '/' + result.invoice_hash + '/' + result.gateway_id;
-                               $('#payment-html-inner').html('<a href="'+link+'" target="_parent" id="redirect-to-gateway">Redirect to payment gateway</a>');
-                               $('#checkout').hide();
-                               $('#checkout-inner').remove();
-                               $('#payment-html').show();
-                               $('#redirect-to-gateway')[0].click();
-                           }
-                       });
-                   } else {
-                       window.top.location.href = ('{{"order/service/manage"|link}}' + '/' + result.order_id );
-                   }
-               }
-           );
-           return false;
-       });
-   
-       $('#show-promo-field').on('click', function(event) {
-           $('#apply-promo').show();
-           $(this).hide();
-           $('#promocode').focus();
-       });
-   
-       $('.register-login a').on('click', function (e) {
-           e.preventDefault();
-           $(this).tab('show');
-       });
-   
-   });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.accordion-body').forEach(accordionBody => {
+            accordionBody.addEventListener('shown.bs.collapse', function() {
+                document.getElementById('popup-iframe').height = document.body.clientHeight;
+            });
+        });
+
+        document.getElementById('show-promo-field')?.addEventListener('click', function() {
+            document.getElementById('apply-promo').style.display = 'block';
+            this.style.display = 'none';
+            document.getElementById('promocode')?.focus();
+        });
+
+        document.querySelectorAll('.register-login a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('href');
+                const tabElement = document.querySelector(tabId);
+                const bsTab = new bootstrap.Tab(this);
+                bsTab.show();
+            });
+        });
+
+        document.querySelectorAll('.remove-cart-item').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (confirm("{{ 'Are you sure you want to remove this item from cart?'|trans }}")) {
+                    var item_id = this.getAttribute('data-cart-item-id');
+
+                    API.guest.post("cart/remove_item", { id: item_id },
+                        () => {
+                            FOSSBilling.message("{{ 'Item was removed from cart'|trans }}");
+                            window.location.reload();
+                        });
+                }
+            });
+        });
+
+    });
+
+    function onOrderCheckout(result){
+        if (result.invoice_hash) {
+            API.guest.post('invoice/payment', { hash: result.invoice_hash, gateway_id: result.gateway_id, auto_redirect: true },
+                (r) => {
+                    let checkoutEl = document.getElementById('checkout');
+                    let paymentHtmlEl = document.getElementById('payment-html');
+                    if (r.iframe) {
+                        document.getElementById('payment-html-inner').innerHTML = r.result;
+                        bootstrap.Collapse.getOrCreateInstance(checkoutEl).hide();
+                        document.getElementById('checkout').remove();
+                        bootstrap.Collapse.getOrCreateInstance(paymentHtmlEl).show();
+                    } else {
+                        const link = '{{ "invoice/banklink"|link }}' + '/' + result.invoice_hash + '/' + result.gateway_id;
+                        document.getElementById('payment-html-inner').innerHTML = '<a href="' + link + '" target="_parent" id="redirect-to-gateway">Redirect to payment gateway</a>';
+                        bootstrap.Collapse.getOrCreateInstance(checkoutEl).hide();
+                        document.getElementById('checkout-inner').remove();
+                        bootstrap.Collapse.getOrCreateInstance(paymentHtmlEl).show();
+                        document.getElementById('redirect-to-gateway').click();
+                    }
+                });
+        } else {
+            window.top.location.href = ('{{ "order/service/manage"|link }}' + '/' + result.order_id);
+        }
+    }
+
+    function onLogin(result){
+        FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
+        window.location.href = "{{ 'orderbutton'|link({ 'checkout': 1 }) }}";
+        let registerEl = document.getElementById('register');
+        new bootstrap.Collapse('#register').hide();
+        document.querySelector("#checkoutButton").hidden = false;
+        document.querySelector("#loginMessage").hidden = true;
+        setTimeout(() => {
+            registerEl.parentElement.remove();
+            new bootstrap.Collapse('#checkout').show();
+        }, 500);
+    }
+
+    function onAccountCreate(result){
+        const login_details = {
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value
+        };
+        API.guest.post('client/login', login_details,
+            () => {
+                FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
+                window.location.href = "{{ 'orderbutton'|link({ 'checkout': 1 }) }}";
+                let registerEl = document.getElementById('register');
+                new bootstrap.Collapse('#register').hide();
+                document.querySelector("#checkoutButton").hidden = false;
+                document.querySelector("#loginMessage").hidden = true;
+                setTimeout(() => {
+                    registerEl.parentElement.remove();
+                    new bootstrap.Collapse('#checkout').show();
+                    }, 500);
+            });
+    }
 </script>
-{% endautoescape %}
 {% endblock %}

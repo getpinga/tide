@@ -14,236 +14,254 @@
 
 {% block body_class %}page-signup{% endblock %}
 {% block body %}
-<div class="page page-center">
-   <div class="container container-tight py-4">
-      {% if settings.login_page_show_logo %}
-      <div class="text-center mb-4">
-         <a href="{{ settings.login_page_logo_url|default('/') }}" class="navbar-brand navbar-brand-autodark">
-         <img src="{{ guest.system_company.logo_url }}" alt="{{ guest.system_company.name }}" class="navbar-brand-image">
-         </a>
-      </div>
-      {% endif %}
-      <form class="card card-md" method="post" action="" id="client-signup" autocomplete="off" novalidate>
-         <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-         <div class="card-body">
-            <h2 class="card-title text-center mb-4">{{ 'Signup'|trans }}</h2>
-            <div class="alert alert-info alert-dismissible" role="alert" style="display: none" id="account-created-info-block">
-               <div class="d-flex">
-                  <div>
-                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M9.103 2h5.794a3 3 0 0 1 2.122 .879l4.101 4.1a3 3 0 0 1 .88 2.125v5.794a3 3 0 0 1 -.879 2.122l-4.1 4.101a3 3 0 0 1 -2.123 .88h-5.795a3 3 0 0 1 -2.122 -.88l-4.101 -4.1a3 3 0 0 1 -.88 -2.124v-5.794a3 3 0 0 1 .879 -2.122l4.1 -4.101a3 3 0 0 1 2.125 -.88z"></path>
-                        <path d="M12 9h.01"></path>
-                        <path d="M11 12h1v4h1"></path>
-                     </svg>
-                  </div>
-                  <div>
-                     <h4 class="alert-title">{{ 'Account has been created'|trans }}.</h4>
-                     <div class="text-muted">{{ 'Please check your mailbox and confirm email address'|trans }}.</div>
-                  </div>
-               </div>
-               <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+    <div class="page page-center">
+      <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+        {% if settings.login_page_show_logo %}
+            <div class="d-flex justify-content-center">
+                <a href="{{ settings.login_page_logo_url|default('/') }}" target="_blank">
+                    <img class="my-4 navbar-brand navbar-brand-autodark" height="50px" src="{{ logo_url }}" alt="{{ company.name }}"/>
+                </a>
             </div>
-            {% set r = guest.client_required %}
+        {% endif %}
+        </div>
+        <form class="api-form auth card card-md" action="{{ 'api/guest/client/create'|link }}" method="post" data-api-redirect="{{ '/'|link }}">
+          <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+          {% set r = guest.client_required %}
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">{{ 'Create a new account'|trans }}</h2>
+
             <div class="mb-3">
-               <label class="form-label required">{{ 'Email Address'|trans }}</label>
-               <input type="email" class="form-control" placeholder="Enter email" name="email" value="{{ request.email }}" required="required" id="reg-email">
+                <label class="form-label" for="first-name">{{ 'First Name'|trans }}</label>
+                <input class="form-control" id="first-name" type="text" name="first_name"
+                       value="{{ request.first_name }}" required="required"/>
             </div>
+
+            {% if 'last_name' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="last_name">{{ 'Last Name'|trans }}</label>
+                    <input class="form-control" id="last_name" type="text" name="last_name"
+                           value="{{ request.last_name }}" required="required"/>
+                </div>
+            {% endif %}
+
             <div class="mb-3">
-               <label class="form-label required">{{ 'First Name'|trans }}</label>
-               <input type="text" class="form-control" name="first_name" id="first-name" value="{{ request.first_name }}" required="required">
+                <label class="form-label" for="reg-email">{{ 'Email Address'|trans }}</label>
+                <input class="form-control" id="reg-email" type="email" name="email"
+                       value="{{ request.email }}" required="required"/>
             </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Last Name'|trans }}</label>
-               <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.last_name }}" required="required">
-            </div>
-            <div class="mb-3">
-               <label class="form-label">{{ 'Company'|trans }}</label>
-               <input type="text" class="form-control" name="company" id="company" value="{{ request.company }}">
-            </div>
-            <div class="mb-3">
-               <label class="form-label">{{ 'Company Number'|trans }}</label>
-               <input type="text" class="form-control" name="company_number" id="company_number" value="{{ request.company_number }}">
-            </div>
+
+            {% if 'company' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="company">{{ 'Company'|trans }}</label>
+                    <input class="form-control" id="company" type="text" name="company"
+                           value="{{ request.company }}" required="required"/>
+                </div>
+            {% endif %}
+
             {% if 'birthday' in r %}
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Birthday'|trans }}</label>
-               <input type="date" class="form-control" name="birthday" id="birthday" value="">
-            </div>
+                <div class="mb-3">
+                    <label class="form-label" for="birthday">{{ 'Birthday'|trans }}</label>
+                    <input class="form-control" id="birthday" type="date" name="birthday" value=""/>
+                </div>
             {% endif %}
+
             {% if 'gender' in r %}
-            <div class="mb-3">
-               <label class="form-label required">{{ 'You are'|trans }}</label>
-               <select class="form-select" name="gender" id="gender">
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="nonbinary">Non-binary</option>
-                  <option value="other">Other</option>
-               </select>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label" for="gender">{{ 'Gender'|trans }}</label>
+                    <select class="form-select" id="gender" name="gender">
+                        <option value="male">{{ 'Male'|trans }}</option>
+                        <option value="female">{{ 'Female'|trans }}</option>
+                        <option value="nonbinary">{{ 'Non-binary'|trans }}</option>
+                        <option value="other">{{ 'Other'|trans }}Other</option>
+                    </select>
+                </div>
             {% endif %}
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Address'|trans }}</label>
-               <input type="text" class="form-control" name="address_1" id="address_1" value="{{ request.address_1 }}">
-            </div>
-            <div class="mb-3">
-               <label class="form-label">{{ 'Address 2'|trans }}</label>
-               <input type="text" class="form-control" name="address_2" id="address_2" value="{{ request.address_2 }}">
-            </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'City'|trans }}</label>
-               <input type="text" class="form-control" name="city" id="city" value="{{ request.city }}">
-            </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'State'|trans }}</label>
-               {# mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') #}
-               <input type="text" class="form-control" name="state" id="state" value="{{ request.state }}" />
-            </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Zip/Postal Code'|trans }}</label>
-               <input type="text" class="form-control" name="postcode" id="postcode" value="{{ request.postcode }}">
-            </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Country'|trans }}</label>
-               <select class="form-select" name="country" required="required">
-                  <option value="">{{ '-- Select country --'|trans }}</option>
-                  {% for val,label in guest.system_countries %}
-                  <option value="{{ val }}" label="{{ label|e }}">{{ label|e }}</option>
-                  {% endfor %}
-               </select>
-            </div>
-            <div class="mb-3">
-               <div class="row">
-                  <label class="form-label required">{{ 'Phone Number'|trans }}</label>
-               </div>
-               <div class="row">
-                  <div class="col-4">
-                     <input type="text" class="form-control" name="phone_cc" value="+">
-                  </div>
-                  <div class="col-8">
-                     <input id="phone" class="form-control" type="text" name="phone" value="{{ request.phone }}">
-                  </div>
-               </div>
-            </div>
+
+            {% if 'address_1' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="address_1">{{ 'Address'|trans }}</label>
+                    <input class="form-control" id="address_1" type="text" name="address_1"
+                           value="{{ request.address_1 }}"/>
+                </div>
+            {% endif %}
+
+            {% if 'address_2' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="address_2">{{ 'Address 2'|trans }}</label>
+                    <input class="form-control" id="address_2" type="text" name="address_2"
+                           value="{{ request.address_2 }}"/>
+                </div>
+            {% endif %}
+
+            {% if 'city' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="city">{{ 'City'|trans }}</label>
+                    <input class="form-control" id="city" type="text" name="city"
+                           value="{{ request.city }}"/>
+                </div>
+            {% endif %}
+
+            {% if 'country' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="country">{{ 'Country'|trans }}</label>
+                    <select class="form-select" id="country" name="country" required="required">
+                        <option value="">{{ '-- Select country --'|trans }}</option>
+                        {% for val,label in guest.system_countries %}
+                            <option value="{{ val }}" label="{{ label|e }}">{{ label|e }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            {% if 'state' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="state">{{ 'State'|trans }}</label>
+                    <input class="form-control" id="state" type="text" name="state"
+                           value="{{ request.state }}"/>
+                </div>
+            {% endif %}
+
+            {% if 'postcode' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="postcode">{{ 'Zip/Postal Code'|trans }}</label>
+                    <input class="form-control" id="postcode" type="text" name="postcode"
+                           value="{{ request.postcode }}"/>
+                </div>
+            {% endif %}
+
+            {% if 'phone' in r %}
+                <div class="mb-3">
+                    <label class="form-label" for="phone">{{ 'Phone Number'|trans }}</label>
+                    <div class="input-group">
+                        <input class="form-control" id="phone" type="text" name="phone_cc" value=""
+                               style="width: 20%"/>
+                        <input class="form-control" id="phone" type="text" name="phone"
+                               value="{{ request.phone }}" style="width: 70%"/>
+                    </div>
+                </div>
+            {% endif %}
+
             {% set custom_fields = guest.client_custom_fields %}
             {% for field_name, field in custom_fields %}
-            {% if field.active %}
+                {% if field.active %}
+                    <div class="mb-3">
+                        <label class="form-label"
+                               for="{{ field_name }}">{{ field.title is not empty ? field.title : field_name | capitalize }}</label>
+                        <input class="form-control" id="{{ field_name }}" type="text"
+                               name="{{ field_name }}" value="{{ request.(field_name) }}"
+                               {% if field.required %}required="required"{% endif %} />
+                    </div>
+                {% endif %}
+            {% endfor %}
+
             <div class="mb-3">
-               <label class="form-label{% if field.required %} required{% endif %}>">{% if field.title is not empty %}{{ field.title }}{% else %} {{ field_name | capitalize }} {% endif %}</label>
-               <input type="text" class="form-control" name="{{ field_name }}" id="{{ field_name }}" value="{{ attribute(request, field_name) }}" {% if field.required %}required="required"{% endif %}>
+                <label class="form-label" for="reg-password">{{ 'Password'|trans }}</label>
+                <div class="input-group input-group-flat">
+                  <input class="form-control password-field" id="reg-password" type="password" name="password" value=""
+                       required="required"/>
+                  <span class="input-group-text">
+                    <a href="#" class="link-secondary toggle-password" title="Show password" data-show="Show password" data-hide="Hide password">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-1"
+                      >
+                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                        <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg
+                    ></a>
+                  </span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="password-confirm">{{ 'Password confirm'|trans }}</label>
+                <div class="input-group input-group-flat">
+                  <input class="form-control password-field" id="password-confirm" type="password" name="password_confirm" value="" required="required"/>
+                  <span class="input-group-text">
+                    <a href="#" class="link-secondary toggle-password" title="Show password" data-show="Show password" data-hide="Hide password">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="icon icon-1"
+                      >
+                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                        <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg
+                    ></a>
+                  </span>
+                </div>
+            </div>
+
+            {{ mf.recaptcha }}
+
+            {% if settings.signup_tos == 'explicit' %}
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <span>I agree to the <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}.</a></span>
+                    </label>
+                </div>
             </div>
             {% endif %}
-            {% endfor %}
+
+            {% if settings.signup_tos == 'implicit' %}
             <div class="mb-3">
-               <label class="form-label required">{{ 'Password'|trans }}</label>
-               <div class="input-group input-group-flat">
-                  <input type="password" class="form-control" name="password" value="" required="required" id="reg-password" autocomplete="off">
-                  <span class="input-group-text">
-                     <a href="#" class="link-secondary" title="Show password" id="reveal1" data-bs-toggle="tooltip">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                           <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                           <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                        </svg>
-                     </a>
-                  </span>
-               </div>
+                <span class="text-muted mb-1">By creating an account, you agree to our <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
             </div>
-            <div class="mb-3">
-               <label class="form-label required">{{ 'Password confirm'|trans }}</label>
-               <div class="input-group input-group-flat">
-                  <input type="password" class="form-control" name="password_confirm" name="password-confirm" value="" id="reg-password2" required="required" autocomplete="off">
-                  <span class="input-group-text">
-                     <a href="#" class="link-secondary" title="Show password" id="reveal2" data-bs-toggle="tooltip">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                           <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                           <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                        </svg>
-                     </a>
-                  </span>
-               </div>
-            </div>
-            {{ mf.recaptcha }}
-            
-            <div class="form-check mb-1">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
-                <label class="form-check-label" for="flexCheckDefault">
-                    <span>I agree to the <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}.</span>
-                </label>
-            </div>
+            {% endif %}
 
             <div class="form-footer">
-               <input type="hidden" name="auto_login" value="1"/>
-               <button type="submit" class="btn btn-primary w-100">{{ 'Register'|trans }}</button>
+              <button type="submit" class="btn btn-primary w-100">{{ 'Register'|trans }}</button>
             </div>
-
-         </div>
-      </form>
-      <div class="text-center text-secondary mt-3">
-         Already have account? <a href="{{ 'login'|link }}" tabindex="-1">Sign in</a>
+          </div>
+        </form>
+        <div class="text-center text-secondary mt-3">{{ 'Already a user?'|trans }} <a href="{{ 'login'|link }}" tabindex="-1">{{ 'Login'|trans }}</a></div>
       </div>
-   </div>
-</div>
-{% endblock %}
-{% block js %}
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function() {
-    function togglePasswordVisibility(buttonId, passwordFieldId, showIconSvg, hideIconSvg) {
-        var button = document.getElementById(buttonId);
-        var passwordField = document.getElementById(passwordFieldId);
-        var tooltip = new bootstrap.Tooltip(button);
-    
-        button.addEventListener("click", function() {
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                button.innerHTML = hideIconSvg;
-                tooltip.dispose();
-                tooltip = new bootstrap.Tooltip(button, {
-                    title: "Hide password"
-                });
-            } else {
-                passwordField.type = "password";
-                button.innerHTML = showIconSvg;
-                tooltip.dispose();
-                tooltip = new bootstrap.Tooltip(button, {
-                    title: "Show password"
-                });
-            }
-        });
-    }
+    </div>
+<script>
+document.querySelectorAll('.toggle-password').forEach(btn => {
 
-    var showIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>';
-    var hideIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"></path><path d="M3 3l18 18"></path></svg>';
-    
-    togglePasswordVisibility("reveal1", "reg-password", showIconSvg, hideIconSvg);
-    togglePasswordVisibility("reveal2", "reg-password2", showIconSvg, hideIconSvg);
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const group = this.closest('.input-group');
+        const input = group?.querySelector('.password-field');
+        const icon = this.querySelector('svg');
+
+        if (!input) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.title = this.dataset.hide;
+
+            icon.innerHTML = `
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" />
+            `;
+        } else {
+            input.type = 'password';
+            this.title = this.dataset.show;
+
+            icon.innerHTML = `
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+            `;
+        }
+    });
+
 });
-
-
-   $(function () {
-       $('#client-signup').on('submit', function (event) {
-           $.ajax({
-               type: "POST",
-               url: bb.restUrl('guest/client/create'),
-               data: $(this).serialize(),
-               dataType: 'json',
-               success: function (data) {
-                   if (data.error) {
-                       if (data.error.code == 7777) {
-                           $('#account-created-info-block').show();
-                       } else {
-                           $('.wait').hide();
-                           bb.msg(data.error.message, 'error');
-                       }
-                   } else {
-                       bb.redirect("{{ constant('SYSTEM_URL') }}");
-                   }
-               }
-           });
-   
-           return false;
-       });
-   });
 </script>
 {% endblock %}

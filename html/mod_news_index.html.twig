@@ -1,51 +1,48 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+
 {% block meta_title %}{{ 'News'|trans }}{% endblock %}
-{% block page_header %}{{ 'News & Announcements'|trans }}{% endblock %}
-{% block page_subheader %}{{ 'Track our latest information.'|trans }}{% endblock %}
+
 {% block body_class %}news-index{% endblock %}
-{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'News'|trans }}</a></li>{% endblock %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">{{ 'News'|trans }}</li>{% endblock %}
+
 {% block content %}
-{% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
-{% for i, post in posts.list %}
-<div class="row row-deck row-cards mb-3">
-   <div class="col-md-12">
-      <div class="card">
-         <div class="card-header">
-            <h3 class="card-title"><a href="{{ '/news'|link }}/{{post.slug}}">{{ post.title }}</a> <span class="card-subtitle">{{ post.updated_at|format_datetime }}</span></h3>
-         </div>
-         <div class="card-body">
-            {% if post.excerpt %}
-            {{ post.excerpt|markdown }}
-            {% else %}
-            {{ post.content|markdown }}
-            {% endif %}
-         </div>
-         <div class="card-footer">
-            <a class="btn btn-primary btn-sm" href="{{ '/news'|link }}/{{post.slug}}">{{ 'Read more ...'|trans }}</a>
-         </div>
-      </div>
-   </div>
-</div>
-{% else %}
-<div class="row row-deck row-cards mb-3">
-   <div class="col-md-12">
-      <div class="card">
-         <div class="card-body">
-            <p>No News Is Good News!</p>
-         </div>
-      </div>
-   </div>
-</div>
-{% endfor %}
-{% if posts.list|length >= 5 %}
-<div class="row row-deck row-cards mb-3">
-   <div class="col-md-12">
-      <div class="card">
-         <div class="card-body">
-            {% include "partial_pagination.html.twig" with { 'list': posts } %}
-         </div>
-      </div>
-   </div>
-</div>
-{% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header py-3 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="mb-1">{{ 'News & Announcements'|trans }}</h1>
+                            <span class="small text-muted">{{ 'Track our latest information.'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pb-0">
+                    {% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
+                    {% for i, post in posts.list %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3 class="link-body-emphasis mb-1">{{ post.title }}</h3>
+                                <span class="text-muted">{{ post.updated_at|format_datetime }}</span>
+                                <p>
+                                    {% if post.excerpt %}
+                                        {{ post.excerpt|truncate(200)|markdown }}
+                                    {% else %}
+                                        {{ post.content|truncate(200)|markdown }}
+                                    {% endif %}
+                                </p>
+                                <a class="link-offset-2 link-underline"
+                                   href="{{ '/news'|link }}/{{ post.slug }}">{{ 'Continue reading'|trans }}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        {{ 'No news or announcements'|trans }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

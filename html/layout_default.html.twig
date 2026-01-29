@@ -1,610 +1,544 @@
-<!doctype html>
-<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %}>
-   <head>
-      <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-      <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-      <title>{% block meta_title %}{{ settings.meta_title }}{% endblock %}</title>
-      <meta name="msapplication-TileColor" content=""/>
-      <meta name="theme-color" content=""/>
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-      <meta name="apple-mobile-web-app-capable" content="yes"/>
-      <meta name="mobile-web-app-capable" content="yes"/>
-      <meta name="HandheldFriendly" content="True"/>
-      <meta name="MobileOptimized" content="320"/>
-      <link rel="icon" href="{{ guest.system_company.favicon_url }}" type="image/x-icon"/>
-      <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}" type="image/x-icon"/>
-      <meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}"/>
-      <meta property="bb:url" content="{{ constant('SYSTEM_URL') }}">
-      <meta property="bb:client_area" content="{{ '/'|link }}">
-      <meta name="csrf-token" content="{{ CSRFToken }}">
-      <meta name="robots" content="{{ settings.meta_robots }}">
-      <meta name="author" content="{{ settings.meta_author }}">
-      <meta name="generator" content="FOSSBilling {{ guest.system_version }}">
-      <meta name="canonical" content="{{ constant('SYSTEM_URL') }}">
-      {% block opengraph %}{% endblock %}
-      <!-- CSS files -->
-      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
-      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-flags.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-flags.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
-      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-payments.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-payments.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
-      <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
-      <link href="{{ 'css/custom.css' | asset_url }}" rel="stylesheet"/>
-      <script src="{{ "Api/API.js?v=#{guest.system_version}" | library_url }}"></script>
-      <script src="{{ 'js/jquery-3.7.0.min.js' | asset_url }}"></script>
-      <script src="{{ 'js/bb-jquery.js' | asset_url }}"></script>
-      <style>
-         @import url('https://rsms.me/inter/inter.css');
-         :root {
-            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-         }
-         body {
-            font-feature-settings: "cv03", "cv04", "cv11";
-         }
-        .small-dropdown .dropdown-item {
-            padding: 0.25rem 1.5rem;
+<!DOCTYPE html>
+<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}">
+<head>
+    <meta charset="utf-8">
+    <title>{{ settings.meta_title_prefix }} {% block meta_title %}{% endblock %} {{ settings.meta_title_suffix }}</title>
+
+    <meta property="bb:url" content="{{ constant('SYSTEM_URL') }}">
+    <meta property="bb:client_area" content="{{ '/'|link }}">
+    <meta name="csrf-token" content="{{ CSRFToken }}">
+
+    <meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}">
+    <meta name="keywords" content="{{ settings.meta_keywords }}">
+    <meta name="robots" content="{{ settings.meta_robots }}">
+    <meta name="author" content="{{ settings.meta_author }}">
+    <meta name="generator" content="FOSSBilling">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block opengraph %}{% endblock %}
+    <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+    <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-flags.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-flags.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+    <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-payments.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-payments.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+    <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+    <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
+    <style>
+       @import url('https://rsms.me/inter/inter.css');
+       :root {
+          --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+       }
+       body {
+          font-feature-settings: "cv03", "cv04", "cv11";
+       }
+      .small-dropdown .dropdown-item {
+          padding: 0.25rem 1.5rem;
+      }
+      .small-dropdown .flag {
+          width: 20px;
+          height: 15px;
+          display: inline-block;
+      }
+      .responsive-logo {
+          height: 32px;
+          width: auto;
+      }
+      @media (max-width: 576px) {
+        .responsive-logo {
+            height: 24px;
         }
-        .small-dropdown .dropdown-menu{
-          max-height: 60vh;
-          overflow-y: auto;
-        }
-        .small-dropdown .flag {
-            width: 20px;
-            height: 15px;
-            display: inline-block;
-        }
-      </style>
-      {% block head %}{% endblock %}
-      {% block js %}{% endblock %}
-   </head>
-   <body>
-      {% if guest.extension_is_on({ "mod": "cookieconsent" }) %}
-      {% include 'mod_cookieconsent_index.html.twig' ignore missing%}
-      {% endif %}
-      {% block body %}
-      <script>
-         if (localStorage.getItem('theme') === 'dark') {
-            document.body.setAttribute("data-bs-theme", localStorage.getItem('theme'));
-         } else {
-            document.body.removeAttribute("data-bs-theme");
-         }
-      </script>
-      {% if not client and settings.require_login%}
-      <script>
-         $(function() {
-             bb.redirect('{{ "login"|link }}');
-         });
-      </script>
-      {% endif %}
-      {% if client %}
-        {% set profile = client.profile_get %}
-      {% endif %}
-      {% set company = guest.system_company %}
-      <div class="page">
-         <!-- Navbar -->
-         <div class="sticky-top">
-            {% if settings.announcement_bar_enabled %}
-            <header class="navbar navbar-expand-md d-print-none bg-{% if settings.announcement_bar_color == 1 %}primary{% elseif settings.announcement_bar_color == 2 %}purple{% elseif settings.announcement_bar_color == 3 %}red{% elseif settings.announcement_bar_color == 4 %}orange{% elseif settings.announcement_bar_color == 5 %}yellow{% else %}green{% endif %} text-primary-fg border-bottom-0">
-               <div class="container-xl ml-3">
-                  <strong>{{ settings.announcement_bar_text }}</strong>
-               </div>
-            </header>
+      }
+    </style>
+
+    {{ "Api/API.js" | library_url | script_tag }}
+    <script src="{{ 'js/atrix.js' | asset_url }}"></script>
+
+    {{ DebugBar_renderHead() }}
+
+    {% block head %}{% endblock %}
+    {% block js %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.setAttribute("data-bs-theme", localStorage.getItem('theme'));
+    } else {
+      document.body.removeAttribute("data-bs-theme");
+    }
+</script>
+      
+{% block body %}
+{% if not client and settings.require_login %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const publicPaths = [
+                '/news',
+                '/tos',
+                '/privacy-policy'
+            ];
+            const currentPath = window.location.pathname;
+
+            const isAllowed = publicPaths.some(path => currentPath.startsWith(path));
+            if (!isAllowed) {
+                window.location.href = '{{ "login"|link }}';
+            }
+        });
+    </script>
+{% endif %}
+
+{% if client %}
+    {% set profile = client.profile_get %}
+{% endif %}
+{% set company = guest.system_company %}
+
+{% if settings.theme == 'dark' %}
+    {% set logo_url =  company.logo_url_dark %}
+{% else %}
+    {% set logo_url =  company.logo_url %}
+{% endif %}
+<div class="page">
+      <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+          <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-brand p-0 me-auto">
+            {% if logo_url and settings.show_company_logo %}
+            <a class="navbar-brand" href="{{ '/'|link }}">
+              <img src="{{ logo_url }}" alt="{{ company.name }}" title="{{ company.name }}" class="navbar-brand-image responsive-logo">
+            </a>
+            {% else %}
+            <a class="navbar-brand" href="{{ '/'|link }}">
+              <span>{{ company.name }}</span>
+            </a>
             {% endif %}
-            <header class="navbar navbar-expand-md d-print-none{% if settings.announcement_bar_enabled %} border-top-0{% endif %}">
-               <div class="container-xl">
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                  </button>
-                  {% if settings.show_company_logo %}
-                  <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                     <a href="{{'/'|link }}">
-                     <img src="{{company.logo_url}}" alt="{{company.name}}" class="navbar-brand-image">
-                     </a>
-                  </h1>
-                  {% endif %}
-                  {% if settings.show_company_name %}
-                  <p class="mt-3 text-info">{{company.name}}</p>
-                  {% endif %}                  
-                  <div class="navbar-nav flex-row order-md-last">
-                     <div class="nav-item d-none d-md-flex me-3">
-                        <div class="btn-list">
-                           {% set languages = guest.extension_languages(true) %}
-                           {% if languages|length > 1 %}
-                           {% set currentLang = guest.system_locale %}
-                           {% set countryCode = currentLang | slice(3, 2) %}
-                           <div class="dropdown small-dropdown">
-                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% for lang in languages %}
-                              {% if lang.locale == currentLang %}
-                              {{ lang.title }}
-                              {% endif %}
-                              {% endfor %}</a>
-                              <div class="dropdown-menu">
-                                 {% for lang in languages %}
-                                 {% set countryCode = lang.locale | slice(3, 2) %}
-                                 {% if lang != currentLang %}
-                                 <a href="javascript:;" class="dropdown-item language_selector" data-language-code="{{ lang.locale }}"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{{ lang.title }}</a>
-                                 {% endif %}
-                                 {% endfor %}
-                              </div>
-                           </div>
-                           {% endif %}
-                           {% if not client %}
-                           <a href="{{ 'login'|link }}" class="btn btn-secondary">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                 <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                 <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
-                              </svg>
-                              {{ 'Login'|trans }}
-                           </a>
-                           <a href="{{ 'signup'|link }}" class="btn btn-primary">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                 <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                 <path d="M16 19h6"></path>
-                                 <path d="M19 16v6"></path>
-                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
-                              </svg>
-                              {{ 'Register'|trans }}
-                           </a>
-                           {% endif %}
-                        </div>
-                     </div>
-                     <div class="d-none d-md-flex me-3">
-                        <a href="?theme=dark" class="nav-link px-0 hide-theme-dark js-theme-toggler" title="Enable dark mode" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                           <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-                           </svg>
-                        </a>
-                        <a href="?theme=light" class="nav-link px-0 hide-theme-light js-theme-toggler" title="Enable light mode" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                           <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                           <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
-                           </svg>
-                        </a>
-                     </div>
-                     {% if client %}
-                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                           <span class="avatar avatar-sm" style="background-image: url({{ profile.email|gravatar(60) }})"></span>
-                           <div class="d-none d-xl-block ps-2">
-                              <div>Welcome, {{profile.first_name}}</div>
-                              <div class="mt-1 small text-muted">Balance: {{ profile.balance | money(profile.currency) }}</div>
-                           </div>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                           <a href="{{ 'client/profile' | link}}" class="dropdown-item">{{ 'Profile'|trans }}</a>
-                           <a href="{{ '/email'|link }}" class="dropdown-item">{{ 'Emails'|trans }}</a>
-                           <a href="{{ 'client/logout' | link}}" class="dropdown-item">{{ 'Sign out'|trans }}</a>
-                        </div>
-                     </div>
-                     {% endif %}
-                  </div>
-               </div>
-            </header>
-            <header class="navbar-expand-md d-print-none">
-               <div class="collapse navbar-collapse" id="navbar-menu">
-                  <div class="navbar">
-                     <div class="container-xl">
-                        <ul class="navbar-nav">
-                           {% if settings.main_menu_home %}
-                           {% if client %}
-                           <li class="nav-item{% if request._url == '' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                       <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                       <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                       <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Dashboard'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% else %}
-                           <li class="nav-item{% if request._url == '' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                       <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                       <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                       <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Home'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% endif %}
-                           {% if settings.main_menu_order %}
-                           <li class="nav-item{% if request._url == '/order' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/order'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                       <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                       <path d="M17 17h-11v-14h-2"></path>
-                                       <path d="M6 5l14 1l-1 7h-13"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Order'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% if client %}
-                           {% if settings.main_menu_services %}
-                           <li class="nav-item{% if request._url == '/order/service' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/order/service'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                                       <path d="M3 12m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                                       <path d="M7 8l0 .01"></path>
-                                       <path d="M7 16l0 .01"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Services'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% if settings.main_menu_invoices %}
-                           <li class="nav-item{% if request._url == '/invoice' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/invoice'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-                                       <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
-                                       <path d="M9 7l1 0"></path>
-                                       <path d="M9 13l6 0"></path>
-                                       <path d="M13 17l2 0"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Invoices'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% if settings.main_menu_payments %}
-                           <li class="nav-item{% if request._url == '/client/balance' %} active{% endif %}">
-                              <a class="nav-link" href="{{ '/client/balance'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
-                                       <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                       <path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
-                                       <path d="M12 17v1m0 -8v1"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Payment history'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% if settings.main_menu_support %}
-                           <li class="nav-item dropdown{% if request._url == '/support' %} active{% endif %}">
-                              <a class="nav-link dropdown-toggle" href="#support" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                                       <path d="M12 17l0 .01"></path>
-                                       <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Support'|trans }}
-                                 </span>
-                              </a>
-                              <div class="dropdown-menu">
-                                 {% if settings.main_menu_tickets %}
-                                 <a class="dropdown-item" href="{{ '/support'|link }}">
-                                 {{ 'Support'|trans }}
-                                 </a>
-                                 {% endif %}
-                                 {% if (guest.extension_is_on({"mod":"news"}) and settings.main_menu_news) %}
-                                 <a class="dropdown-item" href="{{ '/news'|link }}">
-                                 {{ 'Announcements'|trans }}
-                                 </a>
-                                 {% endif %}
-                                 {% if (guest.support_kb_enabled() and settings.main_menu_kb) %}
-                                 <a class="dropdown-item" href="{{ 'support/kb'|link }}">
-                                 {{ 'Knowledge base'|trans }}
-                                 </a>
-                                 {% endif %}
-                              </div>
-                           </li>
-                           {% endif %}
-                           {% endif %}
-                           {% if not client %}
-                           {% if settings.main_menu_support %}
-                           <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                                       <path d="M12 17l0 .01"></path>
-                                       <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Support'|trans }}
-                                 </span>
-                              </a>
-                              <div class="dropdown-menu">
-                                 {% if (guest.extension_is_on({"mod":"news"}) and settings.main_menu_news) %}
-                                 <a class="dropdown-item" href="{{ '/news'|link }}">
-                                 {{ 'Announcements'|trans }}
-                                 </a>
-                                 {% endif %}
-                                 {% if (guest.support_kb_enabled() and settings.main_menu_kb) %}
-                                 <a class="dropdown-item" href="{{ 'support/kb'|link }}">
-                                 {{ 'Knowledge base'|trans }}
-                                 </a>
-                                 {% endif %}
-                                 <a class="dropdown-item" href="{{ '/support/contact-us'|link }}">
-                                 {{ 'Contact us'|trans }}
-                                 </a>
-                              </div>
-                           </li>
-                           {% endif %}
-                           {% if settings.main_menu_login %}
-                           <li class="nav-item">
-                              <a class="nav-link" href="{{ 'login'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
-                                       <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Login'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% if settings.main_menu_register %}
-                           <li class="nav-item">
-                              <a class="nav-link" href="{{ 'signup'|link }}">
-                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                       <path d="M16 19h6"></path>
-                                       <path d="M19 16v6"></path>
-                                       <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
-                                    </svg>
-                                 </span>
-                                 <span class="nav-link-title">
-                                 {{ 'Register'|trans }}
-                                 </span>
-                              </a>
-                           </li>
-                           {% endif %}
-                           {% endif %}
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-            </header>
-         </div>
-         <div class="page-wrapper">
-            <!-- Page header -->
-            <div class="page-header d-print-none">
-               <div class="container-xl">
-                  <div class="row g-2 align-items-center mw-100">
-                     <div class="col">
-                        {% if settings.show_breadcrumb %}
-                        {% block breadcrumbs %}
-                        <div class="mb-1">
-                           <ol class="breadcrumb" aria-label="breadcrumbs">
-                              <li class="breadcrumb-item"><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a></li>
-                              {% block breadcrumb %}
-                              <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Dashboard'|trans }}</a></li>
-                              {% endblock %}
-                           </ol>
-                        </div>
-                        {% endblock %}
+          </div>
+          <div class="navbar-nav flex-row ms-auto order-md-last">
+            <div class="nav-item d-md-flex me-1 me-sm-2 me-md-3">
+              <div class="btn-list">
+                {% set languages = guest.extension_languages(true) %}
+                {% if languages|length > 1 %}
+                {% set currentLang = guest.system_locale %}
+                {% set countryCode = currentLang | slice(3, 2) %}
+                <div class="dropdown small-dropdown">
+                    <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% for lang in languages %}
+                    {% if lang.locale == currentLang %}
+                        {% set parts = lang.title|split(' (') %}
+                        {{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}
+                    {% endif %}
+                    {% endfor %}</a>
+                    <div class="dropdown-menu language-selector">
+                        {% for lang in languages %}
+                        {% set countryCode = lang.locale | slice(3, 2) %}
+                        {% if lang != currentLang %}
+                        <a href="javascript:;" class="dropdown-item language_selector" data-lang="{{ lang.locale }}"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% set parts = lang.title|split(' (') %}{{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}</a>
                         {% endif %}
-                        <h2 class="page-title">
-                           <span class="text-truncate">{% block page_header %}{% endblock %}</span>
-                        </h2>
-                        <div class="text-muted mt-1">{% block page_subheader %}{% endblock %}</div>
-                     </div>
-                  </div>
-               </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if not client %}
+                <div class="d-none d-md-inline-flex gap-2">
+                    <a href="{{ 'login'|link }}" class="btn btn-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                        <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                      </svg>
+                      {{ 'Login'|trans }}
+                    </a>
+                    <a href="{{ 'signup'|link }}" class="btn btn-secondary">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                        <path d="M16 19h6"></path>
+                        <path d="M19 16v6"></path>
+                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                      </svg>
+                      {{ 'Register'|trans }}
+                    </a>
+                </div>
+                {% endif %}
+              </div>
             </div>
-            <!-- Page body -->
-            <div class="page-body">
-               <div class="container-xl">
-                  {% block content_before %}{% endblock %}
-                  {% block content %}{% endblock %}
-                  <div class="row row-deck row-cards">
-                     {% include "partial_message.html.twig" %}
-                     {% if not client %}
-                     {% if request._url == "/" %}
-                     <div class="col-md-4">
-                        <div class="card card-lg bg-red text-red-fg d-print-none">
-                           <div class="card-stamp">
-                              <div class="card-stamp-icon bg-white text-red">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M17 17h-11v-14h-2"></path>
-                                    <path d="M6 5l14 1l-1 7h-13"></path>
-                                 </svg>
-                              </div>
-                           </div>
-                           <div class="card-body">
-                              <h2>{{ 'Order'|trans }}</h2>
-                              <p>{{ 'Products and services'|trans }}</p>
-                              <div class="row">
-                                 <div class="mt-2">
-                                    <a href="{{ '/order'|link }}" class="btn btn-outline-light w-100">
-                                    {{ 'Order'|trans }}
-                                    </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="card card-lg bg-azure text-azure-fg d-print-none">
-                           <div class="card-stamp">
-                              <div class="card-stamp-icon bg-white text-azure">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                 </svg>
-                              </div>
-                           </div>
-                           <div class="card-body">
-                              <h2>{{ 'Profile'|trans }}</h2>
-                              <p>{{ 'You are logged out'|trans }}</p>
-                              <div class="row">
-                                 <div class="col-md-6 mt-2">
-                                    <a href="{{ '/login'|link }}" class="btn btn-outline-light w-100">
-                                    {{ 'Login'|trans }}
-                                    </a>
-                                 </div>
-                                 <div class="col-md-6 mt-2">
-                                    <a href="{{ '/signup'|link }}" class="btn btn-outline-light w-100">
-                                    {{ 'Register'|trans }}
-                                    </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="card card-lg bg-green text-green-fg d-print-none">
-                           <div class="card-stamp">
-                              <div class="card-stamp-icon bg-white text-green">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"></path>
-                                    <path d="M8 8l4 0"></path>
-                                    <path d="M8 12l4 0"></path>
-                                    <path d="M8 16l4 0"></path>
-                                 </svg>
-                              </div>
-                           </div>
-                           <div class="card-body">
-                              <h2 >{{ 'News'|trans }}</h2>
-                              <p>{{ 'Latest news and announcements' | trans }}</p>
-                              <div class="row">
-                                 <div class="mt-2">
-                                    <a href="{{ '/news'|link }}" class="btn btn-outline-light w-100">
-                                    {{ 'Announcements'|trans }}
-                                    </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     {% endif %}
-                     {% endif %}
-                     {% block content_after %}{% endblock %}
-                  </div>
-               </div>
+            <div class="d-flex me-1 me-sm-2 me-md-3 gap-1 gap-sm-2">
+              <a href="?theme=dark" class="nav-link px-0 hide-theme-dark js-theme-toggler" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                  </svg>
+              </a>
+              <a href="?theme=light" class="nav-link px-0 hide-theme-light js-theme-toggler" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                    <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                  </svg>
+              </a>
             </div>
-            <div id="push"></div>
-            {% if settings.footer_enabled %}
-            <footer class="footer footer-transparent d-print-none">
-               <div class="container-xl">
-                  <div class="row text-center align-items-center flex-row-reverse">
-                     {% set linksAvailable = false %}
-                     {% for i in 1..4 %}
-                     {% if attribute(settings, 'footer_link_' ~ i ~ '_enabled') %}
-                     {% set linksAvailable = true %}
-                     {% endif %}
-                     {% endfor %}
-                     {% if linksAvailable %}
-                     <div class="col-lg-auto ms-lg-auto">
-                        <ul class="list-inline list-inline-dots mb-0">
-                           {% if settings.footer_link_1_enabled %}
-                           {% if 'http://' in settings.footer_link_1_page or  'https://' in settings.footer_link_1_page%}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a></li>
-                           {% else %}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_1_page | link }}" class="link-secondary">{{ settings.footer_link_1_title }}</a></li>
-                           {% endif %}
-                           {% endif %}      
-                           {% if settings.footer_link_2_enabled %}
-                           {% if 'http://' in settings.footer_link_2_page or  'https://' in settings.footer_link_2_page%}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a></li>
-                           {% else %}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_2_page | link }}" class="link-secondary">{{ settings.footer_link_2_title }}</a></li>
-                           {% endif %}
-                           {% endif %}    
-                           {% if settings.footer_link_3_enabled %}
-                           {% if 'http://' in settings.footer_link_3_page or  'https://' in settings.footer_link_3_page%}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a></li>
-                           {% else %}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_3_page | link }}" class="link-secondary">{{ settings.footer_link_3_title }}</a></li>
-                           {% endif %}
-                           {% endif %}    
-                           {% if settings.footer_link_4_enabled %}
-                           {% if 'http://' in settings.footer_link_4_page or  'https://' in settings.footer_link_4_page%}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a></li>
-                           {% else %}
-                           <li class="list-inline-item"><a href="{{ settings.footer_link_4_page | link }}" class="link-secondary">{{ settings.footer_link_4_title }}</a></li>
-                           {% endif %}
-                           {% endif %}    
-                        </ul>
-                     </div>
-                     {% endif %}    
-                     <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                        <ul class="list-inline list-inline-dots mb-0">
-                           <li class="list-inline-item">
-                              &copy; {{ now|format_date(pattern='yyyy') }} {{ settings.footer_signature | default(company.signature) }}
-                           </li>
-                           {% if guest.extension_is_on({"mod":'branding'}) %}
-                           <li class="list-inline-item">
-                              <a href="https://fossbilling.org" title="Billing Software" target="_blank">{{ 'Powered by the FOSSBilling Community'|trans }}</a>
-                           </li>
-                           {% endif %}
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-            </footer>
+            {% if settings.top_menu_signout %}
+            {% if client %}
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                <span class="avatar avatar-sm" style="background-image: url({{ profile.email|gravatar(60) }})"> </span>
+                <div class="d-none d-xl-block ps-2">
+                  {% if profile.company %}
+                      <div>{{ profile.first_name }} {{ profile.last_name }}</div>
+                      <div class="mt-1 small text-secondary">({{ profile.company }})</div>
+                  {% else %}
+                      <div>{{ profile.first_name }} {{ profile.last_name }}</div>
+                      {% if settings.sidebar_balance_enabled and client %}
+                        <div class="mt-1 small text-secondary">{{ profile.balance | money(profile.currency) }}</div>
+                      {% endif %}
+                  {% endif %}
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="{{ 'client/profile'|link }}" class="dropdown-item">{{ 'Profile'|trans }}</a>
+                <a href="{{ '/client/balance'|link }}" class="dropdown-item">{{ 'Wallet'|trans }}</a>
+                <a href="{{ '/email'|link }}" class="dropdown-item">{{ 'Emails'|trans }}</a>
+                <a href="{{ 'client/logout'|link }}" class="dropdown-item">{{ 'Sign out'|trans }}</a>
+              </div>
+            </div>
             {% endif %}
-         </div>
-      </div>
-      <div class="wait" style="display:none" onclick="$(this).hide();">
-         <div class="popup_block" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 0.5; -webkit-opacity: 0.5; -moz-opacity: 0.5; filter :  alpha(opacity=50); z-index: 2000">
-            <img alt="loading gif" src="{{ 'img/loader.gif'|asset_url}}" style="position: absolute; display: block; margin-left: auto; margin-right: auto; position: relative; top: 50%; opacity: 1; filter: alpha(opacity=100); z-index: 1003">
-         </div>
-      </div>
-      <noscript>NOTE: Many features on FOSSBilling require Javascript and cookies. You can enable both via your browser's preference settings.</noscript>
-      {% endblock %}
-      {% if settings.inject_javascript %}
-      {{ settings.inject_javascript | raw}}
-      {% endif %}
-      {% include 'partial_pending_messages.html.twig' ignore missing %}
-      {% block footerjs %}{% endblock %}
-      <script src="{{ 'js/tabler.min.js' | asset_url }}" defer></script>
-   </body>
+            {% endif %}
+          </div>
+        </div>
+      </header>
+      <header class="navbar-expand-md">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <div class="navbar">
+            <div class="container-xl">
+              <div class="row flex-column flex-md-row flex-fill align-items-center">
+                <div class="col">
+                  <ul class="navbar-nav">
+                    {% if settings.top_menu_dashboard %}
+                    <li class="nav-item{% if request._url == '/' %} active{% endif %}">
+                      <a class="nav-link" href="{{ ''|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" /><path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" /><path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1" /><path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Dashboard'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if settings.top_menu_order %}
+                    <li class="nav-item{% if request._url == '/order' or request._url starts with '/orderbutton' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/order'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Order'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if client %}
+                    <li class="nav-item{% if request._url starts with '/order/service' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/order/service'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Services'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if client %}
+                    <li class="nav-item{% if request._url starts with '/invoice' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/invoice'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Invoices'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if client %}
+                    <li class="nav-item{% if
+                        request._url starts with '/support'
+                        and not (request._url starts with '/support/contact-us')
+                        and not (request._url starts with '/support/kb')
+                    %}
+                     active{% endif %}">
+                      <a class="nav-link" href="{{ '/support'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Support'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    {% if guest.extension_is_on({"mod":"news"}) %}
+                    <li class="nav-item{% if request._url starts with '/news' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/news'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'News'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if guest.support_kb_enabled() %}
+                    <li class="nav-item{% if request._url == '/support/kb' %} active{% endif %}">
+                      <a class="nav-link" href="{{ 'support/kb'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block"
+                          >
+                          <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 1L14 6V17L19 12.5V1M21 5V18.5C19.9 18.15 18.7 18 17.5 18C15.8 18 13.35 18.65 12 19.5V6C10.55 4.9 8.45 4.5 6.5 4.5C4.55 4.5 2.45 4.9 1 6V20.65C1 20.9 1.25 21.15 1.5 21.15C1.6 21.15 1.65 21.1 1.75 21.1C3.1 20.45 5.05 20 6.5 20C8.45 20 10.55 20.4 12 21.5C13.35 20.65 15.8 20 17.5 20C19.15 20 20.85 20.3 22.25 21.05C22.35 21.1 22.4 21.1 22.5 21.1C22.75 21.1 23 20.85 23 20.6V6C22.4 5.55 21.75 5.25 21 5M10 18.41C8.75 18.09 7.5 18 6.5 18C5.44 18 4.18 18.19 3 18.5V7.13C3.91 6.73 5.14 6.5 6.5 6.5C7.86 6.5 9.09 6.73 10 7.13V18.41Z" /></svg></span>
+                        <span class="nav-link-title"> {{ 'Knowledge Base'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="nav-item{% if request._url starts with '/support/contact-us' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/support/contact-us'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Contact us'|trans }} </span>
+                      </a>
+                    </li>
+
+                  </ul>
+                </div>
+                {% if not client %}
+                <div class="col col-md-auto">
+                  <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#profile" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false"
+                      >
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                        </span>
+                        <span class="nav-link-title">{{ 'Profile'|trans }}</span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="{{ '/login'|link }}">{{ 'Login'|trans }}</a>
+                        <a class="dropdown-item" href="{{ '/signup'|link }}">{{ 'Register'|trans }}</a>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="page-wrapper">
+        {% if settings.show_breadcrumb and request._url != '/' %}
+        <div class="page-header d-print-none" aria-label="Page header">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                {% block breadcrumbs %}
+                <ol class="breadcrumb" aria-label="{{ 'breadcrumb'|trans }}">
+                  <li class="breadcrumb-item"><a href="{{ '/'|link }}">{{ 'Home'|trans }}</a></li>
+                    {% block breadcrumb %}
+                    <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ 'Dashboard'|trans }}</a></li>
+                    {% endblock %}
+                </ol>
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="page-body">
+          <div class="container-xl">
+            {% block content_before %}{% endblock %}
+
+            {% block content %}{% endblock %}
+
+            {{ include('partial_message.html.twig') }}
+
+            {% block content_after %}{% endblock %}
+            <div id="push"></div>
+          </div>
+        </div>
+        
+        {% if settings.footer_enabled %}
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  {% if settings.footer_link_1_enabled %}
+                  <li class="list-inline-item">
+                      {% if 'http://' in settings.footer_link_1_page or  'https://' in settings.footer_link_1_page %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
+                      {% else %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_1_page | link }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
+                      {% endif %}
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_link_2_enabled %}
+                  <li class="list-inline-item">
+                      &nbsp;&#x2022;&nbsp;
+                      {% if 'http://' in settings.footer_link_2_page or  'https://' in settings.footer_link_2_page %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                           href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
+                      {% else %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                           href="{{ settings.footer_link_2_page | link }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
+                      {% endif %}
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_link_3_enabled %}
+                  <li class="list-inline-item">
+                      &nbsp;&#x2022;&nbsp;
+                      {% if 'http://' in settings.footer_link_3_page or  'https://' in settings.footer_link_3_page %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
+                      {% else %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_3_page | link }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
+                      {% endif %}
+                  </li>
+                  {% endif %}
+                  {% if settings.footer_link_4_enabled %}
+                  <li class="list-inline-item">
+                      &nbsp;&#x2022;&nbsp;
+                      {% if 'http://' in settings.footer_link_4_page or  'https://' in settings.footer_link_4_page %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
+                      {% else %}
+                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                            href="{{ settings.footer_link_4_page | link }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
+                      {% endif %}
+                  </li>
+                  {% endif %}
+                </ul>
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    &copy; {{ now|format_date(pattern='yyyy') }} {{ settings.footer_signature | default(company.signature) }}
+                    {% if company.bank_info_pagebottom == 1 %}
+                        <br/>
+                        <b>{{'Payment Information'|trans}}</b> - {{'Bank Name'|trans}}: {{ company.bank_name }} | {{'BIC / SWIFT Code'|trans}}: {{ company.bic }} | {{'Account Number'|trans}}: {{ company.account_number }}
+                    {% endif %}
+                  </li>
+                  {% if guest.extension_is_on({"mod":'branding'}) %}
+                  <li class="list-inline-item">
+                    <span>{{ 'Powered by the'|trans }}&nbsp;</span>
+                    <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                     href="https://fossbilling.org" title="Billing Software"
+                     target="_blank">{{ 'FOSSBilling Community'|trans }}</a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+        {% endif %}
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1070;"></div>
+        {% if settings.footer_to_top_enabled %}
+            <a href="#top" class="position-fixed btn btn-primary bottom-0 end-0 m-3">
+                <span class="awe-arrow-up"></span> {{ 'Top'|trans }}</a>
+        {% endif %}
+        <div class="wait" style="display:none" onclick="$(this).hide();">
+            <div class="spinner-border"
+                 style="width: 4rem; height: 4rem; top: 50%; left: 50%; position: fixed; z-index: 999"></div>
+        </div>
+        <noscript>{{ "NOTE: Many features on FOSSBilling require Javascript and cookies. You can enable both in your browser's preference settings."|trans }}</noscript>
+
+        {% endblock %}
+
+        {% if settings.inject_javascript %}
+            {{ settings.inject_javascript | raw }}
+        {% endif %}
+        {{ include('partial_pending_messages.html.twig', ignore_missing: true) }}
+        {% if guest.extension_is_on({ "mod": "cookieconsent" }) %}
+            {{ include('mod_cookieconsent_index.html.twig', ignore_missing: true) }}
+        {% endif %}
+    </div>
+</div>
+{{ DebugBar_render() }}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const THEME_KEY = "theme";
+
+  function applyTheme(theme) {
+    const t = theme === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-bs-theme", t);
+
+    document.querySelectorAll(".hide-theme-dark").forEach(el => {
+      el.style.display = (t === "dark") ? "none" : "";
+    });
+    document.querySelectorAll(".hide-theme-light").forEach(el => {
+      el.style.display = (t === "light") ? "none" : "";
+    });
+  }
+
+  applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+  document.querySelectorAll(".js-theme-toggler").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const theme = new URL(el.href, window.location.origin).searchParams.get("theme");
+      if (!theme) return;
+
+      localStorage.setItem(THEME_KEY, theme);
+      applyTheme(theme);
+    });
+  });
+});
+
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = name + "=" + encodeURIComponent(value) +
+    "; expires=" + expires + "; path=/";
+}
+
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="))
+    ?.split("=")[1] || null;
+}
+
+function initLanguageSelector() {
+  document.querySelectorAll("a.language_selector").forEach(link => {
+
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // Prefer data-lang, fallback to value or href
+      const lang =
+        link.dataset.lang ||
+        link.getAttribute("value") ||
+        new URL(link.href, location.origin).searchParams.get("lang");
+
+      if (!lang) return;
+
+      setCookie("BBLANG", lang, 7);
+      location.reload();
+    });
+
+    // Optional: mark active language
+    const current = getCookie("BBLANG");
+
+    if (current) {
+      if (
+        link.dataset.lang === current ||
+        link.getAttribute("value") === current
+      ) {
+        link.classList.add("active");
+      }
+    }
+
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initLanguageSelector);
+
+</script>
+</body>
 </html>

@@ -1,439 +1,323 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+
 {% import "macro_functions.html.twig" as mf %}
+
 {% block meta_title %}{{ order.title }}{% endblock %}
-{% block page_header %}{{ 'Service details'|trans }}{% endblock %}
-{% block page_subheader %}{{ 'All information about your service'|trans }}{% endblock %}
+
 {% set addons = client.order_addons({ "id": order.id }) %}
+
 {% block body_class %}order-manage{% endblock %}
 {% block breadcrumb %}
-<li class="breadcrumb-item"><a href="{{ 'service' | link}}">{{ 'Services'|trans }}</a></li>
-<li class="breadcrumb-item active" aria-current="page"><a href="#">{{ order.title }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'order/service' | link}}">{{ 'Services'|trans }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ order.title }}</li>
 {% endblock %}
+
 {% set service_partial = "mod_service" ~ order.service_type ~ "_manage.html.twig" %}
 {% set upgradables = client.order_upgradables({ 'id': order.id }) %}
-{% block content %}
-<div class="row row-deck row-cards">
-   <div class="col-md-12">
-      <div class="card">
-         <div class="card-header">
-            <h3 class="card-title">{{ 'Service details'|trans }}</h3>
-            <div class="card-actions">
-               {% if order.period and order.status != 'failed_renew' %}
-               <button class="btn btn-primary" type="button" id="renewal-button" data-bs-toggle="modal" data-bs-target="#modal-renew">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                     <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
-                     <path d="M12 7v5l3 3"></path>
-                  </svg>
-                  {{ 'Renew now'|trans }}
-               </button>
-               {% endif %}
-               {% if upgradables %}
-               <a href="#submit-upgrade-ticket" class="btn btn-success" type="button" id="request-upgrade" data-bs-toggle="modal" data-bs-target="#submit-upgrade-ticket">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                     <path d="M9 12l6 0"></path>
-                     <path d="M12 9l0 6"></path>
-                  </svg>
-                  {{ 'Request Upgrade'|trans }}
-               </a>
-               {% endif %}
-               <a href="#submit-ticket" class="btn btn-info" type="button" id="open-ticket" data-bs-toggle="modal" data-bs-target="#submit-ticket">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                     <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                     <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-                     <path d="M15 15l3.35 3.35"></path>
-                     <path d="M9 15l-3.35 3.35"></path>
-                     <path d="M5.65 5.65l3.35 3.35"></path>
-                     <path d="M18.35 5.65l-3.35 3.35"></path>
-                  </svg>
-                  {{ 'Open ticket'|trans }}
-               </a>
-               {% if order.status == 'active' %}
-               <a href="#submit-cancellation-ticket" class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#submit-cancellation-ticket">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                     <path d="M4 7l16 0"></path>
-                     <path d="M10 11l0 6"></path>
-                     <path d="M14 11l0 6"></path>
-                     <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                     <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                  </svg>
-                  {{ 'Request Cancellation'|trans }}
-               </a>
-               {% endif %}
-               <a class="btn" href="{{ '/order/service'|link }}">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                     <path d="M9 14l-4 -4l4 -4"></path>
-                     <path d="M5 10h11a4 4 0 1 1 0 8h-1"></path>
-                  </svg>
-                  {{ 'Back to services'|trans }}
-               </a>
-            </div>
-         </div>
-         <div class="table-responsive">
-            <table class="table card-table table-vcenter text-nowrap table-bordered table-striped">
-               <tbody>
-                  <tr>
-                     <td><label>{{ 'Order'|trans }}</label></td>
-                     <td>#{{ order.id }}</td>
-                  </tr>
-                  <tr>
-                     <td><label>{{ 'Product name'|trans }}</label></td>
-                     <td><strong>{{ order.title }}</strong></td>
-                  </tr>
-                  <tr>
-                     <td><label>{{ 'Payment amount'|trans }}</label></td>
-                     <td>{{ order.total|money(order.currency) }}</td>
-                  </tr>
-                  {% if order.period %}
-                  <tr>
-                     <td><label>{{ 'Billing cycle'|trans }}</label></td>
-                     <td>{{ order.period|period_title }}</td>
-                  </tr>
-                  {% endif %}
-                  <tr>
-                     <td><label>{{ 'Order status'|trans }}</label></td>
-                     <td>
-                        <span class="status status-{% if order.status == 'active' %}green{% elseif order.status == 'pending_setup' %}orange{% endif %}">{{ mf.status_name(order.status) }}</span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td><label>{{ 'Order created'|trans }}</label></td>
-                     <td>{{ order.created_at|format_date }}</td>
-                  </tr>
-                  <tr>
-                     <td><label>{{ 'Activated at'|trans }}</label></td>
-                     <td>{% if order.activated_at %}{{ order.activated_at|format_date }}{% else %}-{% endif %}</td>
-                  </tr>
-                  {% if order.period %}
-                  <tr>
-                     <td><label>{{ 'Renewal date'|trans }} {% if order.expires_at %} in {{ order.expires_at|daysleft }} day(s) {% endif %}</label></td>
-                     <td>{% if order.expires_at %}{{ order.expires_at|format_date }}{% else %}-{% endif %}</td>
-                  </tr>
-                  {% endif %}
-                  {% if order.notes %}
-                  <tr>
-                     <td><label>{{ 'Order notes'|trans }}</label></td>
-                     <td>{{ order.notes|markdown }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if order.active_tickets > 0 %}
-                  <tr>
-                     <td><label>{{ 'Active support tickets'|trans }}</label></td>
-                     <td>
-                        <div class="num"><a href="{{ 'support'|link }}" class="redNum">{{ order.active_tickets }}</a></div>
-                        {# 
-                        <div class="num"><a href="{{ 'support'|link }}" class="greenNum">{{ order.active_tickets }}</a></div>
-                        #}
-                        {# 
-                        <div class="num"><a href="{{ 'support'|link }}" class="bludNum">{{ order.active_tickets }}</a></div>
-                        #}
-                     </td>
-                  </tr>
-                  {% endif %}
-               </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
-</div>
-{% if order.group_master == 1 %}
-{% if addons|length > 0 %}
-<div class="row row-deck row-cards mt-1">
-   <div class="col-md-12">
-      <div class="card">
-         <div class="card-header">
-            <h3 class="card-title">{{ 'Addons'|trans }} <span class="card-subtitle">{{ 'Addons you have ordered with this service'|trans }}</span></h3>
-         </div>
-         <div class="card-body">
-            <div class="table-responsive">
-               <table class="table table-striped table-bordered table-condensed">
-                  <thead>
-                     <tr>
-                        <th>{{ 'Product/Service'|trans }}</th>
-                        <th>{{ 'Price'|trans }}</th>
-                        <th>{{ 'Billing Cycle'|trans }}</th>
-                        <th>{{ 'Next due date'|trans }}</th>
-                        <th>{{ 'Status'|trans }}</th>
-                        <th>&nbsp;</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {% for i, addon in addons %}
-                     <tr class="{{ cycle(['odd', 'even'], i) }}">
-                        <td>{{ addon.title }}</td>
-                        <td>{{ addon.total|money(addon.currency) }}</td>
-                        <td>{{ addon.period|period_title }}</td>
-                        <td>{% if addon.expires_at %}{{ addon.expires_at|format_date }}{% else %}-{% endif %}</td>
-                        <td>
-                           <span class="status {% if addon.status == 'active' %}status-success{% elseif addon.status == 'pending_setup' %}status-warning{% endif %}">{{ mf.status_name(addon.status) }}</span>
-                        </td>
-                        <td class="actions">
-                           <a class="btn btn-secondary btn-icon" href="{{ '/order/service/manage'|link }}/{{ addon.id }}">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                 <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
-                                 <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
-                              </svg>
-                           </a>
-                        </td>
-                     </tr>
-                     {% endfor %}
-                  </tbody>
-               </table>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-{% endif %}
-{% endif %}
-<div class="modal modal-blur fade" id="submit-ticket" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title">{{ 'Submit new support ticket'|trans }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form action="" method="post" class="open-ticket" class="form" style="background: none">
-               <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Help desk'|trans }}:</label>
-                  {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Subject'|trans }}:</label>
-                  <input type="text" class="form-control" name="subject" required="required" value="{{ request.subject|e }}" placeholder="Your subject">  
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Message'|trans }}:</label>
-                  <textarea class="form-control" name="content" cols="10" rows="10" required="required">{{ request.content|e }}</textarea>
-                  <input type="hidden" name="rel_type" value="order">
-                  <input type="hidden" name="rel_id" value="{{ order.id }}">
-               </div>
-         </div>
-         <div class="modal-footer">
-         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-         Cancel
-         </a>
-         <button class="btn btn-info ms-auto" type="submit" value="{{ 'Submit'|trans }}" data-bs-dismiss="modal">
-         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-         <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-         <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-         <path d="M15 15l3.35 3.35"></path>
-         <path d="M9 15l-3.35 3.35"></path>
-         <path d="M5.65 5.65l3.35 3.35"></path>
-         <path d="M18.35 5.65l-3.35 3.35"></path>
-         </svg> {{ 'Open ticket'|trans }}
-         </button></form>
-         </div>
-      </div>
-   </div>
-</div>
-<div class="modal modal-blur fade" id="submit-cancellation-ticket" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title">{{ 'Submit cancellation request'|trans }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form action="" method="post" class="open-ticket" class="form" style="background: none">
-               <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Help desk'|trans }}:</label>
-                  {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Subject'|trans }}:</label>
-                  <input type="text" class="form-control" name="subject" required="required" value="{{ 'I would like to cancel'|trans }} {{ order.title }}">  
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Reason'|trans }}:</label>
-                  <textarea class="form-control" name="content" cols="10" rows="10" required="required">{{ 'I would like to cancel'|trans }} {{ order.title }} {{ request.content|e }}</textarea>
-                  <input type="hidden" name="rel_type" value="order">
-                  <input type="hidden" name="rel_id" value="{{ order.id }}">
-                  <input type="hidden" name="rel_task" value="cancel">
-               </div>
-         </div>
-         <div class="modal-footer">
-         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-         Cancel
-         </a>
-         <button class="btn btn-danger ms-auto" type="submit" value="{{ 'Submit'|trans }}" data-bs-dismiss="modal">
-         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-         <path d="M4 7l16 0"></path>
-         <path d="M10 11l0 6"></path>
-         <path d="M14 11l0 6"></path>
-         <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-         <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-         </svg>
-         {{ 'Request'|trans }}
-         </button></form>
-         </div>
-      </div>
-   </div>
-</div>
-<div class="modal modal-blur fade" id="submit-upgrade-ticket" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title">{{ 'Submit upgrade request'|trans }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <form action="" method="post" class="request-upgrade" class="form" style="background: none" data-api-url="client/support/ticket_create" data-api-msg="Upgrade request received">
-               <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Help desk'|trans }}:</label>
-                  {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Subject'|trans }}:</label>
-                  <input type="text" class="form-control" name="subject" required="required" value="{{ 'I would like to upgrade'|trans }} {{ order.title }}">  
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Upgrade to'|trans }}:</label>
-                  {{ mf.selectbox('rel_new_value', upgradables, '', 1) }}
-               </div>
-               <div class="mb-3">
-                  <label class="form-label">{{ 'Notes'|trans }}:</label>
-                  <textarea class="form-control" name="content" cols="10" rows="10" required="required">{{ 'I would like to upgrade'|trans }} {{ order.title }}</textarea>
-                  <input type="hidden" name="rel_type" value="order">
-                  <input type="hidden" name="rel_id" value="{{ order.id }}">
-                  <input type="hidden" name="rel_task" value="upgrade">
-               </div>
-         </div>
-         <div class="modal-footer">
-         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-         Cancel
-         </a>
-         <button class="btn btn-success ms-auto" type="submit" value="{{ 'Submit'|trans }}" data-bs-dismiss="modal">
-         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-         <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-         <path d="M9 12l6 0"></path>
-         <path d="M12 9l0 6"></path>
-         </svg>
-         {{ 'Request'|trans }}
-         </button></form>
-         </div>
-      </div>
-   </div>
-</div>
-<div class="modal modal-blur fade" id="modal-renew" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         <div class="modal-status bg-primary"></div>
-         <div class="modal-body text-center py-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-primary icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-               <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
-               <path d="M12 7v5l3 3"></path>
-            </svg>
-            <h3>Are you sure?</h3>
-            <div class="text-muted">This will generate new invoice. Are you sure you want to continue?</div>
-         </div>
-         <div class="modal-footer">
-            <div class="w-100">
-               <div class="row">
-                  <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                     No
-                     </a>
-                  </div>
-                  <div class="col"><a href="#" class="btn btn-primary w-100" id="create-invoice">
-                     Yes
-                     </a>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-{% if guest.system_template_exists({ 'file': service_partial }) %}
-{% set service = client.order_service({ 'id': order.id }) %}
-{% include service_partial with { 'order': order, 'service': service } %}
-{% else %}
-{# {{ 'Service does not have configuration page'|trans }} #}
-{% endif %}
+
+{% block head %}
+    {{ mf.wysiwyg('.editor-textarea') }}
 {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            {# Order info #}
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="mb-1">{{ 'Service details'|trans }}</h1>
+                            <span class="small text-secondary">{{ 'All information about your service'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="datagrid">
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Order'|trans }}</div>
+                        <div class="datagrid-content">#{{ order.id }}</div>
+                      </div>
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Product name'|trans }}</div>
+                        <div class="datagrid-content"><strong>{{ order.title }}</strong></div>
+                      </div>
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Payment amount'|trans }}</div>
+                        <div class="datagrid-content">{{ order.total|money(order.currency) }}</div>
+                      </div>
+                      {% if order.period %}
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Billing cycle'|trans }}</div>
+                        <div class="datagrid-content">{{ order.period|period_title }}</div>
+                      </div>
+                      {% endif %}
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Order status'|trans }}</div>
+                        <div class="datagrid-content"><span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span></div>
+                      </div>
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Order created'|trans }}</div>
+                        <div class="datagrid-content">{{ order.created_at|date('Y-m-d H:i:s') }}</div>
+                      </div>
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Activated at'|trans }}</div>
+                        <div class="datagrid-content">{% if order.activated_at %}{{ order.activated_at|date('Y-m-d H:i:s') }}{% else %}-{% endif %}</div>
+                      </div>
+                      {% if order.period %}
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Renewal date'|trans }} {% if order.expires_at %} in {{ order.expires_at|daysleft }} day(s) {% endif %}</div>
+                        <div class="datagrid-content">{% if order.expires_at %}{{ order.expires_at|date('Y-m-d H:i:s') }}{% else %}-{% endif %}</div>
+                      </div>
+                      {% endif %}
+                      {% if order.notes %}
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Order notes'|trans }}</div>
+                        <div class="datagrid-content">{{ order.notes|markdown }}</div>
+                      </div>
+                      {% endif %}
+                      {% if order.active_tickets > 0 %}
+                      <div class="datagrid-item">
+                        <div class="datagrid-title">{{ 'Active support tickets'|trans }}</div>
+                        <div class="datagrid-content"><div class="num"><a href="{{ 'support'|link }}" class="redNum">{{ order.active_tickets }}</a></div></div>
+                      </div>
+                      {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    {% if order.period and order.status != 'failed_renew' %}
+                        <button class="btn btn-primary btn-sm" type="button" id="renewal-button">{{ 'Renew now'|trans }}</button>
+                    {% endif %}
+                    {% if upgradables %}
+                        <button class="btn btn-success btn-sm" type="button" id="request-upgrade" data-bs-toggle="modal" data-bs-target="#upgrade-request-modal">{{ 'Request Upgrade'|trans }}</button>
+                    {% endif %}
+                    <button class="btn btn-info btn-sm" type="button" id="open-ticket" data-bs-toggle="modal" data-bs-target="#open-ticket-modal">{{ 'Open ticket'|trans }}</button>
+                    {% if order.status == 'active' %}
+                        <button class="btn btn-danger btn-sm" type="button" id="request-cancel" data-bs-toggle="modal" data-bs-target="#cancel-request-modal">{{ 'Request cancellation'|trans }}</button>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Service management #}
+            {% if guest.system_template_exists({ 'file': service_partial }) %}
+                {% set service = client.order_service({ 'id': order.id }) %}
+                {{ include(service_partial, { 'order': order, 'service': service }) }}
+            {% endif %}
+
+            {# Order addons #}
+            {% if order.group_master == 1 and addons|length > 0 %}
+            <div class="card mb-4">
+                <div class="card-header py-3 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="mb-1">{{ 'Addons'|trans }}</h1>
+                            <span class="small text-secondary">{{ 'Addons you have ordered with this service'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                        <table class="table table-hover table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th>{{ 'Product/Service'|trans }}</th>
+                                <th>{{ 'Price'|trans }}</th>
+                                <th>{{ 'Billing Cycle'|trans }}</th>
+                                <th>{{ 'Next due date'|trans }}</th>
+                                <th>{{ 'Status'|trans }}</th>
+                                <th>{{ 'Actions'|trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i, addon in addons %}
+                                <tr>
+                                    <td>{{ addon.title }}</td>
+                                    <td>{{ addon.total|money(addon.currency) }}</td>
+                                    <td>{{ addon.period|period_title }}</td>
+                                    <td>{% if addon.expires_at %}{{ addon.expires_at|format_date }}{% else %}-{% endif %}</td>
+                                    <td>
+                                        <span class="badge {% if addon.status == 'active' %}bg-success{% elseif addon.status == 'pending_setup' %}bg-warning{% endif %}">{{ mf.status_name(addon.status) }}</span>
+                                    </td>
+                                    <td class="actions">
+                                        <a class="btn btn-outline-primary btn-sm" href="{{ '/order/service/manage'|link }}/{{ addon.id }}">{{ 'Manage'|trans }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="modal fade" id="cancel-request-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">{{ 'Submit cancellation request'|trans }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
+                        </div>
+                        <form action="" method="post" id="cancel-request-form" class="request-cancellation">
+                            <div class="modal-body">
+                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                                <input type="hidden" name="rel_type" value="order">
+                                <input type="hidden" name="rel_id" value="{{ order.id }}">
+                                <input type="hidden" name="rel_task" value="cancel">
+                                <div class="mb-3">
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">{{ 'Subject'|trans }}</label>
+                                    <input class="form-control" type="text" name="subject" id="subject" value="{{ request.subject|e }}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="content" class="form-label">{{ 'Reason'|trans }}</label>
+                                    <textarea class="form-control" id="content" name="content" rows="5" required>{{ request.content|e }}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">{{ 'Request'|trans }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="open-ticket-modal" tabindex="-1" role="dialog" aria-labelledby="ticket-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">{{ 'Submit new support ticket'|trans }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
+                        </div>
+                        <form action="" method="post" id="open-ticket-form" class="open-ticket">
+                            <div class="modal-body">
+                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                                <input type="hidden" name="rel_type" value="order">
+                                <input type="hidden" name="rel_id" value="{{ order.id }}">
+                                <div class="mb-3">
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">{{ 'Subject'|trans }}</label>
+                                    <input class="form-control" type="text" name="subject" value="{{ request.subject|e }}" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="content" class="form-label">{{ 'Message'|trans }}</label>
+                                    <textarea class="editor-textarea form-control" id="content" name="content" rows="5" required>{{ request.content|e }}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">{{ 'Open ticket'|trans }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="upgrade-request-modal" tabindex="-1" role="dialog" aria-labelledby="upgrade-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">{{ 'Submit upgrade request'|trans }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
+                        </div>
+                        <form action="" method="post" id="upgrade-request-form" class="request-upgrade">
+                            <div class="modal-body">
+                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                                <input type="hidden" name="rel_type" value="order">
+                                <input type="hidden" name="rel_id" value="{{ order.id }}">
+                                <input type="hidden" name="rel_task" value="upgrade">
+                                <div class="mb-3">
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">{{ 'Subject'|trans }}</label>
+                                    <input class="form-control" type="text" name="subject" id="subject" value="{{ request.subject|e }}" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rel_new_value" class="form-label">{{ 'Upgrade to'|trans }}</label>
+                                    {{ mf.selectbox('rel_new_value', upgradables, '', 1) }}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="content" class="form-label">{{ 'Notes'|trans }}</label>
+                                    <textarea id="content" name="content" rows="5" required class="form-control" placeholder="Your comment">{{ 'I would like to upgrade'|trans }} {{ order.title }}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" id="open-ticket-submit">{{ 'Request'|trans }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
 {% block js %}
-{% autoescape "js" %}
-<script>
-   $(function() {
-   $('#create-invoice').on('click', function(e) {
-       e.preventDefault();
-   
-       bb.post(
-           'client/invoice/renewal_invoice',
-           { order_id: {{ order.id }}, CSRFToken: "{{ CSRFToken }}" },
-           function(result) {
-               bb.redirect("{{ 'invoice'|link }}" + '/' + result);
-           }
-       );
-   
-       // Hide the modal after the operation
-       $('#modal-renew').modal('hide');
-   });
-   
-   
-   
-   
-       $('.open-ticket').on('submit', function() {
-           $('.wait').show();
-   
-           bb.post(
-               'client/support/ticket_create',
-               $(this).serialize(),
-               function(result) {
-                   $('#submit-ticket').modal('hide')
-                   bb.msg('Ticket was submitted. If you want to track conversation please go to support section');
-                   $('.wait').hide();
-               }
-           );
-   
-           return false;
-       });
-   
-       $('.request-cancellation').on('submit', function() {
-           $('.wait').show();
-           bb.post(
-               'client/support/ticket_create',
-               $(this).serialize(),
-               function(result) {
-                   $('#submit-cancellation-ticket').modal('hide')
-                   bb.msg('Service cancellation request received');
-                   $('.wait').hide();
-               }
-           );
-   
-           return false;
-       });
-   
-       $('.request-upgrade').on('submit', function() {
-           $('.wait').show();
-           bb.post(
-               'client/support/ticket_create',
-               $(this).serialize(),
-               function(result) {
-                   $('#submit-upgrade-ticket').modal('hide')
-                   bb.msg('Service upgrade request received');
-                   $('.wait').hide();
-               }
-           );
-   
-           return false;
-       });
-   });
-</script>
-{% endautoescape %}
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const cancelRequestForm = document.getElementById('cancel-request-form');
+            const upgradeRequestForm = document.getElementById('upgrade-request-form');
+            const openTicketForm = document.getElementById('open-ticket-form');
+
+            cancelRequestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                API.client.post('support/ticket_create',
+                    new FormData(cancelRequestForm).serializeObject(),
+                    () => {
+                        FOSSBilling.message('Service cancellation request received');
+                        const cancelRequestModal = bootstrap.Modal.getInstance(document.getElementById('cancel-request-modal'))
+                        cancelRequestModal.hide();
+                    },
+                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
+                )
+            });
+
+            upgradeRequestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                API.client.post('support/ticket_create',
+                    new FormData(upgradeRequestForm).serializeObject(),
+                    () => {
+                        FOSSBilling.message('Service upgrade request received');
+                        const upgradeRequestModal = bootstrap.Modal.getInstance(document.getElementById('upgrade-request-modal'))
+                        upgradeRequestModal.hide();
+                    },
+                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
+                )
+            });
+
+            openTicketForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                API.client.post('support/ticket_create',
+                    new FormData(openTicketForm).serializeObject(),
+                    () => {
+                        FOSSBilling.message('Ticket was submitted. If you want to track conversation please go to support section');
+                        let openTicketModal = bootstrap.Modal.getInstance(document.getElementById('open-ticket-modal'));
+                        openTicketModal.hide();
+                    },
+                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
+                )
+            });
+
+            const renewalButton = document.getElementById('renewal-button');
+            if (renewalButton) {
+                renewalButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    if (confirm("This will generate new invoice. Are you sure you want to continue?")) {
+                        API.client.post('invoice/renewal_invoice', { order_id: {{ order.id }} },
+                            (result) => {
+                                window.location = "{{ 'invoice'|link }}" + '/' + result;
+                            });
+                    }
+                });
+            }
+
+        });
+    </script>
 {% endblock %}

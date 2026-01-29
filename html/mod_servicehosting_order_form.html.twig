@@ -4,139 +4,131 @@
 
 <div class="row">
     <div class="col-md-12">
-       <h3 class="mb-1">{{ product_details }}</h3>
-       <strong>{{ 'Domain configuration'|trans }}</strong>
-       <div class="mt-3 mb-3">
-          <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" 
-             name="domain[action]" value="owndomain" onclick="selectDomainAction(this);">
-          <span class="form-check-label">{{ 'I will use my existing domain and update nameservers'|trans }}</span>
-          </label>
-          {% if tlds is not empty %}
-          <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" 
-             name="domain[action]" value="register" onclick="selectDomainAction(this);">
-          <span class="form-check-label">{{ 'I want to register a new domain'|trans }}</span>
-          </label>
-          {% endif %}
-       </div>
-       <div id="owndomain" class="domain_action" style="display: none;">
-          <fieldset class="form-fieldset">
-             <div class="mb-3">
-                <div class="row g-2">
-                   <div class="col-auto">
-                      <input type="text" name="domain[owndomain_sld]" value="{{ request.owndomain_sld }}" placeholder="{{ 'mydomain'|trans }}" class="form-control">
-                   </div>
-                   <div class="col-auto">
-                      <input type="text" name="domain[owndomain_tld]" value="{{ request.owndomain_tld|default('.com') }}" class="form-control">
-                   </div>
+        <h5 class="mb-1">{{ product_details }}</h5>
+        <span class="text-muted">{{ 'Domain configuration'|trans }}</span>
+        <div class="mb-2">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="domain[action]" value="owndomain"id="own-domain-check" onclick="selectDomainAction(this);" {% if tlds is empty %} checked {% endif %}>
+                <label class="form-check-label" for="own-domain-check">{{ 'I will use my existing domain and update nameservers'|trans }}</label>
+            </div>
+            {% if tlds is not empty %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="domain[action]" value="register" id="domain-register-check" onclick="selectDomainAction(this);">
+                    <label class="form-check-label" for="domain-register-check">{{ 'I want to register a new domain'|trans }}</label>
                 </div>
-             </div>
-          </fieldset>
-       </div>
-       <div id="register" class="domain_action" style="display: none;">
-          <fieldset class="form-fieldset">
-             <div class="mb-3">
-                <div class="row g-2">
-                   <div class="col-auto">
-                      <input type="text" name="domain[register_sld]" value="{{ request.register_sld }}" placeholder="{{ 'mydomain'|trans }}" class="form-control">
-                   </div>
-                   <div class="col-auto">
-                      <select name="domain[register_tld]" style="width: 150px" class="form-select">
-                         {% for tld in tlds%}
-                         <option value="{{ tld.tld}}" label="{{ tld.tld}}">{{ tld.tld}}</option>
-                         {% endfor %}
-                      </select>
-                   </div>
-                   <div class="col-auto">
-                      <button class="btn btn-primary" type="button" id="domain-check">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                            <path d="M21 21l-6 -6"></path>
-                         </svg>
-                         {{ 'Check'|trans }}
-                      </button>
-                   </div>
+            {% endif %}
+
+            <div id="owndomain" class="mt-2 domain_action" {% if tlds is not empty %} style="display: none;" {% endif %}>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="d-flex gap-2">
+                            <div class="input-group mb-3">
+                                <input class="form-control w-75" type="text" name="domain[owndomain_sld]"
+                                       value="{{ request.owndomain_sld }}"
+                                       placeholder="{{ 'Your existing domain'|trans }}">
+                                <input class="form-control" type="text" name="domain[owndomain_tld]"
+                                       value="{{ request.owndomain_tld|default('.com') }}">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-             </div>
-             <div id="domain-config" style="display:none;">
-                <div class="mb-3">
-                   <div class="row g-2">
-                      <div class="col-5">
-                         <label class="form-label required">{{ 'Period'|trans }}</label>
-                         <select class="form-select" name="domain[register_years]"></select>
-                      </div>
-                   </div>
+            </div>
+
+            <div id="register" class="mt-2 domain_action" style="display: none;">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="d-flex gap-2">
+                            <div class="input-group mb-3">
+                                <input class="form-control w-75" type="text" name="domain[register_sld]"
+                                       value="{{ request.register_sld }}"
+                                       placeholder="{{ 'Your new domain'|trans }}">
+                                <select class="form-select" name="domain[register_tld]">
+                                    {% for tld in tlds %}
+                                        <option value="{{ tld.tld }}" label="{{ tld.tld }}">{{ tld.tld }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <button class="btn btn-dark" type="button" id="domain-check">{{ 'Check'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="domain-config" style="display:none;">
+                        <div class="mb-3">
+                            <label>
+                                <select class="form-select" name="domain[register_years]"></select>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-             </div>
-          </fieldset>
-       </div>
+            </div>
+        </div>
     </div>
 </div>
 
 {% set currency = guest.cart_get_currency %}
 <script type="text/javascript">
-   function selectDomainAction(el)
-   {
-       $('.domain_action').hide();
-       $('#'+$(el).val()).show();
-   }
-   
-   $(function() {
-   $('#domain-check').on('click', function(event) {
-       var sld = $('input[name="domain[register_sld]"]').val();
-       var tld = $('select[name="domain[register_tld]"]').val();
-       var domain = sld + tld;
-       bb.post(
-           'guest/servicedomain/check',
-           { sld: sld, tld: tld, CSRFToken: "{{ CSRFToken }}" },
-           function(result) {
-               setRegistrationPricing(tld);
-               $('#domain-config').fadeIn('slow');
-           }
-       );
-   
-       return false;
-   });
-   
-   if($(".addons").length && $(".addons").is(':hidden')) {
-       $('#order-button').one('click', function() {
-           $(this).slideUp('fast');
-           $('.addons').slideDown('fast');
-   
-           return false;
-       });
-   }
-   
-   $('#period-selector').on('change',function() {
-       $('.period').hide();
-       $('.period.' + $(this).val()).show();
-   }).trigger('change');
-   
-   $('.addon-period-selector').on('change',function() {
-       var r = $(this).attr('rel');
-       $('#' + r + ' span').hide();
-       $('#' + r + ' span.' + $(this).val()).fadeIn();
-   }).trigger('change');
-   
-   function setRegistrationPricing(tld)
-   {
-       bb.post(
-           'guest/servicedomain/pricing',
-           { tld: tld, CSRFToken: "{{ CSRFToken }}" },
-           function(result) {
-               var s = $("select[name='domain[register_years]']");
-   
-               s.find('option').remove();
-   
-               for (i=1;i<6;i++) {
-                   var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "{{ currency.code }}", i);
-   
-                   s.append(new Option(i + "{{ ' Year/s @ '|trans }}" + price, i));
-               }
-           }
-       );
-   }
-   });
+    function selectDomainAction(el) {
+        $('.domain_action').hide();
+        $('#' + $(el).val()).show();
+    }
+
+    $(function () {
+        $('#domain-check').on('click', function (event) {
+            var sld = $('input[name="domain[register_sld]"]').val();
+            var tld = $('select[name="domain[register_tld]"]').val();
+            var domain = sld + tld;
+            bb.post(
+                'guest/servicedomain/check',
+                {sld: sld, tld: tld, CSRFToken: "{{ CSRFToken }}"},
+                function (result) {
+                    setRegistrationPricing(tld);
+                    $('#domain-config').fadeIn('slow');
+                }
+            );
+
+            return false;
+        });
+
+        if ($(".addons").length && $(".addons").is(':hidden')) {
+            $('#order-button').one('click', function () {
+                $(this).slideUp('fast');
+                $('.addons').slideDown('fast');
+
+                return false;
+            });
+        }
+
+        $('#period-selector').on('change', function () {
+            $('.period').hide();
+            $('.period.' + $(this).val()).show();
+        }).trigger('change');
+
+        $('.addon-period-selector').on('change', function () {
+            var r = $(this).attr('rel');
+            $('#' + r + ' span').hide();
+            $('#' + r + ' span.' + $(this).val()).fadeIn();
+        }).trigger('change');
+
+        function setRegistrationPricing(tld) {
+            bb.post(
+                'guest/servicedomain/pricing',
+                {tld: tld, CSRFToken: "{{ CSRFToken }}"},
+                function (result) {
+                    var s = $("select[name='domain[register_years]']");
+
+                    s.find('option').remove();
+
+                    for (i = 1; i < 6; i++) {
+                        var price = bb.currency(result.price_registration, {{ currency.conversion_rate }}, "{{ currency.code }}", i);
+                        if (i === 1) {
+                            s.append(new Option(i + "{{ ' year @ '|trans }}" + price, i));
+                        } else {
+                            s.append(new Option(i + "{{ ' years @ '|trans }}" + price, i));
+                        }
+                    }
+                }
+            );
+        }
+    });
 </script>
