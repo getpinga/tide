@@ -1,8 +1,8 @@
 {
-    "name": "FOSSBilling Tide",
-    "version": "0.9.6",
-    "description": "Tide client area theme",
-    "icon": "tide.png",
-    "author": "Tanglin",
-    "author_url": "https://tanglin.io/"
+  "name": "Tide",
+  "version": "1.1.0",
+  "description": "Tide client area theme",
+  "icon": "tide.png",
+  "author": "Namingo",
+  "author_url": "https://namingo.org"
 }

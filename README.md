@@ -20,7 +20,7 @@ Follow these steps to install the Tide theme:
 4. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
 5. Navigate to `Settings -> Themes` in the FOSSBilling admin panel and select `tide` as the default theme.
 
-## Upgrade
+## Upgrade (for v1.0.x only)
 
 To upgrade to a newer version of the Tide theme, perform the following:
 
@@ -54,7 +54,7 @@ Your feedback and inquiries are invaluable to Namingo's evolutionary journey. If
 
 We appreciate your involvement and patience as Namingo continues to grow and adapt.
 
-## 💖 Support This Project
+## Support This Project
 
 If you find Tide useful, consider donating:
 
@@ -64,4 +64,8 @@ If you find Tide useful, consider donating:
 
 ## Licensing
 
-Tide is licensed under the MIT license.
+Tide is licensed under the Apache License, Version 2.0 starting from version 1.1.
+
+Versions 1.0 and earlier are licensed under the MIT License.
+
+This project includes and builds upon code from Huraga, the default template of the FOSSBilling platform.
