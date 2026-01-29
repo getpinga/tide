@@ -155,12 +155,15 @@ var Widget = /*#__PURE__*/function () {
       var _this = this;
 
       // ():void
-      var parentEl, widgetEl;
+      var parentEl = null;
+      var widgetEl = null;
 
       if (this.props.prebuilt) {
         parentEl = this.el.parentNode;
         widgetEl = parentEl.querySelector('.' + this.props.classNames.base + '--stars');
-      } else {
+      }
+
+      if (null === widgetEl) {
         parentEl = insertSpanEl(this.el, false, {
           "class": this.props.classNames.base
         });

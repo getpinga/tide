@@ -1,10 +1,3 @@
-/**!
- * Star Rating
- * @version: 4.3.0
- * @author: Paul Ryley (http://geminilabs.io)
- * @url: https://github.com/pryley/star-rating.js
- * @license: MIT
- */
 var StarRating = (function () {
   'use strict';
 
@@ -163,12 +156,15 @@ var StarRating = (function () {
         var _this = this;
 
         // ():void
-        var parentEl, widgetEl;
+        var parentEl = null;
+        var widgetEl = null;
 
         if (this.props.prebuilt) {
           parentEl = this.el.parentNode;
           widgetEl = parentEl.querySelector('.' + this.props.classNames.base + '--stars');
-        } else {
+        }
+
+        if (null === widgetEl) {
           parentEl = insertSpanEl(this.el, false, {
             "class": this.props.classNames.base
           });

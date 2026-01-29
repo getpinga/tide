@@ -18,13 +18,14 @@ export interface CountUpOptions {
     scrollSpyDelay?: number;
     scrollSpyOnce?: boolean;
     onCompleteCallback?: () => any;
+    onStartCallback?: () => any;
     plugin?: CountUpPlugin;
 }
 export declare interface CountUpPlugin {
     render(elem: HTMLElement, formatted: string): void;
 }
 export declare class CountUp {
-    private endVal;
+    private endVal?;
     options?: CountUpOptions;
     version: string;
     private defaults;
@@ -43,7 +44,7 @@ export declare class CountUp {
     paused: boolean;
     frameVal: number;
     once: boolean;
-    constructor(target: string | HTMLElement | HTMLInputElement, endVal: number, options?: CountUpOptions);
+    constructor(target: string | HTMLElement | HTMLInputElement, endVal?: number | null, options?: CountUpOptions);
     handleScroll(self: CountUp): void;
     /**
      * Smart easing works by breaking the animation into 2 parts, the second part being the
@@ -63,4 +64,5 @@ export declare class CountUp {
     private resetDuration;
     formatNumber: (num: number) => string;
     easeOutExpo: (t: number, b: number, c: number, d: number) => number;
+    parse(number: string): number;
 }

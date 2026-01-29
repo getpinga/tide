@@ -1,16 +1,25 @@
+/**
+ * Star Rating
+ * @version: 4.3.0
+ * @author: Paul Ryley (http://geminilabs.io)
+ * @url: https://github.com/pryley/star-rating.js
+ * @license: MIT
+ */
+
 :root {
     --gl-star-color: #fdd835;
     --gl-star-color-inactive: #dcdce6;
     --gl-star-empty: url('../img/star-empty.svg');
     --gl-star-full: url('../img/star-full.svg');
     --gl-star-size: 24px;
+    --gl-tooltip-background: rgba(17,17,17, .9);
     --gl-tooltip-border-radius: 4px;
+    --gl-tooltip-color: #fff;
     --gl-tooltip-font-size: 0.875rem;
     --gl-tooltip-font-weight: 400;
     --gl-tooltip-line-height: 1;
     --gl-tooltip-margin: 12px;
     --gl-tooltip-padding: .5em 1em;
-    --gl-tooltip-size: 6px;
 }
 
 [data-star-rating] > select {
@@ -103,7 +112,6 @@
     pointer-events: none;
     position: absolute;
     top: 50%;
-    opacity: .9;
     transform-origin: top;
     transform: translate3d(0,-50%,0);
     white-space: nowrap;
@@ -111,29 +119,27 @@
 }
 
 [data-star-rating] .gl-star-rating--stars[aria-label]::before {
-    background-size: 100% auto !important;
-    background-position: 50% !important;
-}
-
-[data-star-rating] .gl-star-rating--stars[aria-label]::before {
-    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 31"%3E%3Cpath fill="%23111" d="M12.002 31C12.002 25 0 19.838 0 15.5 0 11.24 12 6 12 0l.002 31z"/%3E%3C/svg%3E') no-repeat;
+    background: rgba(17,17,17, .9);
+    background: rgba(17,17,17, .9);
+    background: var(--gl-tooltip-background);
+    -webkit-clip-path: path('M6 14.998c0-3-6-5.499-6-7.499S5.999 3 5.999 0L6 14.998z');
+            clip-path: path('M6 14.998c0-3-6-5.499-6-7.499S5.999 3 5.999 0L6 14.998z');
     content: '';
-    height: 18px;
-    margin-bottom: 0;
-    margin-left: 6px;
-    margin-left: 6px;
-    margin-left: var(--gl-tooltip-size);
+    height: 15px;
+    margin: 0 0 0 6px;
     width: 6px;
-    width: 6px;
-    width: var(--gl-tooltip-size);
 }
 
 [data-star-rating] .gl-star-rating--stars[aria-label]::after {
-    background: #111;
+    background: rgba(17,17,17, .9);
+    background: rgba(17,17,17, .9);
+    background: var(--gl-tooltip-background);
     border-radius: 4px;
     border-radius: 4px;
     border-radius: var(--gl-tooltip-border-radius);
     color: #fff;
+    color: #fff;
+    color: var(--gl-tooltip-color);
     content: attr(aria-label);
     font-size: 0.875rem;
     font-size: 0.875rem;
@@ -156,10 +162,7 @@
 
 [data-star-rating].gl-star-rating--rtl .gl-star-rating--stars[aria-label]::before {
     transform: scaleX(-1) translate3d(0,-50%,0);
-    margin-left: 0;
-    margin-right: 6px;
-    margin-right: 6px;
-    margin-right: var(--gl-tooltip-size);
+    margin: 0 6px 0 0;
 }
 
 [data-star-rating].gl-star-rating--rtl .gl-star-rating--stars[aria-label]::after {
