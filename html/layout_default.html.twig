@@ -177,7 +177,7 @@
             {% if client %}
             <div class="nav-item dropdown">
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url({{ profile.email|gravatar(60) }})"> </span>
+                <span class="avatar bg-green-lt">{{ profile.first_name|slice(0, 2)|upper }}</span>
                 <div class="d-none d-xl-block ps-2">
                   {% if profile.company %}
                       <div>{{ profile.first_name }} {{ profile.last_name }}</div>
