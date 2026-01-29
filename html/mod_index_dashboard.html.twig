@@ -17,14 +17,19 @@
 
 {% block content %}
     {% if settings.showcase_enabled %}
-        <div class="alert alert-info" role="alert">
-            <p>{{ settings.showcase_text |markdown }}</p>
-
-            {% if (settings.showcase_button_url) and (settings.showcase_button_title) %}
-                <a class="btn btn-primary btn-large"
-                   href="{{ settings.showcase_button_url }}">{{ settings.showcase_button_title }}</a>
-            {% endif %}
-        </div>
+    <div class="row row-deck row-cards mb-3">
+       <div class="col-md-12">
+          <div class="card card-sm">
+             <div class="card-status-top bg-yellow"></div>
+             <div class="card-body">
+                <p>{{ settings.showcase_text |markdown }}</p>
+                {% if (settings.showcase_button_url) and (settings.showcase_button_title) %}
+                <p><a class="btn btn-yellow" href="{{ settings.showcase_button_url }}">{{ settings.showcase_button_title }}</a></p>
+                {% endif %}
+             </div>
+          </div>
+       </div>
+    </div>
     {% endif %}
 
     {% if client %}
