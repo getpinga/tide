@@ -8,9 +8,9 @@
 
 Tide is a client area theme for FOSSBilling. It's designed to enhance your user interface with a clean, modern aesthetic. This guide provides steps on how to install, upgrade, secure, and customize the Tide theme.
 
-<img width="735" alt="tide_screen" src="screen1.png">
+<img width="735" alt="tide_screen" src="screen1.jpeg">
 
-<img width="735" alt="tide_screen" src="screen2.png">
+<img width="735" alt="tide_screen" src="screen2.jpeg">
 
 ## Installation
 
