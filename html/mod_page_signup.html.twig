@@ -18,9 +18,9 @@
       <div class="container container-tight py-4">
         <div class="text-center mb-4">
         {% if settings.login_page_show_logo %}
-            <div class="d-flex justify-content-center">
-                <a href="{{ settings.login_page_logo_url|default('/') }}" target="_blank">
-                    <img class="my-4 navbar-brand navbar-brand-autodark" height="50px" src="{{ logo_url }}" alt="{{ company.name }}"/>
+            <div class="text-center mb-4">
+                <a href="{{ settings.login_page_logo_url|default('/') }}" target="_blank" class="navbar-brand navbar-brand-autodark">
+                    <img class="navbar-brand-image" height="50px" src="{{ logo_url }}" alt="{{ company.name }}"/>
                 </a>
             </div>
         {% endif %}
