@@ -2,12 +2,6 @@
 
 {% set company = guest.system_company %}
 
-{% if settings.theme == 'dark' %}
-    {% set logo_url =  company.logo_url_dark %}
-{% else %}
-    {% set logo_url =  company.logo_url %}
-{% endif %}
-
 {% block meta_title %}{{ 'Login'|trans }}{% endblock %}
 
 {% block body_class %}page-login{% endblock %}
@@ -18,7 +12,7 @@
         {% if settings.login_page_show_logo %}
             <div class="text-center mb-4">
                 <a href="{{ settings.login_page_logo_url|default('/') }}" target="_blank" class="navbar-brand">
-                    <img class="navbar-brand-image" height="50px" src="{{ logo_url }}" alt="{{ company.name }}"/>
+                    <img class="navbar-brand-image responsive-logo" height="50px" id="company-logo" src="{{ settings.theme == 'dark' ? company.logo_url_dark : company.logo_url }}" data-logo-light="{{ company.logo_url }}" data-logo-dark="{{ company.logo_url_dark }}" alt="{{ company.name }}" title="{{ company.name }}" />
                 </a>
             </div>
         {% endif %}
