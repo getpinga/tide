@@ -85,7 +85,7 @@
                     {% endif %}
                     <select class="form-select form-select-lg w-100 mt-2 mt-md-0 ms-md-2 onAfterDomainCheck" name="register_years" id="registration-years" style="display:none;"></select>
                     <input type="text" class="form-control mt-2 mt-md-0 ms-md-2" name="transfer_code" value="{{ request.transfer_code }}" placeholder="{{ 'Enter domain transfer code'|trans }}" id="domain-transfer-config" style="display:none;" />
-                    <span id="transfer-price" class="text-center align-self-center mt-2 mt-md-0 ms-md-2" style="display:none; display:block; margin-top: 8px;"></span>
+                    <span id="transfer-price" class="text-center align-self-center mt-2 mt-md-0 ms-md-2 text-nowrap fw-bold" style="display:none; margin-top: 8px;"></span>
                 </div>
             </div>
             <p class="text-muted text-center mt-4" id="info-text">Search for your perfect domain name{% if transfer_tlds is not empty %} or transfer an existing one{% endif %}.</p>
@@ -183,166 +183,300 @@
 </div>
 
 <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        // Prefill the search input on domain checker page
-        let storedDomain = localStorage.getItem("selected_domain");
+function show(el, display = '') {
+    if (!el) return;
+    el.style.display = display;
+}
 
-        if (storedDomain) {
-            let searchInput = document.querySelector("input[name='domain_name']");
-            if (searchInput) {
-                searchInput.value = storedDomain; // Autofill the input field
-                localStorage.removeItem("selected_domain"); // Clear after use
-            }
+function hide(el) {
+    if (!el) return;
+    el.style.display = 'none';
+}
+
+function fadeIn(el, display = 'block', durationMs = 150) {
+    if (!el) return;
+
+    if (getComputedStyle(el).display !== 'none') {
+        el.style.display = display;
+        el.style.opacity = '1';
+        return;
+    }
+
+    el.style.opacity = '0';
+    el.style.display = display;
+    el.style.transition = `opacity ${durationMs}ms ease`;
+
+    requestAnimationFrame(() => {
+        el.style.opacity = '1';
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    hide(document.getElementById('config-next-domain'));
+    hide(document.getElementById('config-next-domain2'));
+
+    document.querySelectorAll('.onAfterDomainCheck, .onAfterDomainCheck2').forEach(hide);
+    hide(document.getElementById('domain-transfer-config'));
+    hide(document.getElementById('transfer-price'));
+
+    document.querySelectorAll('#register .order-button').forEach(hide);
+
+    const storedDomain = localStorage.getItem("selected_domain");
+    if (storedDomain) {
+        const searchInput = document.querySelector("input[name='domain_name']");
+        if (searchInput) {
+            searchInput.value = storedDomain;
+            localStorage.removeItem("selected_domain");
         }
+    }
+
+    ['config-next', 'config-next-domain', 'config-next-domain2'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
     });
 
-   $(function() {
-       $('#config-next').hide();
-       $('#config-next-domain').hide();
-       $('#config-next-domain2').hide();
-   
-       if ($(".addons").length) {
-           $('.order-button').one('click', function() {
-               $(this).hide();
-               $('.addons').slideDown('fast');
-   
-               return false;
-           });
-       }
-   
-       $('.addon-period-selector').on('change',function() {
-           var r = $(this).attr('rel');
-   
-           $('#' + r + ' span').hide();
-           $('#' + r + ' span.' + $(this).val()).fadeIn();
-       }).trigger('change');
-   
-       $('#transfer-check').on('click', function(event) {
-           var domain = $('input[name="domain_name"]').val();
-           const parts = domain.split('.');
-           let sld = '';
-           let tld = '';
-           if (parts.length >= 3) {
-               // Assume the last two parts make up the TLD (e.g., .in.ua, .co.uk)
-               sld = parts.slice(0, -2).join('.');
-               tld = '.' + parts.slice(-2).join('.');
-           } else if (parts.length === 2) {
-               // For typical two-part domains (e.g., example.com)
-               sld = parts[0];
-               tld = '.' + parts[1];
-           }
-           $('input[name="transfer_sld"]').val(sld);
-           $('input[name="transfer_tld"]').val(tld);
-           $('input[name="action"]').val('transfer');
-           bb.post(
-               'guest/servicedomain/can_be_transferred',
-               { sld: sld, tld: tld },
-               function(result) {
-                   setTransferPricing(tld);
-                   $('#domain-name').text(domain);
-                   $('input[name="domain_name"]').attr('readonly', true);
-                   $('#transfer-price').fadeIn('fast');
-                   $('#domain-transfer-config').fadeIn('fast').attr('required', true);
-                   $('#info-text').hide();
-                   $('#domain-check').hide();
-                   $('#transfer-check').hide();
-                   $('#register .order-button').show();
-               }
-           );
-   
-           return false;
-       });
-   
-       $('#domain-check').on('click', function(event) {
-           var domain = $('input[name="domain_name"]').val();
-           const parts = domain.split('.');
-           let sld = '';
-           let tld = '';
-           if (parts.length >= 3) {
-               // Assume the last two parts make up the TLD (e.g., .in.ua, .co.uk)
-               sld = parts.slice(0, -2).join('.');
-               tld = '.' + parts.slice(-2).join('.');
-           } else if (parts.length === 2) {
-               // For typical two-part domains (e.g., example.com)
-               sld = parts[0];
-               tld = '.' + parts[1];
-           }
-           $('input[name="register_sld"]').val(sld);
-           $('input[name="register_tld"]').val(tld);
-           $('input[name="action"]').val('register');
-           bb.post(
-               'guest/servicedomain/check',
-               { sld: sld, tld: tld },
-               function(result) {
-                   setPricing(tld);
-                   $('#domain-name').text(domain);
-                   $('input[name="domain_name"]').attr('readonly', true);
-                   $('.onAfterDomainCheck').fadeIn('fast');
-                   $('.onAfterDomainCheck2').fadeIn('fast');
-                   $('#domain-check').hide();
-                   $('#transfer-check').hide();
-                   $('#info-text').hide();
-                   $('#register .order-button').show();
-               }
-           );
-   
-           return false;
-       });
-   
-        function setPricing(tld) {
-            bb.post(
-                'guest/servicedomain/pricing',
-                { tld },
+    if (document.querySelector('.addons')) {
+        document.querySelectorAll('.order-button').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                this.style.display = 'none';
+
+                const addons = document.querySelector('.addons');
+                if (addons) {
+                    addons.style.display = 'block';
+                    addons.style.maxHeight = addons.scrollHeight + 'px';
+                    addons.style.transition = 'max-height 0.2s ease';
+                }
+            }, { once: true });
+        });
+    }
+
+    document.querySelectorAll('.addon-period-selector').forEach(select => {
+        const update = () => {
+            const r = select.getAttribute('rel');
+            if (!r) return;
+
+            const container = document.getElementById(r);
+            if (!container) return;
+
+            container.querySelectorAll('span').forEach(span => span.style.display = 'none');
+
+            const active = container.querySelector('span.' + select.value);
+            if (active) {
+                active.style.display = 'inline';
+                active.style.opacity = 0;
+                active.style.transition = 'opacity 0.2s ease';
+                requestAnimationFrame(() => { active.style.opacity = 1; });
+            }
+        };
+
+        select.addEventListener('change', update);
+        update();
+    });
+
+    const nsToggle = document.querySelector('.onAfterDomainCheck2 input.form-check-input');
+    const nsBox = document.getElementById('nameservers');
+    if (nsToggle && nsBox) {
+        nsToggle.addEventListener('change', () => {
+            nsBox.style.display = nsToggle.checked ? 'block' : 'none';
+        });
+    }
+
+    const transferCheck = document.getElementById('transfer-check');
+    if (transferCheck) {
+        transferCheck.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const domainInput = document.querySelector('input[name="domain_name"]');
+            if (!domainInput) return;
+
+            const domain = domainInput.value.trim();
+            if (!domain) return;
+
+            const parts = domain.split('.');
+            let sld = '';
+            let tld = '';
+
+            if (parts.length >= 3) {
+                sld = parts.slice(0, -2).join('.');
+                tld = '.' + parts.slice(-2).join('.');
+            } else if (parts.length === 2) {
+                sld = parts[0];
+                tld = '.' + parts[1];
+            }
+
+            const sldInput = document.querySelector('input[name="transfer_sld"]');
+            const tldInput = document.querySelector('input[name="transfer_tld"]');
+            const actionInput = document.querySelector('input[name="action"]');
+
+            if (sldInput) sldInput.value = sld;
+            if (tldInput) tldInput.value = tld;
+            if (actionInput) actionInput.value = 'transfer';
+
+            API.guest.post(
+                'servicedomain/can_be_transferred',
+                { sld: sld, tld: tld },
                 function (result) {
-                    const $select = $('#registration-years');
-                    $select.empty();
+                    setTransferPricing(tld);
 
-                    const regPrice = Number(result.price_registration);
-                    let renewPrice = Number(result.price_renew);
+                    const domainNameEl = document.getElementById('domain-name');
+                    if (domainNameEl) domainNameEl.textContent = domain;
 
-                    // Fallback to registration price if renew is missing/invalid
-                    if (!Number.isFinite(renewPrice)) {
-                        renewPrice = regPrice;
+                    domainInput.readOnly = true;
+
+                    const transferPrice = document.getElementById('transfer-price');
+                    if (transferPrice) fadeIn(transferPrice);
+
+                    const transferConfig = document.getElementById('domain-transfer-config');
+                    if (transferConfig) {
+                        fadeIn(transferConfig);
+                        transferConfig.setAttribute('required', 'true');
                     }
 
-                    for (let years = 1; years <= 5; years++) {
-                        const totalPrice =
-                            years === 1
-                                ? regPrice
-                                : regPrice + (years - 1) * renewPrice;
+                    const infoText = document.getElementById('info-text');
+                    if (infoText) infoText.style.display = 'none';
 
-                        // IMPORTANT: multiplier must be 1 (price already calculated)
-                        const formattedPrice = bb.currency(
-                            totalPrice,
-                            {{ currency.conversion_rate }},
-                            "{{ currency.code }}",
-                            1
-                        );
+                    const domainCheckBtn = document.getElementById('domain-check');
+                    if (domainCheckBtn) domainCheckBtn.style.display = 'none';
 
-                        $select.append(
-                            new Option(
-                                `${years}{{ ' Year/s @ '|trans }}${formattedPrice}`,
-                                years
-                            )
-                        );
-                    }
+                    transferCheck.style.display = 'none';
 
-                    $('#config-next-domain').show();
+                    const orderBtn = document.querySelector('#register .order-button');
+                    if (orderBtn) orderBtn.style.display = '';
                 }
             );
-        }
-   
-       function setTransferPricing(tld) {
-           bb.post(
-               'guest/servicedomain/pricing',
-               { tld: tld },
-               function(result) {
-                   var price = bb.currency(result.price_transfer, {{ currency.conversion_rate }}, "{{ currency.code }}");
-   
-                   $('#transfer-price').text(price);
-                   $('#config-next-domain2').show();
-               }
-           );
-       }
-   });
+        });
+    }
+
+    const domainCheck = document.getElementById('domain-check');
+    if (domainCheck) {
+        domainCheck.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const domainInput = document.querySelector('input[name="domain_name"]');
+            if (!domainInput) return;
+
+            const domain = domainInput.value.trim();
+            if (!domain) return;
+
+            const parts = domain.split('.');
+            let sld = '';
+            let tld = '';
+
+            if (parts.length >= 3) {
+                sld = parts.slice(0, -2).join('.');
+                tld = '.' + parts.slice(-2).join('.');
+            } else if (parts.length === 2) {
+                sld = parts[0];
+                tld = '.' + parts[1];
+            }
+
+            const sldInput = document.querySelector('input[name="register_sld"]');
+            const tldInput = document.querySelector('input[name="register_tld"]');
+            const actionInput = document.querySelector('input[name="action"]');
+
+            if (sldInput) sldInput.value = sld;
+            if (tldInput) tldInput.value = tld;
+            if (actionInput) actionInput.value = 'register';
+
+            API.guest.post(
+                'servicedomain/check',
+                { sld: sld, tld: tld },
+                function (result) {
+                    setPricing(tld);
+
+                    const domainNameEl = document.getElementById('domain-name');
+                    if (domainNameEl) domainNameEl.textContent = domain;
+
+                    domainInput.readOnly = true;
+
+                    document.querySelectorAll('.onAfterDomainCheck').forEach(el => fadeIn(el));
+                    document.querySelectorAll('.onAfterDomainCheck2').forEach(el => fadeIn(el));
+
+                    const transferBtn = document.getElementById('transfer-check');
+                    const infoText = document.getElementById('info-text');
+                    const orderBtn = document.querySelector('#register .order-button');
+
+                    domainCheck.style.display = 'none';
+                    if (transferBtn) transferBtn.style.display = 'none';
+                    if (infoText) infoText.style.display = 'none';
+                    if (orderBtn) orderBtn.style.display = '';
+                }
+            );
+        });
+    }
+
+    function setPricing(tld) {
+        API.guest.post(
+            'servicedomain/pricing',
+            { tld: tld },
+            function (result) {
+                const yearsSelect = document.getElementById('registration-years');
+                if (!yearsSelect) return;
+
+                yearsSelect.innerHTML = '';
+
+                const regPrice = Number(result.price_registration);
+                let renewPrice = Number(result.price_renew);
+
+                if (!Number.isFinite(renewPrice)) {
+                    renewPrice = regPrice;
+                }
+
+                for (let years = 1; years <= 5; years++) {
+                    const totalPrice =
+                        years === 1 ? regPrice : regPrice + (years - 1) * renewPrice;
+
+                    const formattedPrice = bb.currency(
+                        totalPrice,
+                        {{ currency.conversion_rate }},
+                        "{{ currency.code }}",
+                        1
+                    );
+
+                    yearsSelect.appendChild(
+                        new Option(
+                            `${years}{{ ' Year/s @ '|trans }}${formattedPrice}`,
+                            String(years)
+                        )
+                    );
+                }
+
+                fadeIn(yearsSelect, '');
+                show(document.getElementById('config-next-domain'));
+            }
+        );
+    }
+
+    function setTransferPricing(tld) {
+        API.guest.post(
+            'servicedomain/pricing',
+            { tld: tld },
+            function (result) {
+
+                const price = bb.currency(
+                    result.price_transfer,
+                    {{ currency.conversion_rate }},
+                    "{{ currency.code }}"
+                );
+
+                const transferPriceEl = document.getElementById('transfer-price');
+                if (transferPriceEl) {
+                    transferPriceEl.textContent = price;
+                    fadeIn(transferPriceEl, '');
+                }
+
+                const nextBtnWrap = document.getElementById('config-next-domain2');
+                if (nextBtnWrap) {
+                    nextBtnWrap.style.display = '';
+                }
+
+                const nextBtn = nextBtnWrap ? nextBtnWrap.querySelector('button[type="submit"]') : null;
+                if (nextBtn) {
+                    nextBtn.disabled = false;
+                }
+            }
+        );
+    }
+});
 </script>
