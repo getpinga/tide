@@ -447,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1070;"></div>
         {% if settings.footer_to_top_enabled %}
             <a href="#top" class="position-fixed btn btn-primary bottom-0 end-0 m-3">
-                <span class="awe-arrow-up"></span> {{ 'Top'|trans }}</a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M18 11l-6 -6" /><path d="M6 11l6 -6" /></svg> {{ 'Top'|trans }}</a>
         {% endif %}
         <div class="wait" style="display:none" onclick="$(this).hide();">
             <div class="spinner-border"
