@@ -5,7 +5,7 @@
           <div>
             <h1 class="mb-1">{{ 'Manage'|trans }} {{ service.domain }}</h1>
           </div>
-          
+
           <div class="btn-list">
             <button class="btn btn-danger btn-sm icon-link" type="button" id="domain-unlock" {% if service.locked == 0 %}style="display:none;"{% endif %}>
               {{ 'Unlock'|trans }}
@@ -38,7 +38,7 @@
             <div class="datagrid-title">{{ 'Registered on'|trans }}</div>
             <div class="datagrid-content">{{ service.registered_at|date('Y-m-d H:i:s') }}</div>
           </div>
-          
+    
           <div class="datagrid-item">
             <div class="datagrid-title">{{ 'Expires on'|trans }}</div>
             <div class="datagrid-content">{{ service.expires_at|date('Y-m-d H:i:s') }}</div>
@@ -129,6 +129,66 @@
 
                 </div>
               </div>
+
+              {% if guest.extension_is_on({"mod":"domainx"}) %}
+              <div class="card mb-4" id="dnssec">
+                <div class="card-header">
+                  <div class="d-flex flex-column">
+                    <h3 class="card-title mb-1">DNSSEC <span class="card-subtitle">Create a DS Record</span></h3>
+                    <div class="text-muted small">
+                      {{ 'Enable DNSSEC by adding DS records to improve your domain’s security.'|trans }}
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                    <form class="api-form" action="{{ 'api/client/domainx/ds_add'|link }}" data-api-msg="{{ 'DS record added'|trans }}" method="post">
+                        <input type="hidden" name="domain" value="{{ service.domain }}" />
+                        <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                        <div class="form-group row mb-2">
+                            <label for="keytag1" class="col-md-4 col-form-label required">Key tag</label>
+                            <div class="col-md-6">
+                                <input name="keyTag" type="text" maxlength="65535" class="form-control" id="keytag1" required />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label for="alg1" class="col-md-4 col-form-label required">Algorithm</label>
+                            <div class="col-md-6">
+                                <select name="alg" data-supported="True" class="form-control form-select" id="alg1" required>
+                                    <option value="8">RSA/SHA-256 (8)</option>
+                                    <option value="13">ECDSA Curve P-256 with SHA-256 (13)</option>
+                                    <option value="14">ECDSA Curve P-384 with SHA-384 (14)</option>
+                                    <option value="15">Ed25519 (15)</option>
+                                    <option value="16">Ed448 (16)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label for="digestType" class="col-md-4 col-form-label required">Digest type</label>
+                            <div class="col-md-6">
+                                <select name="digestType" class="form-control form-select" id="digestType" required>
+                                    <option value="2">SHA-256 (2)</option>
+                                    <option value="4">SHA-384 (4)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label for="digest1" class="col-md-4 col-form-label required">Digest</label>
+                            <div class="col-md-6">
+                                <textarea name="digest" class="form-control" rows="2" id="digest1" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                Create DS Record
+                            </button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+              {% endif %}
           </div>
 
           <div class="col-12 col-lg-6">
