@@ -53,19 +53,34 @@
             </form>
          </div>
          <div class="card-footer text-center">
-            <address><strong>{{ company.name }}</strong> <br>
-               {% if company.number is not null %}
-                {{ company.number }} <br>
+            <address>
+               {% if company.name is not null and company.name != '' %}
+               <strong>{{ company.name }}</strong> <br>
                {% endif %}
-               {% if company.vat_number is not null %}
-                {{ company.vat_number }} <br>
+               {% if company.number is not null and company.number != '' %}
+               {{ company.number }} <br>
                {% endif %}
+               {% if company.vat_number is not null and company.vat_number != '' %}
+               {{ company.vat_number }} <br>
+               {% endif %}
+               {% if company.address_1 is not null and company.address_1 != '' %}
                {{ company.address_1 }} <br>
+               {% endif %}
+               {% if company.address_2 is not null and company.address_2 != '' %}
                {{ company.address_2 }} <br>
+               {% endif %}
+               {% if company.address_3 is not null and company.address_3 != '' %}
                {{ company.address_3 }} <br>
+               {% endif %}
+               {% if company.tel is not null and company.tel != '' %}
                <abbr title="Phone">P: </abbr>{{ company.tel }}<br>
-               <a href="{{ company.www }}">{{ company.www }}</a><br> 
+               {% endif %}
+               {% if company.www is not null and company.www != '' %}
+               <a href="{{ company.www }}">{{ company.www }}</a><br>
+               {% endif %}
+               {% if company.email is not null and company.email != '' %}
                <a href="mailto:{{ company.email }}">{{ company.email }}</a>
+               {% endif %}
             </address>
          </div>
       </div>
