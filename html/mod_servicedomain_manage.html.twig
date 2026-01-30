@@ -253,8 +253,16 @@
                         </div>
 
                         <div class="col-12 col-md-6">
-                          <label for="whois_country" class="form-label">{{ 'Country'|trans }}</label>
-                          <input class="form-control" type="text" name="contact[country]" id="whois_country" value="{{ request.country|default(service.contact.country) }}" required>
+                          <label for="whois_country" class="form-label required">{{ 'Country'|trans }}</label>
+                          <select class="form-select" name="contact[country]" id="whois_country" required>
+                            <option value="">{{ '-- Select country --'|trans }}</option>    
+                            {% set selected_country = request.country|default(service.contact.country) %}
+                            {% for val, label in guest.system_countries %}
+                              <option value="{{ val }}" {% if val == selected_country %}selected="selected"{% endif %}>
+                                {{ label|e }}
+                              </option>
+                            {% endfor %}
+                          </select>
                         </div>
 
                         <div class="col-12 col-md-6">
