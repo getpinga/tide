@@ -291,7 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!domainInput) return;
 
             const domain = domainInput.value.trim();
-            if (!domain) return;
+            if (!domain) {
+                FOSSBilling.message("{{ 'Please enter a domain name'|trans }}");
+                return;
+            }
 
             const parts = domain.split('.');
             let sld = '';
@@ -357,7 +360,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!domainInput) return;
 
             const domain = domainInput.value.trim();
-            if (!domain) return;
+            if (!domain) {
+                FOSSBilling.message("{{ 'Please enter a domain name'|trans }}");
+                return;
+            }
 
             const parts = domain.split('.');
             let sld = '';
