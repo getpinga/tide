@@ -59,11 +59,18 @@
 
 <body class="{% block body_class %}{% endblock %}">
 <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.setAttribute("data-bs-theme", localStorage.getItem('theme'));
-    } else {
-      document.body.removeAttribute("data-bs-theme");
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const theme = localStorage.getItem('theme');
+  const logo = document.getElementById('company-logo');
+
+  if (theme === 'dark') {
+    document.documentElement.setAttribute("data-bs-theme", "dark");
+    if (logo) logo.src = logo.dataset.logoDark || logo.dataset.logoLight;
+  } else {
+    document.documentElement.setAttribute("data-bs-theme", "light");
+    if (logo) logo.src = logo.dataset.logoLight || logo.dataset.logoDark;
+  }
+});
 </script>
       
 {% block body %}
@@ -104,7 +111,7 @@
           <div class="navbar-brand p-0 me-auto">
             {% if logo_url and settings.show_company_logo %}
             <a class="navbar-brand" href="{{ '/'|link }}">
-              <img src="{{ logo_url }}" alt="{{ company.name }}" title="{{ company.name }}" class="navbar-brand-image responsive-logo">
+              <img id="company-logo" src="{{ settings.theme == 'dark' ? company.logo_url_dark : company.logo_url }}" data-logo-light="{{ company.logo_url }}" data-logo-dark="{{ company.logo_url_dark }}" alt="{{ company.name }}" title="{{ company.name }}" class="navbar-brand-image responsive-logo">
             </a>
             {% else %}
             <a class="navbar-brand" href="{{ '/'|link }}">
@@ -474,6 +481,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".hide-theme-light").forEach(el => {
       el.style.display = (t === "light") ? "none" : "";
     });
+
+    const logo = document.getElementById("company-logo");
+    if (logo) {
+      logo.src = (t === "dark")
+        ? (logo.dataset.logoDark || logo.dataset.logoLight)
+        : (logo.dataset.logoLight || logo.dataset.logoDark);
+    }
   }
 
   applyTheme(localStorage.getItem(THEME_KEY) || "light");

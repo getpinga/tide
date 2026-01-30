@@ -32,6 +32,21 @@
     {% block js %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const theme = localStorage.getItem('theme');
+  const logo = document.getElementById('company-logo');
+
+  if (theme === 'dark') {
+    document.documentElement.setAttribute("data-bs-theme", "dark");
+    if (logo) logo.src = logo.dataset.logoDark || logo.dataset.logoLight;
+  } else {
+    document.documentElement.setAttribute("data-bs-theme", "light");
+    if (logo) logo.src = logo.dataset.logoLight || logo.dataset.logoDark;
+  }
+});
+</script>
+
     {% block body %}{% endblock %}
     <div aria-live="polite" aria-atomic="true" class="position-relative">
         <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1070;"></div>
