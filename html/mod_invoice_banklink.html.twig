@@ -13,10 +13,10 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header">
-                <h1>{{ 'Processing payment ...'|trans }}</h1>
-                <p>{{ 'Thank you for your patience.'|trans }}</p>
+                <h3 class="card-title">{{ 'Processing payment ...'|trans }}</h3>
             </div>
             <div class="card-body">
+                <p class="mb-2 fw-bold">{{ 'Thank you for your patience.'|trans }}</p>
                 {% if payment.type == 'html' %}
                     {{ payment.result|raw }}
                 {% endif %}
