@@ -29,8 +29,7 @@
     <div class="col-md-12">
         <div class="card ms-0 ms-md-3 w-100">
             <div class="card-header">
-                <h3 class="link-body-emphasis mb-1">{{ post.title }}</h3>
-                <span class="text-muted">{{ post.updated_at|format_datetime }} {{ 'by'|trans }} {{ post.author.name }}</span>
+                <h3 class="card-title">{{ post.title }} <span class="card-subtitle">{{ post.updated_at|format_datetime }} {{ 'by'|trans }} {{ post.author.name }}</span></h3>
             </div>
             <div class="card-body">
                 <div class="pt-3 px-2">
