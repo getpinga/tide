@@ -65,8 +65,7 @@
                         <div class="card {% if message.admin_id %}border-primary{% endif %}">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ message.author.email|gravatar(40) }}" alt="{{ message.author.name }}"
-                                         class="img-fluid img-thumbnail d-none d-md-block">
+                                    <span class="avatar bg-green-lt">{{ profile.first_name|slice(0, 2)|upper }}</span>
                                     <div class="d-flex flex-column">
                                         <span class="text-muted">
                                             {{ message.author.name }}

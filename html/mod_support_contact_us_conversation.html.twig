@@ -57,7 +57,7 @@
                             {{ message.author.name }}
                         </span>
                         <br/>
-                        <img src="{{ message.author.email|gravatar(60) }}" alt="{{ message.author.name }}" class="img-fluid img-thumbnail d-none d-md-block">
+                        <span class="avatar bg-green-lt">{{ message.author.email|slice(0, 2)|upper }}</span>
                     </div>
                     <div class="col-10">
                         <header>#{{ i+1 }} | {{ message.created_at|format_date }}
