@@ -74,14 +74,14 @@
         </div>
     {% endif %}
         <form id="domain-search-transfer-form">
-            <div class="row g-0 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
+            <div class="row g-2 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
                 </div>
-                <div class="col-12 col-md-4 d-md-flex">
-                    <button class="btn btn-primary btn-lg w-100 mt-2 mt-md-0 ms-md-2" type="button" id="domain-check">{{ 'Search'|trans }}</button>
+                <div class="col-12 col-md-4 d-flex gap-2">
+                    <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="domain-check">{{ 'Search'|trans }}</button>
                     {% if transfer_tlds is not empty %}
-                        <button class="btn btn-success btn-lg w-100 ms-md-2 mt-2 mt-md-0" type="button" id="transfer-check">{{ 'Transfer'|trans }}</button>
+                        <button class="btn btn-success btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="transfer-check">{{ 'Transfer'|trans }}</button>
                     {% endif %}
                     <select class="form-select form-select-lg w-100 mt-2 mt-md-0 ms-md-2 onAfterDomainCheck" name="register_years" id="registration-years" style="display:none;"></select>
                     <input type="text" class="form-control mt-2 mt-md-0 ms-md-2" name="transfer_code" value="{{ request.transfer_code }}" placeholder="{{ 'Enter domain transfer code'|trans }}" id="domain-transfer-config" style="display:none;" />
