@@ -1,0 +1,68 @@
+{% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+
+{% block meta_title %}{{ 'Knowledge Base Categories'|trans }}{% endblock %}
+
+{% block body_class %}kb-index{% endblock %}
+{% block breadcrumb %}
+  {% if request.q %}
+      <li class="breadcrumb-item">
+        <a href="{{ 'support/kb'|link }}">{{ 'Knowledge Base'|trans }}</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">{{ request.q }}</li>
+  {% else %}
+      <li class="breadcrumb-item active" aria-current="page">{{ 'Knowledge Base'|trans }}</li>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if request.q %}
+        {% set kbcategories = guest.support_kb_category_get_list({ "q": request.q }) %}
+    {% else %}
+        {% set kbcategories = guest.support_kb_category_get_list %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header py-3 py-3">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div>
+                            <h1 class="mb-1">{{ 'Categories'|trans }}</h1>
+                            <span class="small text-muted">{{ 'Explore our knowledge base categories and their associated articles below.'|trans }}</span>
+                        </div>
+                        <form method="get" action="" class="form-inline">
+                            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                            <input name="_url" type="hidden" value="/support/kb">
+                            <div class="input-group">
+                                <input class="form-control" name="q" type="text" value="{{ request.q }}" placeholder="{{ 'What are you looking for?'|trans }}">
+                                <button class="btn btn-outline-secondary" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                {% for row in kbcategories.list|batch(3) %}
+                    <div class="row mb-2">
+                        {% for i, category in row %}
+                            <div class="col">
+                                <a href="{{ 'support/kb'|link }}/{{ category.slug }}" class="card link-underline link-underline-opacity-0" style="min-height: 6rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ category.title }}</h5>
+                                        <p class="card-subtitle mb-2 text-muted">{{ category.description }}</p>
+                                    </div>
+                                </a>
+                            </div>                              
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        {{ 'No results found for:'|trans }}&nbsp;<strong>{{ request.q }}</strong>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

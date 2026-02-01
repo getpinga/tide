@@ -232,9 +232,25 @@
             </div>
         </div>
     {% else %}
-        <div class="row row-cards">
-            <div class="col-md-4">
-                <div class="card card-lg bg-red text-red-fg d-print-none">
+        {% set cardCount = 2 %}
+        {% if guest.extension_is_on({"mod":"news"}) %}{% set cardCount = cardCount + 1 %}{% endif %}
+        {% if guest.support_kb_enabled() %}{% set cardCount = cardCount + 1 %}{% endif %}
+
+        {% set rowClass = '' %}
+        {% set colClass = 'col-12 col-sm-6 col-md-4 col-lg-3' %}
+
+        {% if cardCount == 3 %}
+          {% set colClass = 'col-12 col-sm-6 col-md-4 col-lg-4' %}
+        {% elseif cardCount == 2 %}
+          {% set colClass = 'col-12 col-sm-6 col-md-4 col-lg-4' %}
+          {% set rowClass = 'justify-content-center' %}
+        {% elseif cardCount == 1 %}
+          {% set colClass = 'col-12 col-sm-8 col-md-6 col-lg-6' %}
+          {% set rowClass = 'justify-content-center' %}
+        {% endif %}
+        <div class="row row-cards {{ rowClass }}">
+            <div class="{{ colClass }} d-flex">
+                <div class="card bg-red text-red-fg d-print-none h-100 w-100">
                     <div class="card-stamp">
                         <div class="card-stamp-icon bg-white text-red">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -259,8 +275,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card card-lg bg-azure text-azure-fg d-print-none">
+            <div class="{{ colClass }} d-flex">
+                <div class="card bg-azure text-azure-fg d-print-none h-100 w-100">
                     <div class="card-stamp">
                         <div class="card-stamp-icon bg-white text-azure">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -289,8 +305,8 @@
                 </div>
             </div>
             {% if guest.extension_is_on({"mod":"news"}) %}
-            <div class="col-md-4">
-                <div class="card card-lg bg-green text-green-fg d-print-none">
+            <div class="{{ colClass }} d-flex">
+                <div class="card bg-green text-green-fg d-print-none h-100 w-100">
                     <div class="card-stamp">
                         <div class="card-stamp-icon bg-white text-green">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -303,7 +319,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <h2 >{{ 'News'|trans }}</h2>
+                        <h2>{{ 'News'|trans }}</h2>
                         <p>{{ 'Latest news and announcements' | trans }}</p>
                         <div class="row">
                             <div class="mt-2">
@@ -317,21 +333,27 @@
             </div>
             {% endif %}
             {% if guest.support_kb_enabled() %}
-            <div class="col-md-6 col-xl-3">
-              <div class="card">
-                <div class="card-body text-center">
-                  <div class="mb-3">
-                    <span class="avatar avatar-xl" style="background-image: url(./static/avatars/010m.jpg)"> </span>
-                  </div>
-                  <div class="card-title mb-1">{{ 'Knowledge Base'|trans }}</div>
-                  <div class="text-secondary">{{ 'Find answers to frequent questions' | trans }}</div>
+            <div class="{{ colClass }} d-flex">
+                <div class="card bg-indigo text-azure-fg d-print-none h-100 w-100">
+                    <div class="card-stamp">
+                        <div class="card-stamp-icon bg-white text-azure">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h2>{{ 'Knowledge Base'|trans }}</h2>
+                        <p>{{ 'Find answers to frequent questions' | trans }}</p>
+                        <div class="row">
+                            <div class="mt-2">
+                                <a href="{{ '/support/kb'|link }}" class="btn btn-outline-light w-100">
+                                {{ 'Knowledge Base'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ '/support/kb'|link }}" class="card-btn">{{ 'Knowledge Base'|trans }}</a>
-              </div>
             </div>
             {% endif %}
-            
-            
         </div>
     {% endif %}
 {% endblock %}
