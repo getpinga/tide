@@ -16,11 +16,23 @@ Tide is a client area theme for FOSSBilling. It's designed to enhance your user 
 
 Follow these steps to install the Tide theme:
 
-1. Clone this repository or download the latest version.
-2. Extract the files and move the `tide` directory into the `FOSSBilling directory/themes`.
-3. Change the directory owner to the user your web server runs under. For example: `chown -Rf www-data:www-data tide/`.
-4. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
-5. Navigate to `Settings -> Themes` in the FOSSBilling admin panel and select `tide` as the default theme.
+1. Download or clone this repository.
+
+   - If you downloaded a ZIP file, extract it first.
+   - If you cloned the repository, locate the main project folder.
+  
+2. Inside the downloaded/cloned files, you will find a directory containing the theme files
+   (for example: `tide-main`, `tide-v1.1.0`, or similar).
+
+3. Rename this directory to `tide`.
+
+4. Move the renamed `tide` directory into your FOSSBilling themes folder: `FOSSBilling directory/themes`.
+
+5. Change the directory owner to the user your web server runs under. For example: `chown -Rf www-data:www-data tide/`.
+
+6. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
+
+7. Navigate to `Settings -> Themes` in the FOSSBilling admin panel and select `tide` as the default theme.
 
 ## Upgrade (for v1.0.x only)
 
