@@ -301,7 +301,18 @@ document.addEventListener("DOMContentLoaded", () => {
                       </a>
                     </li>
                     {% endif %}
-                    
+
+                    {% if guest.extension_is_on({ "mod": "whois" }) %}
+                    <li class="nav-item{% if request._url starts with '/whois' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/whois'|link }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Domain Lookup'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
+
                     <li class="nav-item{% if request._url starts with '/support/contact-us' %} active{% endif %}">
                       <a class="nav-link" href="{{ '/support/contact-us'|link }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -528,7 +539,6 @@ function initLanguageSelector() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
 
-      // Prefer data-lang, fallback to value or href
       const lang =
         link.dataset.lang ||
         link.getAttribute("value") ||
@@ -540,7 +550,6 @@ function initLanguageSelector() {
       location.reload();
     });
 
-    // Optional: mark active language
     const current = getCookie("BBLANG");
 
     if (current) {
