@@ -1,0 +1,22 @@
+{% set url = request._url|default('') %}
+{% set parts = url|split('/') %}
+{% set last = parts|last %}
+
+{% set is_id = last matches '/^\\d+$/' %}
+{% set order_id = is_id ? last : null %}
+
+{% block js %}
+{% autoescape "js" %}
+<script>
+(function () {
+  var orderId = {{ order_id ? order_id : 'null' }};
+
+  if (orderId !== null) {
+    window.location.replace('/orderbutton?order=' + orderId);
+  } else {
+    window.location.replace('/');
+  }
+})();
+</script>
+{% endautoescape %}
+{% endblock %}
