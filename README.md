@@ -34,7 +34,7 @@ Follow these steps to install the Tide theme:
 
 7. Navigate to `Settings -> Themes` in the FOSSBilling admin panel and select `tide` as the default theme.
 
-## Upgrade (for v1.0.x only)
+## Upgrade
 
 To upgrade to a newer version of the Tide theme, perform the following:
 
