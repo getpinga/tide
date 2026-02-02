@@ -182,7 +182,26 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const domain = sessionStorage.getItem("namingo_domain");
+
+    if (!domain) return;
+
+    const input = document.querySelector('input[name="domain_name"]');
+
+    if (input) {
+        input.value = domain;
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+
+        sessionStorage.removeItem("namingo_domain");
+    }
+
+});
+
 function show(el, display = '') {
     if (!el) return;
     el.style.display = display;

@@ -248,7 +248,86 @@
           {% set colClass = 'col-12 col-sm-8 col-md-6 col-lg-6' %}
           {% set rowClass = 'justify-content-center' %}
         {% endif %}
+
+        <style>
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: hidden; /* Prevent unnecessary horizontal scrolling */
+            }
+
+            /* Ensure that table layout switches to block only on mobile */
+            .table-responsive table, 
+            .table-responsive thead, 
+            .table-responsive tbody, 
+            .table-responsive th, 
+            .table-responsive td, 
+            .table-responsive tr {
+                display: block;
+                width: 100%;
+            }
+
+            .table-responsive thead {
+                display: none; /* Hide the original table headers on mobile */
+            }
+
+            .table-responsive tbody tr {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 20px;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 10px;
+                width: 100%; /* Ensure rows take full width */
+            }
+
+            .table-responsive tbody td {
+                display: block;
+                position: relative;
+                padding-left: 40%; /* Adjust space for labels */
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #dee2e6;
+                width: 100%; /* Ensure cells take full width */
+                box-sizing: border-box;
+                text-align: right;
+            }
+
+            .table-responsive tbody td::before {
+                content: attr(data-label); /* Display header label */
+                position: absolute;
+                left: 10px;
+                top: 10px;
+                font-weight: bold;
+                color: #495057;
+                white-space: nowrap;
+                text-align: left;
+                width: 30%;
+                box-sizing: border-box;
+            }
+
+            .table-responsive tbody td:last-child {
+                border-bottom: none; /* Remove bottom border from the last cell */
+            }
+        }
+        </style>
+
         <div class="row row-cards {{ rowClass }}">
+            <div class="card">
+                <div class="card-body" id="register">
+                    <form id="domain-search-transfer-form">
+                        <div class="row g-2 mb-3">
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
+                            </div>
+                            <div class="col-12 col-md-4 d-flex gap-2">
+                                <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="domain-check">{{ 'Search'|trans }}</button>
+                            </div>
+                        </div>
+                        <p class="text-muted text-center mt-4" id="info-text">Search for your perfect domain name.</p>
+                    </form>
+                </div>
+            </div>
+
             <div class="{{ colClass }} d-flex">
                 <div class="card bg-red text-red-fg d-print-none h-100 w-100">
                     <div class="card-stamp">
@@ -355,5 +434,43 @@
             </div>
             {% endif %}
         </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const btn   = document.getElementById("domain-check");
+        const input = document.querySelector('input[name="domain_name"]');
+        const form  = document.getElementById("domain-search-transfer-form");
+
+        if (!input || !form) return;
+
+        function handleSubmit() {
+
+            const domain = input.value.trim();
+
+            if (!domain) {
+                alert("Please enter a domain name");
+                return;
+            }
+
+            sessionStorage.setItem("namingo_domain", domain);
+
+            window.location.href = "/orderbutton?order=1";
+        }
+
+        if (btn) {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                handleSubmit();
+            });
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            handleSubmit();
+        });
+
+    });
+    </script>
     {% endif %}
 {% endblock %}

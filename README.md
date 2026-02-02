@@ -8,9 +8,9 @@
 
 Tide is a client area theme for FOSSBilling. It's designed to enhance your user interface with a clean, modern aesthetic. This guide provides steps on how to install, upgrade, secure, and customize the Tide theme.
 
-<img width="735" alt="tide_screen" src="screen1.jpeg">
+<img width="735" alt="Tide Screenshot 1" src="screen1.jpeg">
 
-<img width="735" alt="tide_screen" src="screen2.jpeg">
+<img width="735" alt="Tide Screenshot 2" src="screen2.png">
 
 ## Installation
 
@@ -38,12 +38,23 @@ Follow these steps to install the Tide theme:
 
 To upgrade to a newer version of the Tide theme, perform the following:
 
-1. Clone this repository or download the latest version.
-2. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/custom.css`.
-3. Extract the latest version and move the `tide` directory into `FOSSBilling directory/themes`, overwriting all files.
-4. Restore your `settings_data.json` and any custom assets from the backup.
-5. Change the directory owner to the web server user. For example: `chown -Rf www-data:www-data tide/`.
-6. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
+1. Download or clone this repository.
+
+   - If you downloaded a ZIP file, extract it first.
+   - If you cloned the repository, locate the main project folder.
+  
+2. Inside the downloaded/cloned files, you will find a directory containing the theme files
+   (for example: `tide-main`, `tide-v1.1.0`, or similar).
+
+3. Rename this directory to `tide`.
+
+4. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/custom.css`.
+
+5. Move the renamed `tide` directory into your FOSSBilling themes folder: `FOSSBilling directory/themes`, overwriting all files.
+
+6. Restore your `settings_data.json` and any custom assets from the backup.
+
+7. Change the directory owner to the web server user. For example: `chown -Rf www-data:www-data tide/`. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
 
 ## Security Measures for Prior Installations (Before 0.9.5)
 
