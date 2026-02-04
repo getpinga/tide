@@ -22,8 +22,8 @@
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-themes.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-themes.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
+    <link href="{{ 'css/inter.css' | asset_url }}" rel="stylesheet"/>
     <style>
-       @import url('https://rsms.me/inter/inter.css');
        :root {
           --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
        }
