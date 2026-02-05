@@ -42,6 +42,13 @@
           height: 15px;
           display: inline-block;
       }
+      .navbar .nav-control {
+        height: 40px;
+        padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+        font-size: 14px;
+        border-radius: 0.5rem;
+        background-position: right 0.75rem center;
+      }
       .responsive-logo {
           height: 32px;
           width: auto;
@@ -128,18 +135,23 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="navbar-nav flex-row ms-auto order-md-last">
             <div class="nav-item d-md-flex me-1 me-sm-2 me-md-3">
-              <div class="btn-list">
+              <div class="btn-list d-flex align-items-center gap-2">
                 {% set languages = guest.extension_languages(true) %}
                 {% if languages|length > 1 %}
                 {% set currentLang = guest.system_locale %}
                 {% set countryCode = currentLang | slice(3, 2) %}
                 <div class="dropdown small-dropdown">
-                    <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;{% for lang in languages %}
-                    {% if lang.locale == currentLang %}
-                        {% set parts = lang.title|split(' (') %}
-                        {{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}
-                    {% endif %}
-                    {% endfor %}</a>
+                    <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-label="Language">
+                    <span class="flag flag-country-{{ countryCode | lower }}"></span>&nbsp;
+                      <span class="ms-2 d-none d-sm-inline">
+                      {% for lang in languages %}
+                        {% if lang.locale == currentLang %}
+                          {% set parts = lang.title|split(' (') %}
+                          {{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}
+                        {% endif %}
+                      {% endfor %}
+                      </span>
+                    </a>
                     <div class="dropdown-menu language-selector">
                         {% for lang in languages %}
                         {% set countryCode = lang.locale | slice(3, 2) %}
@@ -148,6 +160,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         {% endif %}
                         {% endfor %}
                     </div>
+                </div>
+                {% endif %}
+                {% set currencies = guest.currency_get_pairs %}
+                {% if currencies|length > 1 %}
+                <div class="dropdown small-dropdown">
+                    <select id="currency" name="currency" class="currency_selector form-select nav-control w-auto">
+                        {% set selected = guest.cart_get_currency.code %}
+                        {% for code,title in currencies %}
+                        <option value="{{ code }}" class="currency_{{ code }}"{% if code == selected %} selected="selected"{% endif %}>{{ code }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 {% endif %}
                 {% if not client %}
