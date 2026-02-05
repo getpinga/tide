@@ -22,7 +22,25 @@
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-payments.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-payments.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-themes.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-themes.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
-    <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
+    <link href="{{ 'css/inter.css' | asset_url }}" rel="stylesheet"/>
+    <link href="{{ 'css/extra.css' | asset_url }}" rel="stylesheet"/>
+    <style>
+       :root {
+          --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+       }
+       body {
+          font-feature-settings: "cv03", "cv04", "cv11";
+       }
+      .responsive-logo {
+          height: 32px;
+          width: auto;
+      }
+      @media (max-width: 576px) {
+        .responsive-logo {
+            height: 24px;
+        }
+      }
+    </style>
 
     <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
 

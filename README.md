@@ -48,7 +48,7 @@ To upgrade to a newer version of the Tide theme, perform the following:
 
 3. Rename this directory to `tide`.
 
-4. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/custom.css`.
+4. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/extra.css`.
 
 5. Move the renamed `tide` directory into your FOSSBilling themes folder: `FOSSBilling directory/themes`, overwriting all files.
 
@@ -65,7 +65,7 @@ For versions of Tide installed prior to 0.9.5, implement these security measures
 
 ## Theme Customization
 
-Tide now allows you to replace default colours with custom ones, enabling you to align the theme with your branding. To make these changes, edit the `FOSSBilling directory/themes/tide/assets/css/custom.css` file as per the comments provided within it.
+Tide allows you to replace default colours with custom ones, enabling you to align the theme with your branding. To make these changes, edit the `FOSSBilling directory/themes/tide/assets/css/extra.css` file as per the comments provided within it. Make sure to back up this file before upgrading and restore it after the upgrade process is complete.
 
 ## Support
 
