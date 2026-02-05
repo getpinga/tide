@@ -4,10 +4,9 @@
 <style>
 @media (max-width: 768px) {
     .table-responsive {
-        overflow-x: hidden; /* Prevent unnecessary horizontal scrolling */
+        overflow-x: hidden;
     }
 
-    /* Ensure that table layout switches to block only on mobile */
     .table-responsive table, 
     .table-responsive thead, 
     .table-responsive tbody, 
@@ -19,7 +18,7 @@
     }
 
     .table-responsive thead {
-        display: none; /* Hide the original table headers on mobile */
+        display: none;
     }
 
     .table-responsive tbody tr {
@@ -29,23 +28,23 @@
         border: 1px solid #dee2e6;
         border-radius: 8px;
         padding: 10px;
-        width: 100%; /* Ensure rows take full width */
+        width: 100%;
     }
 
     .table-responsive tbody td {
         display: block;
         position: relative;
-        padding-left: 40%; /* Adjust space for labels */
+        padding-left: 40%;
         padding-top: 10px;
         padding-bottom: 10px;
         border-bottom: 1px solid #dee2e6;
-        width: 100%; /* Ensure cells take full width */
+        width: 100%;
         box-sizing: border-box;
         text-align: right;
     }
 
     .table-responsive tbody td::before {
-        content: attr(data-label); /* Display header label */
+        content: attr(data-label);
         position: absolute;
         left: 10px;
         top: 10px;
@@ -58,7 +57,7 @@
     }
 
     .table-responsive tbody td:last-child {
-        border-bottom: none; /* Remove bottom border from the last cell */
+        border-bottom: none;
     }
 }
 </style>
@@ -73,7 +72,7 @@
             </a>
         </div>
     {% endif %}
-        <form id="domain-search-transfer-form">
+        <div id="domain-search-transfer-form">
             <div class="row g-2 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
@@ -135,7 +134,7 @@
                     {{ 'Next'|trans }}
                 </button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 {% set currency = guest.cart_get_currency %}
@@ -365,6 +364,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const orderBtn = document.querySelector('#register .order-button');
                     if (orderBtn) orderBtn.style.display = '';
+                },
+                function (err) {
+                    FOSSBilling.message(err?.message || "Transfer check failed");
                 }
             );
         });
@@ -426,6 +428,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (transferBtn) transferBtn.style.display = 'none';
                     if (infoText) infoText.style.display = 'none';
                     if (orderBtn) orderBtn.style.display = '';
+                },
+                function (err) {
+                    const msg =
+                      err?.message ||
+                      err?.error?.message ||
+                      err?.error ||
+                      err?.result?.message ||
+                      "Domain check failed";
+
+                    const code =
+                      err?.code || err?.error?.code || err?.result?.code;
+
+                    FOSSBilling.message(code ? `${msg} (Code: ${code})` : msg);
+
+                    domainInput.readOnly = false;
                 }
             );
         });
@@ -469,6 +486,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 fadeIn(yearsSelect, '');
                 show(document.getElementById('config-next-domain'));
+            },
+            function (err) {
+                FOSSBilling.message(err?.message || "Could not load pricing");
             }
         );
     }
@@ -500,6 +520,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (nextBtn) {
                     nextBtn.disabled = false;
                 }
+            },
+            function (err) {
+                FOSSBilling.message(err?.message || "Could not load pricing");
             }
         );
     }
