@@ -138,6 +138,7 @@
     </div>
 </div>
 {% set currency = guest.cart_get_currency %}
+{% set sorted_tlds = pricing|keys|sort((a, b) => a <=> b) %}
 <div class="card mt-3">
     <div class="card-body">
         <div class="table-responsive">
@@ -151,7 +152,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for tld, details in pricing %}
+                    {% for tld in sorted_tlds %}
+                        {% set details = pricing[tld] %}
                         {% if details.active == 1 %}
                             <tr>
                                 <td data-label="{{ 'Domain'|trans }}">{{ tld }}</td>
