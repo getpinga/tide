@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}">
+<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}"{% if settings.theme_color_enabled %} data-bs-theme-primary="{% if settings.theme_color == 1 %}primary{% elseif settings.theme_color == 2 %}purple{% elseif settings.theme_color == 3 %}pink{% elseif settings.theme_color == 4 %}red{% elseif settings.theme_color == 5 %}orange{% elseif settings.theme_color == 6 %}yellow{% elseif settings.theme_color == 7 %}green{% elseif settings.theme_color == 8 %}teal{% else %}indigo{% endif %}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <title>{{ settings.meta_title_prefix }} {% block meta_title %}{% endblock %} {{ settings.meta_title_suffix }}</title>
@@ -117,7 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
     {% set logo_url =  company.logo_url %}
 {% endif %}
 <div class="page">
-      <header class="navbar navbar-expand-md navbar-light d-print-none">
+      {% if settings.announcement_bar_enabled %}
+      <header class="navbar navbar-expand-md d-print-none bg-{% if settings.announcement_bar_color == 1 %}primary{% elseif settings.announcement_bar_color == 2 %}purple{% elseif settings.announcement_bar_color == 3 %}red{% elseif settings.announcement_bar_color == 4 %}orange{% elseif settings.announcement_bar_color == 5 %}yellow{% else %}green{% endif %} text-primary-fg border-bottom-0">
+        <div class="container-xl ml-3">
+          <strong>{{ settings.announcement_bar_text }}</strong>
+        </div>
+      </header>
+      {% endif %}       
+      <header class="navbar navbar-expand-md navbar-light d-print-none{% if settings.announcement_bar_enabled %} border-top-0{% endif %}">
         <div class="container-xl">
           <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

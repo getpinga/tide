@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}">
+<html class="no-js" lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}"{% if settings.theme_color_enabled %} data-bs-theme-primary="{% if settings.theme_color == 1 %}primary{% elseif settings.theme_color == 2 %}purple{% elseif settings.theme_color == 3 %}pink{% elseif settings.theme_color == 4 %}red{% elseif settings.theme_color == 5 %}orange{% elseif settings.theme_color == 6 %}yellow{% elseif settings.theme_color == 7 %}green{% elseif settings.theme_color == 8 %}teal{% else %}indigo{% endif %}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <title>{{ settings.meta_title_prefix }} {% block meta_title %}{% endblock %} {{ settings.meta_title_suffix }}</title>

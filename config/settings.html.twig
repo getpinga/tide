@@ -2,6 +2,73 @@
 <fieldset>
     <legend>{{ 'General'|trans }}</legend>
 
+    <h3>Theme Color</h3>
+    <table>
+        <tr>
+            <td><label>Enable custom theme color</label></td>
+            <td>
+                <label>
+                    <input type="radio" name="theme_color_enabled" value="1" id="theme_color_enabled_1" checked="checked"/>
+                    Yes
+                </label>
+                <label>
+                    <input type="radio" name="theme_color_enabled" value="0" id="theme_color_enabled_0"/>
+                    No
+                </label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label>Primary theme color</label></td>
+            <td>
+                <label>
+                    <input type="radio" name="theme_color" value="1" id="theme_color_blue" checked="checked"/>
+                    Blue
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="2" id="theme_color_purple"/>
+                    Purple
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="3" id="theme_color_pink"/>
+                    Pink
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="4" id="theme_color_red"/>
+                    Red
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="5" id="theme_color_orange"/>
+                    Orange
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="6" id="theme_color_yellow"/>
+                    Yellow
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="7" id="theme_color_green"/>
+                    Green
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="8" id="theme_color_teal"/>
+                    Teal
+                </label>
+
+                <label>
+                    <input type="radio" name="theme_color" value="9" id="theme_color_indigo"/>
+                    Indigo
+                </label>
+            </td>
+        </tr>
+    </table>
+
     <h3>{{ 'Header items'|trans }}</h3>
     <table>
         <tr>
@@ -30,6 +97,34 @@
                 <label><input type="checkbox" name="top_menu_order" value="1" id="top_menu_order">{{ 'Show order link'|trans }}</label>
                 <label><input type="checkbox" name="top_menu_profile" value="1" id="top_menu_profile">{{ 'Show profile link'|trans }}</label>
                 <label><input type="checkbox" name="top_menu_signout" value="1" id="top_menu_signout">{{ 'Show sign out link'|trans }}</label>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Announcement Bar</h3>
+    <table>
+        <tr>
+            <td><label>Show announcement bar</label></td>
+            <td>
+                <label><input type="radio" name="announcement_bar_enabled" value="1" id="announcement_bar_enabled_1" checked="checked"/>Yes</label>
+                <label><input type="radio" name="announcement_bar_enabled" value="0" id="announcement_bar_enabled_0"/>No</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td><label for="announcement_bar_text">Announcement text</label></td>
+            <td><input type="text" name="announcement_bar_text" id="announcement_bar_text" value=""/></td>
+        </tr>
+        
+        <tr>
+            <td><label>Announcement bar color</label></td>
+            <td>
+                <label><input type="radio" name="announcement_bar_color" value="1" id="announcement_bar_color_1" checked="checked"/>Blue</label>
+                <label><input type="radio" name="announcement_bar_color" value="2" id="announcement_bar_color_2"/>Purple</label>
+                <label><input type="radio" name="announcement_bar_color" value="3" id="announcement_bar_color_3"/>Red</label>
+                <label><input type="radio" name="announcement_bar_color" value="4" id="announcement_bar_color_4"/>Orange</label>
+                <label><input type="radio" name="announcement_bar_color" value="5" id="announcement_bar_color_5"/>Yellow</label>
+                <label><input type="radio" name="announcement_bar_color" value="6" id="announcement_bar_color_6"/>Green</label>
             </td>
         </tr>
     </table>
