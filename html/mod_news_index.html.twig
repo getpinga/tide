@@ -18,8 +18,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body pb-0">
-                    {% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
+                {% set posts = guest.news_get_list({ "page": request.page, "per_page": 5 }) %}
+                <div class="card-body{% if posts.list is not empty %} pb-0{% endif %}">
                     {% for i, post in posts.list %}
                         <div class="card mb-3">
                             <div class="card-body">
