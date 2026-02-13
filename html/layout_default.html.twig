@@ -424,47 +424,36 @@ document.addEventListener("DOMContentLoaded", () => {
                   {% if settings.footer_link_1_enabled %}
                   <li class="list-inline-item">
                       {% if 'http://' in settings.footer_link_1_page or  'https://' in settings.footer_link_1_page %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
+                          <a href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
                       {% else %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_1_page | link }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
+                          <a href="{{ settings.footer_link_1_page | link }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
                       {% endif %}
                   </li>
                   {% endif %}
                   {% if settings.footer_link_2_enabled %}
                   <li class="list-inline-item">
-                      &nbsp;&#x2022;&nbsp;
                       {% if 'http://' in settings.footer_link_2_page or  'https://' in settings.footer_link_2_page %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                           href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
+                          <a href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
                       {% else %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                           href="{{ settings.footer_link_2_page | link }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
+                          <a href="{{ settings.footer_link_2_page | link }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
                       {% endif %}
                   </li>
                   {% endif %}
                   {% if settings.footer_link_3_enabled %}
                   <li class="list-inline-item">
-                      &nbsp;&#x2022;&nbsp;
                       {% if 'http://' in settings.footer_link_3_page or  'https://' in settings.footer_link_3_page %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
+                          <a href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
                       {% else %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_3_page | link }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
+                          <a href="{{ settings.footer_link_3_page | link }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
                       {% endif %}
                   </li>
                   {% endif %}
                   {% if settings.footer_link_4_enabled %}
                   <li class="list-inline-item">
-                      &nbsp;&#x2022;&nbsp;
                       {% if 'http://' in settings.footer_link_4_page or  'https://' in settings.footer_link_4_page %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
+                          <a href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
                       {% else %}
-                          <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                            href="{{ settings.footer_link_4_page | link }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
+                          <a href="{{ settings.footer_link_4_page | link }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
                       {% endif %}
                   </li>
                   {% endif %}

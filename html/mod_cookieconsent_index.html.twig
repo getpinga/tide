@@ -1,0 +1,51 @@
+<div class="offcanvas offcanvas-bottom h-auto" tabindex="-1" id="cookie-consent-block" aria-modal="true" role="dialog">
+  <div class="offcanvas-body">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col">
+          {{ guest.cookieconsent_message }}
+        </div>
+        <div class="col-auto">
+          <button type="button" id="close-cookie-consent-btn" class="btn btn-primary" data-bs-dismiss="offcanvas">Allow All Cookies</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    const consentBlock = document.getElementById('cookie-consent-block');
+    const closeBtn = document.getElementById('close-cookie-consent-btn');
+
+    if (!consentBlock) return;
+
+    if (localStorage.getItem('cookie-consent') === '1') {
+        consentBlock.style.display = 'none';
+        return;
+    }
+
+    consentBlock.style.display = '';
+
+    if (window.bootstrap && typeof bootstrap.Offcanvas === 'function') {
+        const oc = bootstrap.Offcanvas.getOrCreateInstance(consentBlock);
+        oc.show();
+    } else {
+        consentBlock.classList.add('show');
+        consentBlock.setAttribute('aria-modal', 'true');
+        consentBlock.setAttribute('role', 'dialog');
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            localStorage.setItem('cookie-consent', '1');
+
+            if (window.bootstrap && typeof bootstrap.Offcanvas === 'function') {
+                const oc = bootstrap.Offcanvas.getOrCreateInstance(consentBlock);
+                oc.hide();
+            } else {
+                consentBlock.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
