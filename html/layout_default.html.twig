@@ -457,6 +457,15 @@ document.addEventListener("DOMContentLoaded", () => {
                       {% endif %}
                   </li>
                   {% endif %}
+                  {% if settings.footer_link_5_enabled %}
+                  <li class="list-inline-item">
+                      {% if 'http://' in settings.footer_link_5_page or  'https://' in settings.footer_link_5_page %}
+                          <a href="{{ settings.footer_link_5_page }}" class="link-secondary">{{ settings.footer_link_5_title }}</a>
+                      {% else %}
+                          <a href="{{ settings.footer_link_5_page | link }}" class="link-secondary">{{ settings.footer_link_5_title }}</a>
+                      {% endif %}
+                  </li>
+                  {% endif %}
                 </ul>
               </div>
               <div class="col-12 col-lg-auto mt-3 mt-lg-0">
