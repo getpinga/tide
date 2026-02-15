@@ -1,0 +1,93 @@
+{% if product.addons|length > 0 %}
+<h5 class="mt-4 mb-3"><strong>{{ 'Addons & extras'|trans }}</strong></h5>
+
+<div class="card mb-3">
+  <div class="list-group list-group-flush">
+
+    {% for addon in product.addons %}
+    <div class="list-group-item">
+      <div class="row align-items-center">
+
+        {% if addon.icon_url %}
+        <div class="col-auto">
+          <img src="{{ addon.icon_url }}" alt="" width="42" class="rounded" />
+        </div>
+        {% endif %}
+
+        <div class="col">
+          <div class="fw-bold">{{ addon.title }}</div>
+          <div class="text-secondary small">
+            {{ addon.description|markdown }}
+          </div>
+        </div>
+
+        <div class="col-auto d-flex flex-column align-items-end justify-content-center">
+
+          {% if addon.pricing.type is same as('recurrent') %}
+          {% set periods = guest.system_periods %}
+          <select class="form-select form-select-sm mb-2"
+                  name="addons[{{ addon.id }}][period]">
+            {% for code, prices in addon.pricing.recurrent %}
+              {% if prices.enabled %}
+              <option value="{{ code }}">
+                {{ prices.price | money_convert }}
+                {% if prices.setup != '0.00' %}
+                  + {{ prices.setup | money_convert }} {{ 'setup'|trans }}
+                {% endif %}
+                ({{ periods[code] }})
+              </option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          {% endif %}
+
+          {% if addon.pricing.type is same as('once') %}
+            <div class="mb-2 d-flex justify-content-center w-100">
+              <div class="badge bg-success-lt text-success">
+                {{ (addon.pricing.once.price + addon.pricing.once.setup) | money_convert }}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if addon.pricing.type is same as('free') %}
+            <div class="mb-2 d-flex justify-content-center w-100">
+              <div class="badge bg-success-lt text-success">
+                {{ 0 | money_convert }}
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="btn-group btn-group-sm mt-2" role="group">
+            <input type="radio"
+                   class="btn-check"
+                   name="addons[{{ addon.id }}][selected]"
+                   value="1"
+                   id="addon_{{ addon.id }}"
+                   autocomplete="off">
+            <label class="btn btn-outline-green"
+                   for="addon_{{ addon.id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+            </label>
+
+            <input type="radio"
+                   class="btn-check"
+                   name="addons[{{ addon.id }}][selected]"
+                   value="0"
+                   id="addon_{{ addon.id }}_decline"
+                   autocomplete="off"
+                   checked>
+            <label class="btn btn-outline-danger"
+                   for="addon_{{ addon.id }}_decline">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endif %}
