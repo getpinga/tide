@@ -40,6 +40,8 @@
               {% endif %}
             </div>
 
+            <input type="hidden" name="addons[{{ addon.id }}][selected]" value="0">
+
             <div class="form-check form-switch m-0">
               <input class="form-check-input addon-switch"
                      type="checkbox"
@@ -54,10 +56,7 @@
                 {{ 'Add'|trans }}
               </label>
             </div>
-
           </div>
-
-          <input type="hidden" name="addons[{{ addon.id }}][selected]" value="0">
         </div>
 
       </div>
