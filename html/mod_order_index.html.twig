@@ -95,7 +95,7 @@
                             </svg>
                          </div>
                          {% else %}
-                         <div class="ribbon ribbon-top ribbon-bookmark bg-dark">
+                         <div class="ribbon ribbon-top ribbon-bookmark bg-cyan">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"></path>
@@ -108,8 +108,11 @@
                          <div class="card-body text-center">
                             <div class="text-uppercase text-muted font-weight-medium mb-4">{{ product.type }}</div>
                             <h3>{{ product.title }}</h3>
+                            {% if product.type != 'domain' and product.price_starting_from is defined and product.price_starting_from is not empty %}
+                              <div class="h2 my-3">{{ product.price_starting_from|money_convert }}</div>
+                            {% endif %}
                             <div class="text-center mt-4">
-                               <a href="{{ ('/order/' ~ product.id) | link }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-dark{% endif %} w-100">{{ 'Choose'|trans }}</a>
+                               <a href="{{ ('/order/' ~ product.slug) | link }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-cyan{% endif %} w-100">{{ 'Choose'|trans }}</a>
                             </div>
                          </div>
                       </div>
