@@ -34,9 +34,22 @@
                   {{ 0 | money_convert }}
                 </span>
               {% elseif addon.pricing.type is same as('recurrent') %}
-                <span class="badge bg-azure-lt text-azure">
-                  {{ 'Select period'|trans }}
-                </span>
+                {% set periods = guest.system_periods %}
+                <select class="form-select form-select-sm"
+                        style="min-width: 140px;"
+                        name="addons[{{ addon.id }}][period]">
+                  {% for code, prices in addon.pricing.recurrent %}
+                    {% if prices.enabled %}
+                    <option value="{{ code }}">
+                      {{ prices.price | money_convert }}
+                      {% if prices.setup != '0.00' %}
+                        + {{ prices.setup | money_convert }} {{ 'setup'|trans }}
+                      {% endif %}
+                      ({{ periods[code] }})
+                    </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
               {% endif %}
             </div>
 
