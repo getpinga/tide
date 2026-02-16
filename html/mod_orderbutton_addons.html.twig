@@ -21,67 +21,43 @@
           </div>
         </div>
 
-        <div class="col-auto d-flex flex-column align-items-end justify-content-center">
+        <div class="col-auto">
+          <div class="d-flex align-items-center justify-content-end gap-3">
 
-          {% if addon.pricing.type is same as('recurrent') %}
-          {% set periods = guest.system_periods %}
-          <select class="form-select form-select-sm mb-2"
-                  name="addons[{{ addon.id }}][period]">
-            {% for code, prices in addon.pricing.recurrent %}
-              {% if prices.enabled %}
-              <option value="{{ code }}">
-                {{ prices.price | money_convert }}
-                {% if prices.setup != '0.00' %}
-                  + {{ prices.setup | money_convert }} {{ 'setup'|trans }}
-                {% endif %}
-                ({{ periods[code] }})
-              </option>
+            <div class="text-end" style="min-width: 110px;">
+              {% if addon.pricing.type is same as('once') %}
+                <span class="badge bg-success text-success-fg">
+                  {{ (addon.pricing.once.price + addon.pricing.once.setup) | money_convert }}
+                </span>
+              {% elseif addon.pricing.type is same as('free') %}
+                <span class="badge bg-success text-success-fg">
+                  {{ 0 | money_convert }}
+                </span>
+              {% elseif addon.pricing.type is same as('recurrent') %}
+                <span class="badge bg-azure-lt text-azure">
+                  {{ 'Select period'|trans }}
+                </span>
               {% endif %}
-            {% endfor %}
-          </select>
-          {% endif %}
-
-          {% if addon.pricing.type is same as('once') %}
-            <div class="mb-2 d-flex justify-content-center w-100">
-              <div class="badge bg-success-lt text-success">
-                {{ (addon.pricing.once.price + addon.pricing.once.setup) | money_convert }}
-              </div>
             </div>
-          {% endif %}
 
-          {% if addon.pricing.type is same as('free') %}
-            <div class="mb-2 d-flex justify-content-center w-100">
-              <div class="badge bg-success-lt text-success">
-                {{ 0 | money_convert }}
-              </div>
+            <div class="form-check form-switch m-0">
+              <input class="form-check-input addon-switch"
+                     type="checkbox"
+                     role="switch"
+                     id="addon_{{ addon.id }}_switch"
+                     name="addons[{{ addon.id }}][selected]"
+                     value="1"
+                     data-label="addon_label_{{ addon.id }}">
+              <label class="form-check-label small mb-0"
+                     id="addon_label_{{ addon.id }}"
+                     for="addon_{{ addon.id }}_switch">
+                {{ 'Add'|trans }}
+              </label>
             </div>
-          {% endif %}
 
-          <div class="btn-group btn-group-sm mt-2" role="group">
-            <input type="radio"
-                   class="btn-check"
-                   name="addons[{{ addon.id }}][selected]"
-                   value="1"
-                   id="addon_{{ addon.id }}"
-                   autocomplete="off">
-            <label class="btn btn-outline-green"
-                   for="addon_{{ addon.id }}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
-            </label>
-
-            <input type="radio"
-                   class="btn-check"
-                   name="addons[{{ addon.id }}][selected]"
-                   value="0"
-                   id="addon_{{ addon.id }}_decline"
-                   autocomplete="off"
-                   checked>
-            <label class="btn btn-outline-danger"
-                   for="addon_{{ addon.id }}_decline">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
-            </label>
           </div>
 
+          <input type="hidden" name="addons[{{ addon.id }}][selected]" value="0">
         </div>
 
       </div>
@@ -90,4 +66,32 @@
 
   </div>
 </div>
+{% block js %}
+{% autoescape "js" %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.addon-switch').forEach(function (el) {
+    var label = document.getElementById(el.dataset.label);
+
+    function update() {
+        if (el.checked) {
+          label.textContent = "{{ 'Added'|trans }}";
+          label.classList.remove('text-muted');
+          label.classList.add('text-success');
+          label.classList.add('fw-semibold');
+        } else {
+          label.textContent = "{{ 'Add'|trans }}";
+          label.classList.remove('text-success');
+          label.classList.add('text-muted');
+          label.classList.remove('fw-semibold');
+        }
+    }
+
+    el.addEventListener('change', update);
+    update();
+  });
+});
+</script>
+{% endautoescape %}
+{% endblock %}
 {% endif %}
