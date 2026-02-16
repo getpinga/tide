@@ -109,7 +109,7 @@
                             <div class="text-uppercase text-muted font-weight-medium mb-4">{{ product.type }}</div>
                             <h3>{{ product.title }}</h3>
                             <div class="text-center mt-4">
-                               <a href="{{ 'orderbutton'|link({ 'order': product.id, 'show_custom_form_values': request.show_custom_form_values }) }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-dark{% endif %} w-100">{{ 'Choose'|trans }}</a>
+                               <a href="{{ ('/order/' ~ product.id) | link }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-dark{% endif %} w-100">{{ 'Choose'|trans }}</a>
                             </div>
                          </div>
                       </div>
