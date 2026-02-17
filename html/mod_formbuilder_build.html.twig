@@ -51,7 +51,7 @@
                                 {% if field.readonly==1 %}readonly="readonly"{% endif %}
                                 {% if v in field.default_value %}checked="checked"{% endif %}
                             />
-                            <label class="form-check-label{% if field.required==1 %} required{% endif %}">{{k}}</label>
+                            <label class="form-check-label">{{k}}</label>
                         </div>
                     {% endfor %}
 
@@ -63,7 +63,7 @@
                                 {% if field.required==1 %}required="required"{% endif %}
                                 {% if field.readonly==1 %}readonly="readonly"{% endif %}
                             />
-                            <label class="form-check-label{% if field.required==1 %} required{% endif %}">{{k}}</label>
+                            <label class="form-check-label">{{k}}</label>
                         </div>
                     {% endfor %}
 
