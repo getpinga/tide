@@ -21,10 +21,10 @@
           </div>
         </div>
 
-        <div class="col-auto">
-          <div class="d-flex align-items-center justify-content-end gap-3">
+        <div class="col-12 col-md-auto mt-3 mt-md-0">
+          <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-start justify-content-md-end gap-2 gap-md-3">
 
-            <div class="text-end" style="min-width: 110px;">
+            <div class="text-start text-md-end" style="min-width: 110px;">
               {% if addon.pricing.type is same as('once') %}
                 <span class="badge bg-success text-success-fg">
                   {{ (addon.pricing.once.price + addon.pricing.once.setup) | money_convert }}
@@ -36,7 +36,7 @@
               {% elseif addon.pricing.type is same as('recurrent') %}
                 {% set periods = guest.system_periods %}
                 <select class="form-select form-select-sm"
-                        style="min-width: 140px;"
+                        style="min-width: 140px; max-width: 100%;"
                         name="addons[{{ addon.id }}][period]">
                   {% for code, prices in addon.pricing.recurrent %}
                     {% if prices.enabled %}
