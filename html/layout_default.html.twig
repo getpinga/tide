@@ -21,72 +21,19 @@
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-payments.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-payments.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-themes.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-themes.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
     <link href="{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %}{{ 'css/tabler-vendors.rtl.min.css' | asset_url }}{% else %}{{ 'css/tabler-vendors.min.css' | asset_url }}{% endif %}" rel="stylesheet"/>
+    <link href="{{ 'css/tide.css' | asset_url }}" rel="stylesheet"/>
     <link href="{{ 'css/inter.css' | asset_url }}" rel="stylesheet"/>
-    <link href="{{ 'css/extra.css' | asset_url }}" rel="stylesheet"/>
-    <style>
-       :root {
-          --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-       }
-       body {
-          font-feature-settings: "cv03", "cv04", "cv11";
-       }
-      .small-dropdown .dropdown-item {
-          padding: 0.25rem 1.5rem;
-      }
-      .small-dropdown .dropdown-menu{
-          max-height: 60vh;
-          overflow-y: auto;
-      }
-      .small-dropdown .flag {
-          width: 20px;
-          height: 15px;
-          display: inline-block;
-      }
-      .navbar .nav-control {
-        height: 40px;
-        padding: 0.375rem 2.25rem 0.375rem 0.75rem;
-        font-size: 14px;
-        border-radius: 0.5rem;
-        background-position: right 0.75rem center;
-      }
-      .responsive-logo {
-          height: 32px;
-          width: auto;
-      }
-      @media (max-width: 576px) {
-        .responsive-logo {
-            height: 24px;
-        }
-      }
-    </style>
+    {% include 'custom/head.extra.twig' ignore missing %}
 
     <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
 
     {{ "Api/API.js" | library_url | script_tag }}
     <script src="{{ 'js/atrix.js' | asset_url }}"></script>
-
-    {{ DebugBar_renderHead() }}
-
     {% block head %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const theme = localStorage.getItem('theme');
-  const logo = document.getElementById('company-logo');
-
-  if (theme === 'dark') {
-    document.documentElement.setAttribute("data-bs-theme", "dark");
-    if (logo) logo.src = logo.dataset.logoDark || logo.dataset.logoLight;
-  } else {
-    document.documentElement.setAttribute("data-bs-theme", "light");
-    if (logo) logo.src = logo.dataset.logoLight || logo.dataset.logoDark;
-  }
-});
-</script>
-      
+<body class="{% block body_class %}{% endblock %}">     
 {% block body %}
 {% if not client and settings.require_login %}
     <script>
@@ -513,91 +460,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {% endif %}
     </div>
 </div>
-{{ DebugBar_render() }}
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const THEME_KEY = "theme";
+<script src="{{ 'js/tide.js' | asset_url }}"></script>
 
-  function applyTheme(theme) {
-    const t = theme === "dark" ? "dark" : "light";
-    document.documentElement.setAttribute("data-bs-theme", t);
-
-    document.querySelectorAll(".hide-theme-dark").forEach(el => {
-      el.style.display = (t === "dark") ? "none" : "";
-    });
-    document.querySelectorAll(".hide-theme-light").forEach(el => {
-      el.style.display = (t === "light") ? "none" : "";
-    });
-
-    const logo = document.getElementById("company-logo");
-    if (logo) {
-      logo.src = (t === "dark")
-        ? (logo.dataset.logoDark || logo.dataset.logoLight)
-        : (logo.dataset.logoLight || logo.dataset.logoDark);
-    }
-  }
-
-  applyTheme(localStorage.getItem(THEME_KEY) || "light");
-
-  document.querySelectorAll(".js-theme-toggler").forEach(el => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const theme = new URL(el.href, window.location.origin).searchParams.get("theme");
-      if (!theme) return;
-
-      localStorage.setItem(THEME_KEY, theme);
-      applyTheme(theme);
-    });
-  });
-});
-
-function setCookie(name, value, days) {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = name + "=" + encodeURIComponent(value) +
-    "; expires=" + expires + "; path=/";
-}
-
-function getCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find(row => row.startsWith(name + "="))
-    ?.split("=")[1] || null;
-}
-
-function initLanguageSelector() {
-  document.querySelectorAll("a.language_selector").forEach(link => {
-
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const lang =
-        link.dataset.lang ||
-        link.getAttribute("value") ||
-        new URL(link.href, location.origin).searchParams.get("lang");
-
-      if (!lang) return;
-
-      setCookie("BBLANG", lang, 7);
-      location.reload();
-    });
-
-    const current = getCookie("BBLANG");
-
-    if (current) {
-      if (
-        link.dataset.lang === current ||
-        link.getAttribute("value") === current
-      ) {
-        link.classList.add("active");
-      }
-    }
-
-  });
-}
-
-document.addEventListener("DOMContentLoaded", initLanguageSelector);
-
-</script>
 </body>
 </html>

@@ -48,7 +48,7 @@ To upgrade to a newer version of the Tide theme, perform the following:
 
 3. Rename this directory to `tide`.
 
-4. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets`. Pay close attention if you have customized the CSS file at `FOSSBilling directory/themes/tide/assets/css/extra.css`.
+4. Backup your `FOSSBilling directory/themes/tide/config/settings_data.json` and any custom assets located at `FOSSBilling directory/themes/tide/assets/custom` and `FOSSBilling directory/themes/tide/html/custom`.
 
 5. Move the renamed `tide` directory into your FOSSBilling themes folder: `FOSSBilling directory/themes`, overwriting all files.
 
@@ -65,7 +65,78 @@ For versions of Tide installed prior to 0.9.5, implement these security measures
 
 ## Theme Customization
 
-Tide allows you to replace default colours with custom ones, enabling you to align the theme with your branding. To make these changes, edit the `FOSSBilling directory/themes/tide/assets/css/extra.css` file as per the comments provided within it. Make sure to back up this file before upgrading and restore it after the upgrade process is complete.
+Tide is designed to be safely customizable without modifying core template files.  
+To prevent your changes from being overwritten during updates, use the supported customization methods below.
+
+### 1. Dashboard Layout
+
+Tide provides optional hook points that allow you to extend specific dashboard areas without editing core files.
+
+To use them, create the following files inside `FOSSBilling directory/themes/tide/html/custom/`:
+
+`dashboard.top.twig` – customizes the top area of the dashboard  
+`dashboard.widgets.twig` – customizes the widgets section  
+`dashboard.bottom.twig` – customizes the bottom area of the dashboard  
+
+Each file corresponds to its respective dashboard area.  
+It is safe if one or more of these files are missing — Tide will continue to function normally.
+
+For consistent layout and spacing, follow the default Tide dashboard structure:
+
+- For `dashboard.top.twig` and `dashboard.bottom.twig`, wrap your content inside a Bootstrap `row row-cards` container and place elements inside `card` components.
+- For `dashboard.widgets.twig`, use a standard `row`, as it is already rendered within the dashboard widgets grid context.
+
+This ensures visual consistency with the default Tide dashboard styling.
+
+### 2. Theme Colours
+
+Tide allows you to replace the default colours with custom ones, so you can align the theme with your branding.
+
+1. Create the following file to load your custom CSS automatically:
+
+`FOSSBilling directory/themes/tide/html/custom/head.extra.twig`
+
+Paste this content inside:
+
+```twig
+<link href="{{ 'custom/extra.css' | asset_url }}" rel="stylesheet"/>
+```
+
+2. Create `FOSSBilling directory/themes/tide/assets/custom/extra.css` and place your custom CSS overrides inside it, following the example below.
+
+```css
+.bg-primary {
+     background-color: #your-color !important;
+}
+.text-primary {
+     color: #your-color !important;
+}
+.btn-primary {
+     background-color: #your-color !important;
+     border-color: #your-color !important;
+}
+.btn-primary:hover {
+     background-color: #your-hover-color !important;
+     border-color: #your-hover-color !important;
+}
+.btn-primary:focus {
+     background-color: #your-focus-color !important;
+     border-color: #your-focus-color !important;
+     box-shadow: 0 0 0 0.2rem rgba(#your-color, 0.5) !important;
+}
+.btn-primary:active {
+     background-color: #your-active-color !important;
+     border-color: #your-active-color !important;
+}
+.btn-primary:disabled {
+     background-color: #your-disabled-color !important;
+     border-color: #your-disabled-color !important;
+}
+```
+
+Because this file is placed under `assets/custom/`, it is not part of the standard Tide files and will not be rewritten during a normal update.
+
+Backups are still encouraged as a best practice. However, you should not need to restore this file after upgrading unless your update process deletes the entire theme folder.
 
 ## Support
 

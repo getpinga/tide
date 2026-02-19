@@ -249,6 +249,8 @@
           {% set rowClass = 'justify-content-center' %}
         {% endif %}
 
+        {% include 'custom/dashboard.top.twig' ignore missing %}
+
         <div class="row row-cards {{ rowClass }}">
             {% set domainProducts = guest.product_get_list({ "type": "domain" }) %}
             {% if domainProducts.list|length > 0 %}
@@ -268,6 +270,8 @@
                 </div>
             </div>
             {% endif %}
+
+            {% include 'custom/dashboard.widgets.twig' ignore missing %}
 
             <div class="{{ colClass }} d-flex">
                 <div class="card bg-red text-red-fg d-print-none h-100 w-100">
@@ -375,6 +379,8 @@
             </div>
             {% endif %}
         </div>
+
+        {% include 'custom/dashboard.bottom.twig' ignore missing %}
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {
