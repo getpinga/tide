@@ -103,19 +103,19 @@
                     <div class="row g-3">
                       <div class="col-12 col-md-6">
                         <label for="ns1" class="form-label">{{ 'Nameserver 1'|trans }}</label>
-                        <input class="form-control" type="text" name="ns1" id="ns1" value="{{ request.ns1|default(service.ns1) }}" required>
+                        <input class="form-control" type="text" name="ns1" id="ns1" value="{{ request.ns1|default(service.ns1) }}" autocapitalize="off" required>
                       </div>
                       <div class="col-12 col-md-6">
                         <label for="ns2" class="form-label">{{ 'Nameserver 2'|trans }}</label>
-                        <input class="form-control" type="text" name="ns2" id="ns2" value="{{ request.ns2|default(service.ns2) }}" required>
+                        <input class="form-control" type="text" name="ns2" id="ns2" value="{{ request.ns2|default(service.ns2) }}" autocapitalize="off" required>
                       </div>
                       <div class="col-12 col-md-6">
                         <label for="ns3" class="form-label">{{ 'Nameserver 3'|trans }}</label>
-                        <input class="form-control" type="text" name="ns3" id="ns3" value="{{ request.ns3|default(service.ns3) }}">
+                        <input class="form-control" type="text" name="ns3" id="ns3" value="{{ request.ns3|default(service.ns3) }}" autocapitalize="off">
                       </div>
                       <div class="col-12 col-md-6">
                         <label for="ns4" class="form-label">{{ 'Nameserver 4'|trans }}</label>
-                        <input class="form-control" type="text" name="ns4" id="ns4" value="{{ request.ns4|default(service.ns4) }}">
+                        <input class="form-control" type="text" name="ns4" id="ns4" value="{{ request.ns4|default(service.ns4) }}" autocapitalize="off">
                       </div>
                     </div>
 
@@ -219,7 +219,7 @@
 
                         <div class="col-12 col-md-6">
                           <label for="whois_email" class="form-label">{{ 'Email'|trans }}</label>
-                          <input class="form-control" type="text" name="contact[email]" id="whois_email" value="{{ request.email|default(service.contact.email) }}" required>
+                          <input class="form-control" type="text" name="contact[email]" id="whois_email" value="{{ request.email|default(service.contact.email) }}" autocapitalize="off" required>
                         </div>
 
                         <div class="col-12 col-md-6">
