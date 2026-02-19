@@ -56,7 +56,11 @@ To upgrade to a newer version of the Tide theme, perform the following:
 
 7. Change the directory owner to the web server user. For example: `chown -Rf www-data:www-data tide/`. Set permissions to `750` using chmod: `chmod -Rf 750 tide/`.
 
-## Security Measures for Prior Installations (Before 0.9.5)
+### Upgrade from v1.1.3
+
+If you customized your CSS in v1.1.3 or earlier, move `FOSSBilling directory/themes/tide/assets/css/extra.css` to `FOSSBilling directory/themes/tide/assets/custom/extra.css` before upgrading and follow Section 2 of the Theme Customization section below.
+
+### Security Measures for Prior Installations (Before 0.9.5)
 
 For versions of Tide installed prior to 0.9.5, implement these security measures:
 
