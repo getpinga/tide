@@ -266,6 +266,35 @@
                             </div>
                         </div>
                         <p class="text-muted text-center mt-4" id="info-text">Search for your perfect domain name.</p>
+                        {% set domainProduct = (domainProducts.list|first) %}
+                        {% set pricing = domainProduct.pricing ?? {} %}
+                        {% set currency = guest.cart_get_currency %}
+
+                        {% set chips = pricing
+                          |filter(item => (item.active ?? 0) == 1)
+                          |sort((a, b) => a.tld <=> b.tld)
+                          |slice(0, 8)
+                        %}
+
+                        {% if chips|length > 0 %}
+                          <div class="mt-4">
+                            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                              {% set colors = ['azure', 'indigo', 'purple', 'pink', 'teal', 'green', 'orange'] %}
+                              {% for item in chips %}
+                                {% set color = colors[loop.index0 % colors|length] %}
+                                <div class="btn btn-light" style="pointer-events:none;">
+                                  <span class="fw-bold" style="letter-spacing:-0.01em;">{{ item.tld }}</span>
+                                  <span class="badge bg-{{ color }} text-{{ color }}-fg ms-2">
+                                    {{ currency.format|replace({
+                                      '{{price}}': (item.price_registration * currency.conversion_rate)
+                                        |number_format(2, '.', ',')
+                                    }) }}
+                                  </span>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% endif %}
                     </form>
                 </div>
             </div>
