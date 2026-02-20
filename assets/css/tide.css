@@ -1,3 +1,12 @@
+html {
+  scrollbar-gutter: stable;
+}
+@media (min-width: 992px) {
+  :root {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
 :root {
     --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
 }
