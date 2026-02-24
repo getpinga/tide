@@ -340,15 +340,10 @@
     <legend>{{ 'Checkout'|trans }}</legend>
     <table>
     <tr>
-        <td><label>{{ 'Terms of service / privacy policy requirement for the checkout screen'|trans }}</label></td>
-        <td>
-            <select name="checkout_tos">
-                <option value="explicit">{{ 'Explicit agreement'|trans }}</option>
-                <option value="implicit">{{ 'Implicit agreement'|trans }}</option>
-                <option value="none">{{ 'None'|trans }}</option>
-            </select>
-        </td>
+        <td><label>{{ 'Registrant information URL'|trans }}</label></td>
+        <td><input type="text" name="registrant_information" name="registrant_information" value="" placeholder="https://example.com/information-for-registrants"><span></td>
     </tr>
+
     </table>
 </fieldset>
 

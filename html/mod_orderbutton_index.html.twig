@@ -405,6 +405,7 @@
                        </div>
                        {% endif %}
 
+                       {% if settings.registrant_information is defined and settings.registrant_information %}
                        <div class="card card-sm border">
                          <div class="card-body d-flex align-items-center justify-content-between">
                            <div class="d-flex align-items-center">
@@ -417,13 +418,14 @@
                              </div>
                            </div>
 
-                           <a href="information-for-registrants"
+                           <a href="{{ settings.registrant_information }}"
                               target="_blank" rel="noopener"
                               class="btn btn-sm btn-outline-primary">
                              View
                            </a>
                          </div>
                        </div>
+                       {% endif %}
 
                      </div>
 
