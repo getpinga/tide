@@ -288,143 +288,189 @@
       </div>
     </div>
 
-    {% block js %}
-        <script>
-            const DOMAIN_LOCKED_TEXT   = "{{ 'Locked'|trans }}";
-            const DOMAIN_UNLOCKED_TEXT = "{{ 'Unlocked'|trans }}";
-            const PRIVACY_ENABLED_TEXT  = "{{ 'Enabled'|trans }}";
-            const PRIVACY_DISABLED_TEXT = "{{ 'Disabled'|trans }}";
-            
-            const TXT_REVEAL   = "{{ 'Reveal'|trans }}";
-            const TXT_LOADING  = "{{ 'Loading...'|trans }}";
-            const TXT_COPY     = "{{ 'Copy'|trans }}";
-            const TXT_COPIED   = "{{ 'Copied'|trans }}";
-            const TXT_FAILED   = "{{ 'Failed'|trans }}";
-            const MASKED_EPP   = "••••••••••••";
-            
-            let eppHideTimer = null;
+{% block js %}
+<script>
+const DOMAIN_LOCKED_TEXT    = "{{ 'Locked'|trans }}";
+const DOMAIN_UNLOCKED_TEXT  = "{{ 'Unlocked'|trans }}";
+const PRIVACY_ENABLED_TEXT  = "{{ 'Enabled'|trans }}";
+const PRIVACY_DISABLED_TEXT = "{{ 'Disabled'|trans }}";
 
-            function resetEppUI() {
-              const $value = $('#epp-code-value');
-              const $btn   = $('#epp-code-reveal');
+const TXT_REVEAL  = "{{ 'Reveal'|trans }}";
+const TXT_LOADING = "{{ 'Loading...'|trans }}";
+const TXT_COPY    = "{{ 'Copy'|trans }}";
+const TXT_COPIED  = "{{ 'Copied'|trans }}";
+const TXT_FAILED  = "{{ 'Failed'|trans }}";
+const MASKED_EPP  = "••••••••••••";
 
-              $value
-                .text(MASKED_EPP)
-                .addClass('text-muted')
-                .removeClass('fw-bold text-dark');
+let eppHideTimer = null;
 
-              $btn
-                .prop('disabled', false)
-                .removeClass('btn-outline-success')
-                .addClass('btn-outline-secondary')
-                .text(TXT_REVEAL)
-                .removeData('epp');
-            }
+function resetEppUI() {
+    const value = document.getElementById('epp-code-value');
+    const btn   = document.getElementById('epp-code-reveal');
 
-            function scheduleEppHide() {
-              if (eppHideTimer) clearTimeout(eppHideTimer);
-              eppHideTimer = setTimeout(resetEppUI, 30000); // 30 sec
-            }
+    value.textContent = MASKED_EPP;
+    value.classList.add('text-muted');
+    value.classList.remove('fw-bold', 'text-dark');
 
-            function setLockBadge(isLocked) {
-                const $b = $('#domain-lock-badge');
+    btn.disabled = false;
+    btn.classList.remove('btn-outline-success');
+    btn.classList.add('btn-outline-secondary');
+    btn.textContent = TXT_REVEAL;
 
-                $b.toggleClass('bg-green text-green-fg', isLocked);
-                $b.toggleClass('bg-yellow text-yellow-fg', !isLocked);
+    delete btn.dataset.epp;
+}
 
-                $b.text(isLocked ? DOMAIN_LOCKED_TEXT : DOMAIN_UNLOCKED_TEXT);
-            }
+function scheduleEppHide() {
+    if (eppHideTimer) clearTimeout(eppHideTimer);
+    eppHideTimer = setTimeout(resetEppUI, 30000); // 30 sec
+}
 
-            function setPrivacyBadge(isEnabled) {
-                const $b = $('#domain-privacy-badge');
+function setLockBadge(isLocked) {
+    const b = document.getElementById('domain-lock-badge');
 
-                $b.toggleClass('bg-green text-green-fg', isEnabled);
-                $b.toggleClass('bg-secondary text-secondary-fg', !isEnabled);
+    b.classList.toggle('bg-green', isLocked);
+    b.classList.toggle('text-green-fg', isLocked);
 
-                $b.text(isEnabled ? PRIVACY_ENABLED_TEXT : PRIVACY_DISABLED_TEXT);
-            }
-            
-            document.getElementById('domain-lock').addEventListener('click', function(event) {
-                event.preventDefault();
+    b.classList.toggle('bg-yellow', !isLocked);
+    b.classList.toggle('text-yellow-fg', !isLocked);
 
-                API.client.post('servicedomain/lock', { order_id: {{ order.id }} },
-                    () => {
-                        FOSSBilling.message('Domain locked');
+    b.textContent = isLocked ? DOMAIN_LOCKED_TEXT : DOMAIN_UNLOCKED_TEXT;
+}
 
-                        document.getElementById('domain-lock').style.display =
-                            document.getElementById('domain-lock').style.display === 'none' ? '' : 'none';
-                        document.getElementById('domain-unlock').style.display =
-                            document.getElementById('domain-unlock').style.display === 'none' ? '' : 'none';
-                        setLockBadge(true);
-                    });
-            });
-            
-            document.getElementById('domain-unlock').addEventListener('click', function(event) {
-                event.preventDefault();
+function setPrivacyBadge(isEnabled) {
+    const b = document.getElementById('domain-privacy-badge');
 
-                API.client.post('servicedomain/unlock', { order_id: {{ order.id }} },
-                    () => {
-                        FOSSBilling.message('Domain unlocked');
+    b.classList.toggle('bg-green', isEnabled);
+    b.classList.toggle('text-green-fg', isEnabled);
 
-                        document.getElementById('domain-lock').style.display =
-                            document.getElementById('domain-lock').style.display === 'none' ? '' : 'none';
-                        document.getElementById('domain-unlock').style.display =
-                            document.getElementById('domain-unlock').style.display === 'none' ? '' : 'none';
-                        setLockBadge(false);    
-                    });
-            });
-            
-            document.getElementById('domain-enable-pp').addEventListener('click', function(event) {
-                event.preventDefault();
+    b.classList.toggle('bg-secondary', !isEnabled);
+    b.classList.toggle('text-secondary-fg', !isEnabled);
 
-                API.client.post('servicedomain/enable_privacy_protection', { order_id: {{ order.id }} },
-                    (result) =>{
-                        FOSSBilling.message('Privacy Protection enabled');
+    b.textContent = isEnabled ? PRIVACY_ENABLED_TEXT : PRIVACY_DISABLED_TEXT;
+}
 
-                        const enableBtn = document.getElementById('domain-enable-pp');
-                        const disableBtn = document.getElementById('domain-disable-pp');
+function toggleDisplay(idA, idB) {
+    const a = document.getElementById(idA);
+    const b = document.getElementById(idB);
 
-                        enableBtn.style.display = enableBtn.style.display === 'none' ? '' : 'none';
-                        disableBtn.style.display = disableBtn.style.display === 'none' ? '' : 'none';
-                        setPrivacyBadge(true);
-                    });
-            });
+    a.style.display = (a.style.display === 'none') ? '' : 'none';
+    b.style.display = (b.style.display === 'none') ? '' : 'none';
+}
 
-            document.getElementById('domain-disable-pp').addEventListener('click', function(event) {
-                event.preventDefault();
+function apiFailToast(err) {
+    let msg = TXT_FAILED;
+    if (typeof err === 'string' && err.trim()) msg = err.trim();
+    else if (err && typeof err === 'object') {
+        const maybe = err.message || err.error || err.msg;
+        if (typeof maybe === 'string' && maybe.trim()) msg = maybe.trim();
+    }
+    FOSSBilling.message(msg);
+}
 
-                API.client.post('servicedomain/disable_privacy_protection', { order_id: {{ order.id }} },
-                    (result) => {
-                        FOSSBilling.message('Privacy Protection disabled');
+document.getElementById('domain-lock').addEventListener('click', function (event) {
+    event.preventDefault();
 
-                        const enableBtn = document.getElementById('domain-enable-pp');
-                        const disableBtn = document.getElementById('domain-disable-pp');
+    API.client.post(
+        'servicedomain/lock',
+        { order_id: {{ order.id }} },
+        () => {
+            FOSSBilling.message('Domain locked');
+            toggleDisplay('domain-lock', 'domain-unlock');
+            setLockBadge(true);
+        },
+        (err) => apiFailToast(err)
+    );
+});
 
-                        enableBtn.style.display = enableBtn.style.display === 'none' ? '' : 'none';
-                        disableBtn.style.display = disableBtn.style.display === 'none' ? '' : 'none';
-                        setPrivacyBadge(false);
-                    }
-                );
-            });
+document.getElementById('domain-unlock').addEventListener('click', function (event) {
+    event.preventDefault();
 
-            document.getElementById('epp-code-reveal').addEventListener('click', function (event) {
-                event.preventDefault();
+    API.client.post(
+        'servicedomain/unlock',
+        { order_id: {{ order.id }} },
+        () => {
+            FOSSBilling.message('Domain unlocked');
+            toggleDisplay('domain-lock', 'domain-unlock');
+            setLockBadge(false);
+        },
+        (err) => apiFailToast(err)
+    );
+});
 
-                const btn   = this;
-                const value = document.getElementById('epp-code-value');
+document.getElementById('domain-enable-pp').addEventListener('click', function (event) {
+    event.preventDefault();
 
-                API.client.post(
-                    'servicedomain/get_transfer_code',
-                    { order_id: {{ order.id }} },
+    API.client.post(
+        'servicedomain/enable_privacy_protection',
+        { order_id: {{ order.id }} },
+        () => {
+            FOSSBilling.message('Privacy Protection enabled');
+            toggleDisplay('domain-enable-pp', 'domain-disable-pp');
+            setPrivacyBadge(true);
+        },
+        (err) => apiFailToast(err)
+    );
+});
 
-                    (result) => {
-                        const code = result && result.trim() ? result : '************';
-                        value.textContent = code;
-                        navigator.clipboard.writeText(code);
-                        btn.textContent = 'Copied';
-                    }
-                );
-            });
-        </script>
-    {% endblock %}
+document.getElementById('domain-disable-pp').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    API.client.post(
+        'servicedomain/disable_privacy_protection',
+        { order_id: {{ order.id }} },
+        () => {
+            FOSSBilling.message('Privacy Protection disabled');
+            toggleDisplay('domain-enable-pp', 'domain-disable-pp');
+            setPrivacyBadge(false);
+        },
+        (err) => apiFailToast(err)
+    );
+});
+
+document.getElementById('epp-code-reveal').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    const btn   = this;
+    const value = document.getElementById('epp-code-value');
+
+    btn.disabled = true;
+    btn.textContent = TXT_LOADING;
+
+    API.client.post(
+        'servicedomain/get_transfer_code',
+        { order_id: {{ order.id }} },
+        (result) => {
+            const code = (typeof result === 'string' && result.trim()) ? result.trim() : '************';
+
+            value.textContent = code;
+            value.classList.remove('text-muted');
+            value.classList.add('fw-bold', 'text-dark');
+
+            Promise.resolve(navigator.clipboard && navigator.clipboard.writeText
+                ? navigator.clipboard.writeText(code)
+                : Promise.reject(new Error('Clipboard not available')))
+                .then(() => {
+                    btn.textContent = TXT_COPIED;
+                    btn.classList.remove('btn-outline-secondary');
+                    btn.classList.add('btn-outline-success');
+                })
+                .catch(() => {
+                    btn.textContent = TXT_COPY;
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    scheduleEppHide();
+                });
+        },
+        (err) => {
+            apiFailToast(err);
+            btn.disabled = false;
+            btn.textContent = TXT_FAILED;
+            setTimeout(() => { btn.textContent = TXT_REVEAL; }, 1500);
+        }
+    );
+});
+</script>
+{% endblock %}
+
 {% endif %}
