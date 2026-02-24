@@ -1,67 +1,6 @@
 {% set periods = guest.system_periods %}
 {% set pricing = product.pricing %}
 {% set transfer_tlds = guest.serviceDomain_tlds({ "allow_transfer": 1 })%}
-<style>
-@media (max-width: 768px) {
-    .table-responsive {
-        overflow-x: hidden;
-    }
-
-    .table-responsive table, 
-    .table-responsive thead, 
-    .table-responsive tbody, 
-    .table-responsive th, 
-    .table-responsive td, 
-    .table-responsive tr {
-        display: block;
-        width: 100%;
-    }
-
-    .table-responsive thead {
-        display: none;
-    }
-
-    .table-responsive tbody tr {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 10px;
-        width: 100%;
-    }
-
-    .table-responsive tbody td {
-        display: block;
-        position: relative;
-        padding-left: 40%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #dee2e6;
-        width: 100%;
-        box-sizing: border-box;
-        text-align: right;
-    }
-
-    .table-responsive tbody td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        font-weight: bold;
-        color: #495057;
-        white-space: nowrap;
-        text-align: left;
-        width: 30%;
-        box-sizing: border-box;
-    }
-
-    .table-responsive tbody td:last-child {
-        border-bottom: none;
-    }
-}
-</style>
-
 <div class="card">
     <div class="card-body" id="register">
     {% if guest.extension_is_on({"mod":"domainsbot"}) %}
@@ -252,44 +191,53 @@
 {% set sorted_tlds = pricing|keys|sort((a, b) => a <=> b) %}
 <div class="card mt-3">
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>{{ 'Domain'|trans }}</th>
-                        <th>{{ 'Registration'|trans }}</th>
-                        <th>{{ 'Renewal'|trans }}</th>
-                        <th>{{ 'Transfer'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tld in sorted_tlds %}
-                        {% set details = pricing[tld] %}
-                        {% if details.active == 1 %}
-                            <tr>
-                                <td data-label="{{ 'Domain'|trans }}">{{ tld }}</td>
-                                <td data-label="{{ 'Registration'|trans }}">
-                                    {% if details.allow_register == 1 %}
-                                        {{ currency.format|replace({'{{price}}': (details.price_registration * currency.conversion_rate)|number_format(2, '.', ',') }) }}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                </td>
-                                <td data-label="{{ 'Renewal'|trans }}">
-                                    {{ currency.format|replace({'{{price}}': (details.price_renew * currency.conversion_rate)|number_format(2, '.', ',') }) }}
-                                </td>
-                                <td data-label="{{ 'Transfer'|trans }}">
-                                    {% if details.allow_transfer == 1 %}
-                                        {{ currency.format|replace({'{{price}}': (details.price_transfer * currency.conversion_rate)|number_format(2, '.', ',') }) }}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="row row-cards justify-content-center">
+            {% for tld in sorted_tlds %}
+                {% set details = pricing[tld] %}
+                {% if details.active == 1 %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card card-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                  <div class="h2 fw-bold text-primary m-0">{{ tld }}</div>
+                                  <span class="text-muted small">{{ 'per year'|trans }}</span>
+                                </div>
+
+                                <div class="hr my-3"></div>
+
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="text-secondary">{{ 'Registration'|trans }}</div>
+                                    <div class="fw-bold text-primary">
+                                        {% if details.allow_register == 1 %}
+                                            {{ currency.format|replace({'{{price}}': (details.price_registration * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                        {% else %}
+                                            <span class="text-secondary">—</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="text-secondary">{{ 'Renewal'|trans }}</div>
+                                    <div class="fw-semibold">
+                                        {{ currency.format|replace({'{{price}}': (details.price_renew * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="text-secondary">{{ 'Transfer'|trans }}</div>
+                                    <div class="fw-semibold">
+                                        {% if details.allow_transfer == 1 %}
+                                            {{ currency.format|replace({'{{price}}': (details.price_transfer * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                        {% else %}
+                                            <span class="text-secondary">—</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
