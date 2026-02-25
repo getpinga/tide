@@ -314,7 +314,7 @@
                    <div class="form-check">
                      <input class="form-check-input" type="checkbox" id="agreeTerms" name="agree_terms" required>
                      <label class="form-check-label" for="agreeTerms">
-                       {{ 'Before completing your registration, you must agree to the following documents:'|trans }}
+                       {{ 'Before completing your order, you must agree to the following documents:'|trans }}
                      </label>
                    </div>
                    {% set has_ge = cart.items|filter(i => i.type == 'domain' and (i.register_tld == '.ge' or i.transfer_tld == '.ge'))|length > 0 %}
