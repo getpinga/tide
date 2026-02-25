@@ -13,15 +13,15 @@
     {% endif %}
         <div id="domain-search-transfer-form">
             <div class="row g-2 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
-                <div class="col-12 col-md">
+                <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
                 </div>
-                <div class="col-12 col-md-4 d-flex gap-2 flex-wrap flex-md-nowrap align-items-center">
-                    <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0 ms-md-auto" type="button" id="domain-check">{{ 'Search'|trans }}</button>
+                <div class="col-12 col-md-4 d-flex gap-2">
+                    <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="domain-check">{{ 'Search'|trans }}</button>
                     {% if transfer_tlds is not empty %}
                         <button class="btn btn-success btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="transfer-check">{{ 'Transfer'|trans }}</button>
                     {% endif %}
-                    <div id="registration-wrap" class="d-flex align-items-center gap-2 onAfterDomainCheck flex-grow-1 w-100" style="display:none;">
+                    <div id="registration-wrap" class="d-flex align-items-center gap-2 onAfterDomainCheck" style="display:none;">
                       <select class="form-select form-select-lg" name="register_years" id="registration-years" style="display:none;"></select>
 
                       <span id="registration-price"
