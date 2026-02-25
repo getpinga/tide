@@ -323,6 +323,20 @@ function hideTldPricingCard() {
   if (card) card.style.display = 'none';
 }
 
+const CURRENCY_FORMAT = "{{ currency.format|e('js') }}";
+const PRICE_TOKEN = "{{ '{{' ~ 'price' ~ '}}' }}";
+
+function formatMoney(amount) {
+  const value = Number(amount).toFixed(2);
+
+  const parts = value.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  const formatted = parts.join('.');
+
+  return CURRENCY_FORMAT.split(PRICE_TOKEN).join(formatted);
+}
+
 function fadeIn(el, display = 'block', durationMs = 150) {
     if (!el) return;
 
@@ -580,12 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const totalPrice =
                         years === 1 ? regPrice : regPrice + (years - 1) * renewPrice;
 
-                    const formattedPrice = bb.currency(
-                        totalPrice,
-                        {{ currency.conversion_rate }},
-                        "{{ currency.code }}",
-                        1
-                    );
+                    const formattedPrice = formatMoney(totalPrice * {{ currency.conversion_rate }});
 
                     const label = years === 1
                       ? `${years} {{ 'year'|trans }}`
@@ -629,11 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { tld: tld },
             function (result) {
 
-                const price = bb.currency(
-                    result.price_transfer,
-                    {{ currency.conversion_rate }},
-                    "{{ currency.code }}"
-                );
+                const price = formatMoney(Number(result.price_transfer) * {{ currency.conversion_rate }});
 
                 const transferPriceEl = document.getElementById('transfer-price');
                 if (transferPriceEl) {
