@@ -278,6 +278,11 @@ document.addEventListener("DOMContentLoaded", function () {
         input.dispatchEvent(new Event("change", { bubbles: true }));
 
         sessionStorage.removeItem("namingo_domain");
+
+        setTimeout(() => {
+            const btn = document.getElementById("domain-check");
+            if (btn) btn.click();
+        }, 50);
     }
 
 });
