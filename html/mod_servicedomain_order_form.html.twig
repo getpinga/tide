@@ -167,33 +167,34 @@
                 </div>
               </div>
             </div>
-
-            <div class="mb-3" id="config-next-domain">
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M7 7l5 5l-5 5"></path>
-                        <path d="M13 7l5 5l-5 5"></path>
-                    </svg>
-                    {{ 'Next'|trans }}
-                </button>
-            </div>
-            <div class="mb-3" id="config-next-domain2">
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M7 7l5 5l-5 5"></path>
-                        <path d="M13 7l5 5l-5 5"></path>
-                    </svg>
-                    {{ 'Next'|trans }}
-                </button>
-            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none justify-content-end gap-2" id="register-footer">
+        <div style="display:none;" id="config-next-domain">
+            <button type="submit" class="btn btn-primary px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 7l5 5l-5 5"></path>
+                    <path d="M13 7l5 5l-5 5"></path>
+                </svg>
+                {{ 'Next'|trans }}
+            </button>
+        </div>
+        <div style="display:none;" id="config-next-domain2">
+            <button type="submit" class="btn btn-primary px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 7l5 5l-5 5"></path>
+                    <path d="M13 7l5 5l-5 5"></path>
+                </svg>
+                {{ 'Next'|trans }}
+            </button>
         </div>
     </div>
 </div>
 {% set currency = guest.cart_get_currency %}
 {% set sorted_tlds = pricing|keys|sort((a, b) => a <=> b) %}
-<div class="card mt-3">
+<div id="tld-pricing-card" class="card mt-3">
     <div class="card-body">
         <div class="row row-cards justify-content-center">
             {% for tld in sorted_tlds %}
@@ -301,6 +302,27 @@ function hide(el) {
     el.style.display = 'none';
 }
 
+function hideFooter() {
+  const el = document.getElementById('register-footer');
+  if (!el) return;
+
+  el.classList.remove('d-flex');
+  el.classList.add('d-none');
+}
+
+function showFooter() {
+  const el = document.getElementById('register-footer');
+  if (!el) return;
+
+  el.classList.remove('d-none');
+  el.classList.add('d-flex');
+}
+
+function hideTldPricingCard() {
+  const card = document.getElementById('tld-pricing-card');
+  if (card) card.style.display = 'none';
+}
+
 function fadeIn(el, display = 'block', durationMs = 150) {
     if (!el) return;
 
@@ -322,6 +344,7 @@ function fadeIn(el, display = 'block', durationMs = 150) {
 document.addEventListener("DOMContentLoaded", () => {
     hide(document.getElementById('config-next-domain'));
     hide(document.getElementById('config-next-domain2'));
+    hideFooter();
 
     document.querySelectorAll('.onAfterDomainCheck, .onAfterDomainCheck2').forEach(hide);
     hide(document.getElementById('domain-transfer-config'));
@@ -425,6 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 { sld: sld, tld: tld },
                 function (result) {
                     setTransferPricing(tld);
+                    hideTldPricingCard();
 
                     const domainNameEl = document.getElementById('domain-name');
                     if (domainNameEl) domainNameEl.textContent = domain;
@@ -497,6 +521,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 { sld: sld, tld: tld },
                 function (result) {
                     setPricing(tld);
+                    hideTldPricingCard();
 
                     const domainNameEl = document.getElementById('domain-name');
                     if (domainNameEl) domainNameEl.textContent = domain;
@@ -590,6 +615,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 fadeIn(document.getElementById('registration-wrap'), 'flex');
                 fadeIn(document.getElementById('registration-years'), '');
                 show(document.getElementById('config-next-domain'));
+                showFooter();
             },
             function (err) {
                 FOSSBilling.message(err?.message || "Could not load pricing");
@@ -619,6 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (nextBtnWrap) {
                     nextBtnWrap.style.display = '';
                 }
+                showFooter();
 
                 const nextBtn = nextBtnWrap ? nextBtnWrap.querySelector('button[type="submit"]') : null;
                 if (nextBtn) {
