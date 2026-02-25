@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const input = document.querySelector('input[name="domain_name"]');
 
     if (input) {
-        input.value = domain;
+        input.value = (domain || '').toLowerCase();
 
         input.dispatchEvent(new Event("input", { bubbles: true }));
         input.dispatchEvent(new Event("change", { bubbles: true }));
