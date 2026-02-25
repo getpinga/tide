@@ -16,19 +16,18 @@
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
                 </div>
-                <div class="col-12 col-md-4 d-flex gap-2">
+                <div class="col-12 col-md-4 d-flex gap-2 align-items-center flex-nowrap">
                     <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="domain-check">{{ 'Search'|trans }}</button>
                     {% if transfer_tlds is not empty %}
                         <button class="btn btn-success btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="transfer-check">{{ 'Transfer'|trans }}</button>
                     {% endif %}
-                    <div id="registration-wrap" class="d-flex align-items-center gap-2 onAfterDomainCheck" style="display:none;">
+                    <div id="registration-wrap" class="d-flex align-items-center gap-3 flex-grow-1 justify-content-end onAfterDomainCheck" style="display:none;">
                       <select class="form-select form-select-lg" name="register_years" id="registration-years" style="display:none;"></select>
 
-                      <span id="registration-price" class="badge bg-primary-lt text-primary fw-semibold text-nowrap px-3 py-2" style="display:none;">
-                      </span>
+                      <span id="registration-price" class="fw-bold fs-3 text-primary text-nowrap ms-2" style="display:none;"></span>
                     </div>
-                    <input type="text" class="form-control form-control-lg flex-grow-1 mt-2 mt-md-0 ms-md-2" name="transfer_code" id="domain-transfer-config" style="display:none; min-width: 220px;" placeholder="{{ 'Enter domain transfer code'|trans }}" />
-                    <span id="transfer-price" class="badge bg-success-lt text-success fw-semibold text-nowrap px-3 py-2" style="display:none;"></span>
+                    <input type="text" class="form-control form-control-lg flex-grow-1 mt-2 mt-md-0 ms-md-2" name="transfer_code" id="domain-transfer-config" style="display:none; min-width: 180px;" placeholder="{{ 'Enter transfer code'|trans }}" />
+                    <span id="transfer-price" class="fw-bold fs-3 text-success text-nowrap ms-2 align-self-center" style="display:none;"></span>
                 </div>
             </div>
             <p class="text-muted text-center mt-4" id="info-text">Search for your perfect domain name{% if transfer_tlds is not empty %} or transfer an existing one{% endif %}.</p>
