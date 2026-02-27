@@ -15,6 +15,13 @@
             <div class="row g-2 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
+                    <div id="domain-selected" class="form-control form-control-lg d-none">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="fw-semibold text-body text-truncate">
+                          <span id="domain-selected-text"></span>
+                        </div>
+                      </div>
+                    </div>
                 </div>
                 <div class="col-12 col-md-4 d-flex gap-2 align-items-center flex-nowrap">
                     <button class="btn btn-primary btn-lg w-100 w-md-auto flex-fill flex-md-grow-0" type="button" id="domain-check">{{ 'Search'|trans }}</button>
@@ -323,6 +330,42 @@ function hideTldPricingCard() {
   if (card) card.style.display = 'none';
 }
 
+function showTldPricingCard() {
+  const card = document.getElementById('tld-pricing-card');
+  if (card) card.style.display = '';
+}
+
+function lockDomainInput(domain) {
+  const input = document.querySelector('input[name="domain_name"]');
+  const box = document.getElementById('domain-selected');
+  const text = document.getElementById('domain-selected-text');
+
+  if (!input || !box || !text) return;
+
+  input.value = (domain || '').trim();
+
+  input.removeAttribute('required');
+
+  input.classList.add('d-none');
+  box.classList.remove('d-none');
+  text.textContent = input.value;
+}
+
+function unlockDomainInput() {
+  const input = document.querySelector('input[name="domain_name"]');
+  const box = document.getElementById('domain-selected');
+  const text = document.getElementById('domain-selected-text');
+
+  if (!input || !box || !text) return;
+
+  input.classList.remove('d-none');
+  box.classList.add('d-none');
+  text.textContent = '';
+
+  input.readOnly = false;
+  input.focus();
+}
+
 const CURRENCY_FORMAT = "{{ currency.format|e('js') }}";
 const PRICE_TOKEN = "{{ '{{' ~ 'price' ~ '}}' }}";
 
@@ -467,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const domainNameEl = document.getElementById('domain-name');
                     if (domainNameEl) domainNameEl.textContent = domain;
 
-                    domainInput.readOnly = true;
+                    lockDomainInput(domain);
 
                     const transferPrice = document.getElementById('transfer-price');
                     if (transferPrice) fadeIn(transferPrice);
@@ -540,7 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const domainNameEl = document.getElementById('domain-name');
                     if (domainNameEl) domainNameEl.textContent = domain;
 
-                    domainInput.readOnly = true;
+                    lockDomainInput(domain);
 
                     document.querySelectorAll('.onAfterDomainCheck').forEach(el => fadeIn(el));
                     document.querySelectorAll('.onAfterDomainCheck2').forEach(el => fadeIn(el));
