@@ -15,7 +15,7 @@
             <div class="row g-2 mb-3 {% if guest.extension_is_on({"mod":"domainsbot"}) %}mt-6{% endif %}">
                 <div class="col-12 col-md-8">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter your domain name" aria-label="Domain Name" name="domain_name" value="{{ request.domain_name }}" autocapitalize="none" required>
-                    <div id="domain-selected" class="form-control form-control-lg d-none">
+                    <div id="domain-selected" class="form-control form-control-lg d-none bg-light">
                       <div class="d-flex align-items-center justify-content-between">
                         <div class="fw-semibold text-body text-truncate">
                           <span id="domain-selected-text"></span>
@@ -31,10 +31,10 @@
                     <div id="registration-wrap" class="d-flex align-items-center gap-3 flex-grow-1 justify-content-end onAfterDomainCheck" style="display:none;">
                       <select class="form-select form-select-lg" name="register_years" id="registration-years" style="display:none;"></select>
 
-                      <span id="registration-price" class="fw-bold fs-3 text-primary text-nowrap ms-2" style="display:none;"></span>
+                      <span id="registration-price" class="form-control form-control-lg bg-light d-none d-flex align-items-center justify-content-center fw-bold fs-3 text-primary border-primary text-nowrap ms-2" style="width:auto; min-width:120px;"></span>
                     </div>
                     <input type="text" class="form-control form-control-lg flex-grow-1 mt-2 mt-md-0 ms-md-2" name="transfer_code" id="domain-transfer-config" style="display:none; min-width: 180px;" placeholder="{{ 'Enter transfer code'|trans }}" />
-                    <span id="transfer-price" class="fw-bold fs-3 text-success text-nowrap ms-2 align-self-center" style="display:none;"></span>
+                    <span id="transfer-price" class="form-control form-control-lg bg-light d-none d-flex align-items-center justify-content-center fw-bold fs-3 text-success border-success text-nowrap ms-2" style="width:auto; min-width:120px;"></span>
                 </div>
             </div>
             <p class="text-muted text-center mt-4" id="info-text">Search for your perfect domain name{% if transfer_tlds is not empty %} or transfer an existing one{% endif %}.</p>
@@ -388,6 +388,8 @@ function fadeIn(el, display = 'block', durationMs = 150) {
         el.style.opacity = '1';
         return;
     }
+    
+    el.classList.remove('d-none');
 
     el.style.opacity = '0';
     el.style.display = display;
@@ -655,7 +657,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   if (!selected) return;
                   if (priceEl) {
                     priceEl.textContent = selected.dataset.price || '';
-                    fadeIn(priceEl, 'inline-flex');
+                    fadeIn(priceEl, 'flex');
                   }
                 };
 
@@ -686,7 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const transferPriceEl = document.getElementById('transfer-price');
                 if (transferPriceEl) {
                     transferPriceEl.textContent = price;
-                    fadeIn(transferPriceEl, '');
+                    fadeIn(transferPriceEl, 'flex');
                 }
 
                 const nextBtnWrap = document.getElementById('config-next-domain2');
