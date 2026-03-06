@@ -158,30 +158,30 @@
                             </div>
                           </div>
                         </div>
-                        <div class="card-body p-1">
-                            {% if client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
-                                <div class="list-group list-group-flush">
-                                    {% for i, order in client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
-                                        <a href="{{ 'order/service/manage'|link }}/{{ order.id }}"
-                                           class="list-group-item d-flex justify-content-between align-items-center" aria-current="true">
-                                            <div>
-                                                <div>
-                                                    <span><strong>#{{ order.id }}</strong></span>&nbsp;<span>{{ order.title|truncate(45) }}</span>
-                                                </div>
-                                                <span class="text-secondary small" title="{{ order.updated_at|format_date }}">{{ order.updated_at|timeago }} {{ 'ago'|trans }}</span>
-                                            </div>
-                                            <div>
-                                                <span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span>
-                                            </div>
-                                        </a>
-                                    {% endfor %}
+                        {% if client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
+                        <div class="list-group list-group-flush">
+                          {% for i, order in client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
+                            <a href="{{ 'order/service/manage'|link }}/{{ order.id }}" class="list-group-item py-3 list-group-item-action text-reset">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                  <span class="fw-bold">#{{ order.id }}</span>
+                                  <span>{{ order.title|truncate(45) }}</span>
+                                  <span class="text-secondary small" title="{{ order.updated_at|format_date }}">{{ order.updated_at|timeago }} {{ 'ago'|trans }}</span>
                                 </div>
-                            {% else %}
-                                <div class="d-flex justify-content-center my-2 p-2">
-                                    <span class="m-0">{{ 'No recent orders'|trans }}</span>
+                                <div class="d-flex align-items-center gap-3">
+                                  <div class="text-secondary small text-end">
+                                    <span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span>
+                                  </div>
                                 </div>
-                            {% endif %}
+                              </div>
+                            </a>
+                          {% endfor %}
                         </div>
+                        {% else %}
+                        <div class="d-flex justify-content-center my-2 p-2">
+                            <span class="m-0">{{ 'No recent orders'|trans }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -200,30 +200,30 @@
                             </div>
                           </div>
                         </div>
-                        <div class="card-body p-1">
-                            {% if client.support_ticket_get_list({ "per_page": 5 }).list %}
-                                <div class="list-group list-group-flush">
-                                    {% for i, ticket in client.support_ticket_get_list({ "per_page": 5 }).list %}
-                                        <a href="{{ 'support/ticket'|link }}/{{ ticket.id }}"
-                                           class="list-group-item d-flex justify-content-between align-items-center" aria-current="true">
-                                            <div>
-                                                <div>
-                                                    <span><strong>#{{ ticket.id }}</strong></span>&nbsp;<span>{{ ticket.subject|truncate(45) }}</span>
-                                                </div>
-                                                <span class="text-secondary small" title="{{ ticket.updated_at|format_date }}">{{ ticket.updated_at|timeago }} {{ 'ago'|trans }}</span>
-                                            </div>
-                                            <div>
-                                                <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
-                                            </div>
-                                        </a>
-                                    {% endfor %}
+                        {% if client.support_ticket_get_list({ "per_page": 5 }).list %}
+                        <div class="list-group list-group-flush">
+                          {% for i, ticket in client.support_ticket_get_list({ "per_page": 5 }).list %}
+                            <a href="{{ 'support/ticket'|link }}/{{ ticket.id }}" class="list-group-item py-3 list-group-item-action text-reset">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                  <span class="fw-bold">#{{ ticket.id }}</span>
+                                  <span>{{ ticket.subject|truncate(45) }}</span>
+                                  <span class="text-secondary small" title="{{ ticket.updated_at|format_date }}">{{ ticket.updated_at|timeago }} {{ 'ago'|trans }}</span>
                                 </div>
-                            {% else %}
+                                <div class="d-flex align-items-center gap-3">
+                                  <div class="text-secondary small text-end">
+                                    <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </a>
+                          {% endfor %}
+                        </div>
+                        {% else %}
                                 <div class="d-flex justify-content-center my-2 p-2">
                                     <span class="m-0">{{ 'No recent support tickets'|trans }}</span>
                                 </div>
-                            {% endif %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
