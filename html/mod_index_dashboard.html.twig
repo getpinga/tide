@@ -55,14 +55,14 @@
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-orange text-white avatar avatar-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
+                          <span class="bg-teal text-white avatar avatar-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-8 4l8 4l8 -4l-8 -4" /><path d="M4 12l8 4l8 -4" /><path d="M4 16l8 4l8 -4" /></svg>
                           </span>
                         </div>
                         <div class="col">
                           <div class="font-weight-medium">
                             <span class="h1 mt-3">{{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Services'|trans }}</span>
-                            <span class="float-end font-weight-medium text-orange">{{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}</span>
+                            <span class="float-end font-weight-medium text-teal">{{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}</span>
                           </div>
                         </div>
                       </div>
