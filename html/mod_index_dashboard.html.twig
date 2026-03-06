@@ -49,67 +49,64 @@
         {% endif %}
 
         <div>
-            <div class="row row-cards mb-4">
+            <div class="row row-cards mb-3">
                 <div class="col-sm-6 col-lg-4">
-                  <a class="card card-sm card-link" href="{{ 'order/service'|link }}">
+                  <a class="card card-link" href="{{ 'order/service'|link }}">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-green text-white avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
+                          <span class="bg-orange text-white avatar avatar-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">{{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Orders'|trans }}</div>
-                          <div class="text-secondary">{{ client.order_get_list({ "hide_addons": 1, "status": "active" }).total }} {{ 'Active'|trans }}</div>
-                          <div class="text-secondary">{{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}</div>
+                          <div class="font-weight-medium">
+                            <span class="h1 mt-3">{{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Services'|trans }}</span>
+                            <span class="float-end font-weight-medium text-orange">{{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}</span>
+                          </div>
                         </div>
-                        <div class="col-auto"></div>
                       </div>
                     </div>
                   </a>
                 </div>
-                
                 <div class="col-sm-6 col-lg-4">
-                  <a class="card card-sm card-link" href="{{ 'invoice'|link }}">
+                  <a class="card card-link" href="{{ 'invoice'|link }}">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-danger text-white avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
+                          <span class="bg-indigo text-white avatar avatar-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">{{ client.invoice_get_list().total }} {{ 'Invoices'|trans }}</div>
-                          <div class="text-secondary">{{ client.invoice_get_list({ "status": "paid" }).total }} {{ 'Paid'|trans }}</div>
-                          <div class="text-secondary">{{ client.invoice_get_list({ "status": "unpaid" }).total }} {{ 'Unpaid'|trans }}</div>
+                          <div class="font-weight-medium">
+                            <span class="h1 mt-3">{{ client.invoice_get_list().total }} {{ 'Invoices'|trans }}</span>
+                            <span class="float-end font-weight-medium text-indigo">{{ client.invoice_get_list({ "status": "unpaid" }).total }} {{ 'Unpaid'|trans }}</span>
+                          </div>
                         </div>
-                        <div class="col-auto"></div>
                       </div>
                     </div>
                   </a>
                 </div>
-                
                 <div class="col-sm-6 col-lg-4">
-                  <a class="card card-sm card-link" href="{{ 'support'|link }}">
+                  <a class="card card-link" href="{{ 'support'|link }}">
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-info text-white avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
+                          <span class="bg-pink text-white avatar avatar-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M15 15l3.35 3.35"></path><path d="M9 15l-3.35 3.35"></path><path d="M5.65 5.65l3.35 3.35"></path><path d="M18.35 5.65l-3.35 3.35"></path></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">{{ client.support_ticket_get_list().total }} {{ 'Tickets'|trans }}</div>
-                          <div class="text-secondary">{{ client.support_ticket_get_list({ "status": 'open' }).total }} {{ 'Open'|trans }}</div>
-                          <div class="text-secondary">{{ client.support_ticket_get_list({ "status": 'on_hold' }).total }} {{ 'On Hold'|trans }}</div>
+                          <div class="font-weight-medium">
+                            <span class="h1 mt-3">{{ client.support_ticket_get_list().total }} {{ 'Tickets'|trans }}</span>
+                            <span class="float-end font-weight-medium text-pink">{{ client.support_ticket_get_list({ "status": 'open' }).total }} {{ 'Open'|trans }}</span>
+                          </div>
                         </div>
-                        <div class="col-auto"></div>
                       </div>
                     </div>
                   </a>
                 </div>
-
                 <div class="col-12">
                   <div class="card card-sm">
                     <div class="card-body">
@@ -248,7 +245,7 @@
           {% set colClass = 'col-12 col-sm-8 col-md-6 col-lg-6' %}
           {% set rowClass = 'justify-content-center' %}
         {% endif %}
-
+        
         {% include 'custom/dashboard.top.twig' ignore missing %}
 
         <div class="row row-cards {{ rowClass }}">
