@@ -55,14 +55,18 @@
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-teal text-white avatar avatar-lg">
+                          <span class="bg-green-lt text-green avatar avatar-md">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-8 4l8 4l8 -4l-8 -4" /><path d="M4 12l8 4l8 -4" /><path d="M4 16l8 4l8 -4" /></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">
-                            <span class="h1 mt-3">{{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Services'|trans }}</span>
-                            <span class="float-end font-weight-medium text-teal">{{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}</span>
+                          <div>
+                            <div class="h1 m-0">
+                              {{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Services'|trans }}
+                            </div>
+                            <div class="text-muted small opacity-75">
+                              {{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -74,15 +78,19 @@
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-indigo text-white avatar avatar-lg">
+                          <span class="bg-blue-lt text-blue avatar avatar-md">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">
-                            <span class="h1 mt-3">{{ client.invoice_get_list().total }} {{ 'Invoices'|trans }}</span>
-                            <span class="float-end font-weight-medium text-indigo">{{ client.invoice_get_list({ "status": "unpaid" }).total }} {{ 'Unpaid'|trans }}</span>
-                          </div>
+                          <div>
+                            <div class="h1 m-0">
+                              {{ client.invoice_get_list().total }} {{ 'Invoices'|trans }}
+                            </div>
+                            <div class="text-muted small opacity-75">
+                              {{ client.invoice_get_list({ "status": "unpaid" }).total }} {{ 'Unpaid'|trans }}
+                            </div>
+                          </div>                  
                         </div>
                       </div>
                     </div>
@@ -93,30 +101,36 @@
                     <div class="card-body">
                       <div class="row align-items-center">
                         <div class="col-auto">
-                          <span class="bg-pink text-white avatar avatar-lg">
+                          <span class="bg-red-lt text-red avatar avatar-md">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M15 15l3.35 3.35"></path><path d="M9 15l-3.35 3.35"></path><path d="M5.65 5.65l3.35 3.35"></path><path d="M18.35 5.65l-3.35 3.35"></path></svg>
                           </span>
                         </div>
                         <div class="col">
-                          <div class="font-weight-medium">
-                            <span class="h1 mt-3">{{ client.support_ticket_get_list().total }} {{ 'Tickets'|trans }}</span>
-                            <span class="float-end font-weight-medium text-pink">{{ client.support_ticket_get_list({ "status": 'open' }).total }} {{ 'Open'|trans }}</span>
+                          <div>
+                            <div class="h1 m-0">
+                              {{ client.support_ticket_get_list().total }} {{ 'Tickets'|trans }}
+                            </div>
+                            <div class="text-muted small opacity-75">
+                              {{ client.support_ticket_get_list({ "status": 'open' }).total }} {{ 'Open'|trans }}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </a>
                 </div>
+            </div>
+            <div class="row row-cards mb-3">
                 <div class="col-12">
                   <div class="card card-sm">
                     <div class="card-body">
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                          <span class="avatar avatar-md bg-azure-lt text-azure">
+                      <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3 min-w-0">
+                          <span class="avatar avatar-sm avatar-md bg-azure-lt text-azure">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
                           </span>
-                          <div>
-                            <div class="fw-semibold">
+                          <div class="min-w-0">
+                            <div class="fw-semibold text-truncate">
                               {{ profile.email }}
                             </div>
                             <div class="text-muted small">
@@ -124,15 +138,14 @@
                             </div>
                           </div>
                         </div>
-
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="text-end">
+                        <div class="d-flex align-items-center justify-content-between w-100 gap-3 ms-md-auto justify-content-md-end">
+                          <div class="text-start text-md-end">
                             <div class="text-muted small">{{ 'Balance'|trans }}</div>
                             <div class="fw-bold">
                               {{ profile.balance | money(profile.currency) }}
                             </div>
                           </div>
-                          <a href="{{ 'client/profile'|link }}" class="btn btn-sm btn-outline-primary">
+                          <a href="{{ 'client/profile'|link }}" class="btn btn-outline-primary btn-sm">
                             {{ 'Update'|trans }}
                           </a>
                         </div>
@@ -141,18 +154,18 @@
                   </div>
                 </div>
             </div>
-
             <div class="row row-cards">
                 <div class="col-md-6">
-                    <div class="card mb-4">
+                    <div class="card">
                         <div class="card-header py-3">
                           <div class="d-flex align-items-center justify-content-between w-100">
                             <h3 class="card-title mb-0">{{ 'Recent orders'|trans }}</h3>
                             <div class="btn-list">
-                              <a href="{{ 'order/service'|link }}" class="btn btn-sm btn-secondary">
+                              <a href="{{ 'order/service'|link }}" class="btn btn-sm btn-outline-secondary">
                                 {{ 'All orders'|trans }}
                               </a>
-                              <a href="{{ 'order'|link }}" class="btn btn-sm btn-primary">
+                              <a href="{{ 'order'|link }}" class="btn btn-sm btn-primary btn-animate-icon btn-animate-icon-rotate">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 {{ 'New order'|trans }}
                               </a>
                             </div>
@@ -163,13 +176,17 @@
                           {% for i, order in client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
                             <a href="{{ 'order/service/manage'|link }}/{{ order.id }}" class="list-group-item py-3 list-group-item-action text-reset">
                               <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-2 text-truncate">
-                                  <span class="fw-bold">#{{ order.id }}</span>
-                                  <span>{{ order.title|truncate(45) }}</span>
-                                  <span class="text-secondary small" title="{{ order.updated_at|format_date }}">{{ order.updated_at|timeago }} {{ 'ago'|trans }}</span>
+                                <div class="d-flex flex-column text-truncate">
+                                  <div class="d-flex align-items-center gap-2">
+                                    <span class="fw-bold">#{{ order.id }}</span>
+                                    <span>{{ order.title|truncate(45) }}</span>
+                                  </div>
+                                  <span class="text-secondary small" title="{{ order.updated_at|format_date }}">
+                                    {{ order.updated_at|timeago }} {{ 'ago'|trans }}
+                                  </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                  <div class="text-secondary small text-end">
+                                  <div class="text-secondary text-end">
                                     <span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span>
                                   </div>
                                 </div>
@@ -186,15 +203,16 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card mb-4">
+                    <div class="card">
                         <div class="card-header py-3">
                           <div class="d-flex align-items-center justify-content-between w-100">
                             <h3 class="card-title mb-0">{{ 'Support tickets'|trans }}</h3>
                             <div class="btn-list">
-                              <a href="{{ 'support'|link }}" class="btn btn-sm btn-secondary">
+                              <a href="{{ 'support'|link }}" class="btn btn-sm btn-outline-secondary">
                                 {{ 'All tickets'|trans }}
                               </a>
-                              <a href="{{ 'support'|link({ 'ticket': 1 }) }}" class="btn btn-sm btn-primary">
+                              <a href="{{ 'support'|link({ 'ticket': 1 }) }}" class="btn btn-sm btn-primary btn-animate-icon btn-animate-icon-rotate">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                 {{ 'New ticket'|trans }}
                               </a>
                             </div>
@@ -205,13 +223,17 @@
                           {% for i, ticket in client.support_ticket_get_list({ "per_page": 5 }).list %}
                             <a href="{{ 'support/ticket'|link }}/{{ ticket.id }}" class="list-group-item py-3 list-group-item-action text-reset">
                               <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-2 text-truncate">
-                                  <span class="fw-bold">#{{ ticket.id }}</span>
-                                  <span>{{ ticket.subject|truncate(45) }}</span>
-                                  <span class="text-secondary small" title="{{ ticket.updated_at|format_date }}">{{ ticket.updated_at|timeago }} {{ 'ago'|trans }}</span>
+                                <div class="d-flex flex-column text-truncate">
+                                  <div class="d-flex align-items-center gap-2">
+                                    <span class="fw-bold">#{{ ticket.id }}</span>
+                                    <span>{{ ticket.subject|truncate(45) }}</span>
+                                  </div>
+                                  <span class="text-secondary small" title="{{ ticket.updated_at|format_date }}">
+                                    {{ ticket.updated_at|timeago }} {{ 'ago'|trans }}
+                                  </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                  <div class="text-secondary small text-end">
+                                  <div class="text-secondary text-end">
                                     <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
                                   </div>
                                 </div>
