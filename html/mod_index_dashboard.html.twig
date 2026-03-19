@@ -64,7 +64,7 @@
                             <div class="h1 m-0">
                               {{ client.order_get_list({ "hide_addons": 1}).total }} {{ 'Services'|trans }}
                             </div>
-                            <div class="text-muted small opacity-75">
+                            <div class="text-secondary">
                               {{ client.order_get_list({ "expiring": 1 }).total }} {{ 'Expiring'|trans }}
                             </div>
                           </div>
@@ -87,7 +87,7 @@
                             <div class="h1 m-0">
                               {{ client.invoice_get_list().total }} {{ 'Invoices'|trans }}
                             </div>
-                            <div class="text-muted small opacity-75">
+                            <div class="text-secondary">
                               {{ client.invoice_get_list({ "status": "unpaid" }).total }} {{ 'Unpaid'|trans }}
                             </div>
                           </div>                  
@@ -110,7 +110,7 @@
                             <div class="h1 m-0">
                               {{ client.support_ticket_get_list().total }} {{ 'Tickets'|trans }}
                             </div>
-                            <div class="text-muted small opacity-75">
+                            <div class="text-secondary">
                               {{ client.support_ticket_get_list({ "status": 'open' }).total }} {{ 'Open'|trans }}
                             </div>
                           </div>
