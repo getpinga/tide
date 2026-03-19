@@ -21,9 +21,10 @@
     <div class="row mb-3 d-print-none">
         <div class="col-md-12">
             <div class="card">
+                <div class="card-header d-print-none">
+                    <h3 class="card-title">{{ 'Payment methods'|trans }} <span class="card-subtitle">{{ 'Please choose a payment type and pay for your chosen products.'|trans }}</span></h3>
+                </div>
                 <div class="card-body">
-                    <h5 class="mb-1">{{ 'Payment methods'|trans }}</h5>
-                    <p class="small text-muted">{{ 'Please choose a payment type and pay for your chosen products.'|trans }}</p>
                     <form method="post" action="{{ 'api/guest/invoice/payment'|link }}" class="api-form" data-api-redirect="{{ ('invoice/'~invoice.hash)|link({ 'auto_redirect': 1 }) }}">
                         <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                         <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
