@@ -84,6 +84,11 @@
                          </div>
                          {% endif %}
                          <div class="card-body text-center">
+                            {% if product.icon_url is not empty %}
+                            <div class="mb-3 d-flex justify-content-center">
+                                <img src="{{ product.icon_url }}" alt="{{ product.title }}" style="max-height: 42px;" class="img-fluid">
+                            </div>
+                            {% endif %}
                             <div class="text-uppercase text-muted font-weight-medium mb-4">{{ product.type }}</div>
                             <h3>{{ product.title }}</h3>
                             {% if product.type != 'domain' and product.price_starting_from is defined and product.price_starting_from is not empty %}
