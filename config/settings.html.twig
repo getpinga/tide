@@ -86,6 +86,17 @@
                 <label><input type="radio" name="sidebar_balance_enabled" value="0" id="sidebar_balance_enabled_0">{{ 'No'|trans }}</label>
             </td>
         </tr>
+
+        <tr>
+            <td>
+                <label for="inject_head">
+                    {{ 'Add javascript to client area head'|trans }}
+                </label>
+            </td>
+            <td>
+                <textarea name="inject_head" id="inject_head" rows="5"></textarea>
+            </td>
+        </tr>
     </table>
 
     <h3>{{ 'Menu items which are visible in top right menu'|trans }}</h3>
@@ -317,7 +328,7 @@
     <h3>{{ 'Javascript'|trans }}</h3>
     <table>
         <tr>
-            <td><label for="meta_title">{{ 'Add javascript to client area footer'|trans }}</label></td>
+            <td><label for="inject_javascript">{{ 'Add javascript to client area footer'|trans }}</label></td>
             <td><textarea name="inject_javascript" id="inject_javascript"></textarea></td>
         </tr>
     </table>

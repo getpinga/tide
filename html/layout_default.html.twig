@@ -31,6 +31,10 @@
     <script src="{{ 'js/atrix.js' | asset_url }}"></script>
     {% block head %}{% endblock %}
     {% block js %}{% endblock %}
+
+    {% if settings.inject_head %} 
+        {{ settings.inject_head | raw }} 
+    {% endif %}
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
