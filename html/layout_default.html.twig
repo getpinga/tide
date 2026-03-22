@@ -183,7 +183,7 @@
                   {% else %}
                       <div>{{ profile.first_name }} {{ profile.last_name }}</div>
                       {% if settings.sidebar_balance_enabled and client %}
-                        <div class="mt-1 small text-secondary">{{ profile.balance | money(profile.currency) }}</div>
+                        <div class="mt-1 small text-secondary">{{ profile.balance | money_convert }}</div>
                       {% endif %}
                   {% endif %}
                 </div>
