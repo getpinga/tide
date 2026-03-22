@@ -120,16 +120,19 @@
                     </div>
                 </div>
                 {% endif %}
-                {% set currencies = guest.currency_get_pairs %}
-                {% if currencies|length > 1 %}
-                <div class="dropdown small-dropdown">
-                    <select id="currency" name="currency" class="currency_selector form-select nav-control w-auto">
-                        {% set selected = guest.cart_get_currency.code %}
-                        {% for code,title in currencies %}
-                        <option value="{{ code }}" class="currency_{{ code }}"{% if code == selected %} selected="selected"{% endif %}>{{ code }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                {% set orders = client.order_get_list({"per_page":10, "page":request.page, "hide_addons":1}) %}
+                {% if not orders.list %}
+                    {% set currencies = guest.currency_get_pairs %}
+                    {% if currencies|length > 1 %}
+                    <div class="dropdown small-dropdown">
+                        <select id="currency" name="currency" class="currency_selector form-select nav-control w-auto">
+                            {% set selected = guest.cart_get_currency.code %}
+                            {% for code,title in currencies %}
+                            <option value="{{ code }}" class="currency_{{ code }}"{% if code == selected %} selected="selected"{% endif %}>{{ code }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
                 {% endif %}
                 {% if not client %}
                 <div class="d-none d-md-inline-flex gap-2">
