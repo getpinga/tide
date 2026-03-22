@@ -142,7 +142,7 @@
                           <div class="text-start text-md-end">
                             <div class="text-muted small">{{ 'Balance'|trans }}</div>
                             <div class="fw-bold">
-                              {{ profile.balance | money(profile.currency) }}
+                              {{ profile.balance | money_convert }}
                             </div>
                           </div>
                           <a href="{{ 'client/profile'|link }}" class="btn btn-outline-primary btn-sm">
