@@ -49,7 +49,19 @@
                 <div class="mb-3">
                     <label class="form-label" for="company">{{ 'Company'|trans }}</label>
                     <input class="form-control" id="company" type="text" name="company"
-                           value="{{ request.company }}" required="required"/>
+                           value="{{ request.company }}"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="company_number">{{ 'Company number'|trans }}</label>
+                    <input class="form-control" id="company_number" type="text" name="company_number"
+                           value="{{ request.company_number }}"/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="company_vat">{{ 'Company VAT number'|trans }}</label>
+                    <input class="form-control" id="company_vat" type="text" name="company_vat"
+                           value="{{ request.company_vat }}"/>
                 </div>
             {% endif %}
 
@@ -92,13 +104,13 @@
                 <div class="mb-3">
                     <label class="form-label" for="city">{{ 'City'|trans }}</label>
                     <input class="form-control" id="city" type="text" name="city"
-                           value="{{ request.city }}"/>
+                           value="{{ request.city }}" required="required"/>
                 </div>
             {% endif %}
 
             {% if 'country' in r %}
                 <div class="mb-3">
-                    <label class="form-label" for="country">{{ 'Country'|trans }}</label>
+                    <label class="form-label required" for="country">{{ 'Country'|trans }}</label>
                     <select class="form-select" id="country" name="country" required="required">
                         <option value="">{{ '-- Select country --'|trans }}</option>
                         {% for val,label in guest.system_countries %}
@@ -150,7 +162,7 @@
             {% endfor %}
 
             <div class="mb-3">
-                <label class="form-label" for="reg-password">{{ 'Password'|trans }}</label>
+                <label class="form-label required" for="reg-password">{{ 'Password'|trans }}</label>
                 <div class="input-group input-group-flat">
                   <input class="form-control password-field" id="reg-password" type="password" name="password" value=""
                        required="required"/>
@@ -176,7 +188,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="password-confirm">{{ 'Password confirm'|trans }}</label>
+                <label class="form-label required" for="password-confirm">{{ 'Password confirm'|trans }}</label>
                 <div class="input-group input-group-flat">
                   <input class="form-control password-field" id="password-confirm" type="password" name="password_confirm" value="" required="required"/>
                   <span class="input-group-text">

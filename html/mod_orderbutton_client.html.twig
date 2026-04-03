@@ -97,10 +97,27 @@
                                         <div class="row">
                                             <div class="form-floating col-md-7 mb-3">
                                                 <input class="form-control form-control-sm" type="text" name="company" id="company"
-                                                       required="required"
-                                                       value="{{ request.last_name }}"
+                                                       value="{{ request.company }}"
                                                        placeholder="{{ 'Company'|trans }}">
                                                 <label for="company" class="ms-2">{{ 'Company'|trans }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-floating col-md-7 mb-3">
+                                                <input class="form-control form-control-sm" type="text" name="company_number" id="company_number"
+                                                       value="{{ request.company_number }}"
+                                                       placeholder="{{ 'Company number'|trans }}">
+                                                <label for="company_number" class="ms-2">{{ 'Company number'|trans }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-floating col-md-7 mb-3">
+                                                <input class="form-control form-control-sm" type="text" name="company_vat" id="company_vat"
+                                                       value="{{ request.company_vat }}"
+                                                       placeholder="{{ 'Company VAT number'|trans }}">
+                                                <label for="company_vat" class="ms-2">{{ 'Company VAT number'|trans }}</label>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -173,7 +190,7 @@
                                         <div class="row">
                                             <div class="form-floating col-md-7 mb-3">
                                                 <input class="form-control form-control-sm" type="text" name="city" id="city"
-                                                       value="{{ request.city }}"
+                                                       value="{{ request.city }}" required="required" 
                                                        placeholder="{{ 'City'|trans }}">
                                                 <label for="city" class="ms-2">{{ 'City'|trans }}</label>
                                             </div>
@@ -219,15 +236,19 @@
 
                                     {% if 'phone' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
-                                                <div class="input-group">
-                                                    <input class="form-control form-control-sm w-25" type="text" name="phone_cc" id="phone_cc"
-                                                           placeholder="{{ 'Phone Code'|trans }}">
-                                                    <input class="form-control form-control-sm w-50" type="text" name="phone" id="phone"
-                                                           placeholder="{{ 'Phone Number'|trans }}">
+                                            <div class="col-md-7 mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-4">
+                                                        <input class="form-control form-control-sm" type="text" name="phone_cc" id="phone_cc"
+                                                               value="{{ request.phone_cc }}"
+                                                               placeholder="{{ 'Phone Code'|trans }}">
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <input class="form-control form-control-sm" type="text" name="phone" id="phone"
+                                                               value="{{ request.phone }}"
+                                                               placeholder="{{ 'Phone Number'|trans }}">
+                                                    </div>
                                                 </div>
-                                                <label for="phone" class="ms-2">{{ 'Phone Number'|trans }}</label>
-                                                <label for="phone_cc" class="ms-2">{{ 'Phone Code'|trans }}</label>
                                             </div>
                                         </div>
                                     {% endif %}
