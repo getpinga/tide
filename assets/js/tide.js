@@ -46,52 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function setCookie(name, value, days) {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = name + "=" + encodeURIComponent(value) +
-    "; expires=" + expires + "; path=/";
-}
-
-function getCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find(row => row.startsWith(name + "="))
-    ?.split("=")[1] || null;
-}
-
-function initLanguageSelector() {
-  document.querySelectorAll("a.language_selector").forEach(link => {
-
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const lang =
-        link.dataset.lang ||
-        link.getAttribute("value") ||
-        new URL(link.href, location.origin).searchParams.get("lang");
-
-      if (!lang) return;
-
-      setCookie("BBLANG", lang, 7);
-      location.reload();
-    });
-
-    const current = getCookie("BBLANG");
-
-    if (current) {
-      if (
-        link.dataset.lang === current ||
-        link.getAttribute("value") === current
-      ) {
-        link.classList.add("active");
-      }
-    }
-
-  });
-}
-
-document.addEventListener("DOMContentLoaded", initLanguageSelector);
-
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof API !== "undefined" && document.querySelector("form[data-fb-api]")) {
     API._apiForm();

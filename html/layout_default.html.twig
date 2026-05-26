@@ -87,28 +87,12 @@
               <div class="btn-list d-flex align-items-center gap-2">
                 {% set languages = guest.extension_languages(true) %}
                 {% if languages|length > 1 %}
-                {% set currentLang = guest.system_locale %}
-                {% set countryCode = currentLang | slice(3, 2) %}
                 <div class="dropdown small-dropdown">
-                    <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-label="Language">
-                    <span class="flag flag-country-{{ countryCode | lower }}"></span>
-                      <span class="ms-2 d-none d-sm-inline">
-                      {% for lang in languages %}
-                        {% if lang.locale == currentLang %}
-                          {% set parts = lang.title|split(' (') %}
-                          {{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}
-                        {% endif %}
-                      {% endfor %}
-                      </span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end language-selector">
+                    <select name="lang" class="form-select js-locale-selector nav-control w-auto" aria-label="Language">
                         {% for lang in languages %}
-                        {% set countryCode = lang.locale | slice(3, 2) %}
-                        {% if lang != currentLang %}
-                        <a href="javascript:;" class="dropdown-item language_selector" data-lang="{{ lang.locale }}"><span class="flag flag-country-{{ countryCode | lower }}"></span>{% set parts = lang.title|split(' (') %}{{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}</a>
-                        {% endif %}
+                            <option value="{{ lang.locale }}" data-custom-properties="&lt;span class=&quot;dropdown-item-indicator&quot;&gt;&lt;span class=&quot;flag flag-country-{{ lang.locale|split('_')[1]|lower }} &quot;&gt;&lt;/span&gt;&lt;/span&gt;">{{ lang.title }}</option>
                         {% endfor %}
-                    </div>
+                    </select>
                 </div>
                 {% endif %}
                 {% set orders = client.order_get_list({"per_page":10, "page":request.page, "hide_addons":1}) %}
