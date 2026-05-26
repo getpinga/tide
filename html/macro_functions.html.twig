@@ -15,16 +15,6 @@
     </select>
 {% endmacro %}
 
-{# deprecated - use money filter #}
-{% macro currency_format(price, currency) %}
-    {{ price | money(currency) }}
-{% endmacro %}
-
-{# deprecated - use money_convert filter #}
-{% macro currency(price, currency) %}
-    {{ price | money_convert(currency) }}
-{% endmacro %}
-
 {% macro status_name(status) %}
     {% set status = status|replace({'_': " "})|title|trim %}
     {% if status == 'Active' %}
@@ -48,11 +38,6 @@
     {% else %}
         {{ status|trans }}
     {% endif %}
-{% endmacro %}
-
-{# deprecated - use period_title filter #}
-{% macro period_name(period) %}
-    {{ period | period_title }}
 {% endmacro %}
 
 {% macro markdown_quote(text) %}

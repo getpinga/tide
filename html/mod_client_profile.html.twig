@@ -13,9 +13,9 @@
             <div class="row">
                 <span>{{ 'You must verify your email address before you may access our services.'|trans }}</span>
             </div>
-            <a href="{{ 'api/client/client/resend_email_verification'|link({ 'CSRFToken': CSRFToken }) }}"
+            <a href="{{ 'client/resend_email_verification'|api_url(role='client') }}"
                class="btn btn-primary api-link"
-               data-api-msg="{{ 'Verification email has been resent'|trans }}">{{ 'Resend verification email'|trans }}</a>
+               {{ fb_api_link({ message: 'Verification email has been resent'|trans }) }}>{{ 'Resend verification email'|trans }}</a>
         </div>
     {% endif %}
 
@@ -38,8 +38,8 @@
                     <div class="card-body tab-pane active" id="details-tab-pane" role="tabpanel" tabindex="0">
                         <h5 class="card-title mb-1">{{ 'Update details'|trans }}</h5>
                         <p class="card-text fs-7 text-muted">{{ 'Keep your personal data up to date.'|trans }}</p>
-                        <form method="post" action="client/profile/update" id="profile-update" class="api-form"
-                              data-api-msg="Profile updated">
+                        <form action="{{ 'profile/update'|api_url(role='client') }}" id="profile-update" class="api-form"
+                              {{ fb_api_form({ message: 'Profile updated'|trans }) }}>
                             <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}">
                             <div class="row">
                                 <div class="mb-3 col-md-5">
@@ -164,7 +164,7 @@
                     <div class="card-body tab-pane" id="pass-tab-pane" role="tabpanel" tabindex="0">
                         <h5 class="card-title mb-1">{{ 'Change Password'|trans }}</h5>
                         <p class="card-text fs-7 text-muted">{{ 'Enter your new password twice to avoid mistakes. '|trans }}</p>
-                        <form method="post" action="{{ 'api/client/profile/change_password'|link }}" class="api-form">
+                        <form action="{{ 'profile/change_password'|api_url(role='client') }}" class="api-form" {{ fb_api_form({ message: 'Password changed'|trans }) }}>
                             <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}">
                             <div class="mb-3">
                                 <label class="form-label" for="current_password">{{ 'Current Password'|trans }}</label>
@@ -187,8 +187,8 @@
                     <div class="card-body tab-pane" id="apikey-tab-pane" role="tabpanel" tabindex="0">
                         <h5 class="card-title mb-1">{{ 'API Key'|trans }}</h5>
                         <p class="card-text fs-7 text-muted">{{ 'API key allows integration with external applications. You will need this key for authentication.'|trans }}</p>
-                        <form class="api-form" method="post" action="client/profile/api_key_reset" id="change-api-key"
-                              data-api-msg="API key was changed">
+                        <form class="api-form" action="{{ 'profile/api_key_reset'|api_url(role='client') }}" id="change-api-key"
+                              {{ fb_api_form({ message: 'API key was changed'|trans }) }}>
                             <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                             {% if client.profile_api_key_get %}
                                 <div class="alert alert-warning" role="alert">

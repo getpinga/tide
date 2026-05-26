@@ -9,7 +9,7 @@
 {% block body_class %}invoice-invoice{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{{ '/invoice'|link }}">{{ 'Invoices'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ '/invoice'|url }}">{{ 'Invoices'|trans }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">#{{ nr }}</li>
 {% endblock %}
 
@@ -25,13 +25,13 @@
                     <h3 class="card-title">{{ 'Payment methods'|trans }} <span class="card-subtitle">{{ 'Please choose a payment type and pay for your chosen products.'|trans }}</span></h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ 'api/guest/invoice/payment'|link }}" class="api-form" data-api-redirect="{{ ('invoice/'~invoice.hash)|link({ 'auto_redirect': 1 }) }}">
+                    <form action="{{ 'invoice/payment'|api_url(role='guest') }}" class="api-form" {{ fb_api_form({ redirect: ('invoice/'~invoice.hash)|url({ 'auto_redirect': 1 }) }) }}>
                         <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                         <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
                         <div class="d-flex gap-3">
                             {% for gtw in guest.invoice_gateways %}
                                 {% if invoice.currency in gtw.accepted_currencies %}
-                                {% set banklink = 'invoice/banklink'|link %}
+                                {% set banklink = 'invoice/banklink'|url %}
                                 <div class="invoice-gateway rounded-2 p-2">
                                     <input type="radio" class="btn-check border-0" name="gateway_id" gateway_id="{{ gtw.id }}" id="{{ gtw.id }}" autocomplete="off">
                                     <label class="btn" for="{{ gtw.id }}"
@@ -55,7 +55,7 @@
               <div class="card-header d-print-none">
                 <h3 class="card-title">{{ 'Invoice'|trans }} <span class="card-subtitle">{{ 'You can print this invoice or export it to a PDF file by clicking on the corresponding button.'|trans }}</span></h3>
                 <div class="card-actions">
-                  <a href="{{ 'invoice/pdf'|link }}/{{ invoice.hash }}" target="_blank" class="btn btn-sm btn-danger">{{ 'PDF'|trans }}</a>
+                  <a href="{{ 'invoice/pdf'|url }}/{{ invoice.hash }}" target="_blank" class="btn btn-sm btn-danger">{{ 'PDF'|trans }}</a>
                   <button type="button" class="btn btn-sm btn-dark" onclick="window.print()">{{ 'Print'|trans }}</button>
                 </div>
               </div>
@@ -115,7 +115,7 @@
                     <td>{{ i+1 }}</td>
                     <td>
                       {% if item.order_id %}
-                        <a href="{{ '/order/service'|link }}/manage/{{ item.order_id }}">{{ item.title }}</a>
+                        <a href="{{ '/order/service'|url }}/manage/{{ item.order_id }}">{{ item.title }}</a>
                       {% else %}
                         {{ item.title }}
                       {% endif %}
@@ -123,34 +123,34 @@
                         x {{ item.quantity }} {{ item.unit }}
                       {% endif %}
                     </td>
-                    <td>{{ item.price|money(invoice.currency) }}</td>
-                    <td class="text-end">{{ item.total|money(invoice.currency) }}</td>
+                    <td>{{ item.price|format_currency(invoice.currency ?? default_currency) }}</td>
+                    <td class="text-end">{{ item.total|format_currency(invoice.currency ?? default_currency) }}</td>
                   </tr>
                   {% endfor %}
                 
                   {% if invoice.tax > 0 %}
                   <tr>
                     <td colspan="3" class="strong text-end">{{ invoice.taxname }} {{ invoice.taxrate }}%</td>
-                    <td class="text-end">{{ invoice.tax | money(invoice.currency) }}</td>
+                    <td class="text-end">{{ invoice.tax |format_currency(invoice.currency ?? default_currency) }}</td>
                   </tr>
                   {% endif %}
                   {% if invoice.discount > 0 %}
                   <tr>
                     <td colspan="3" class="strong text-end">{{ 'Discount'|trans }}</td>
-                    <td class="text-end">{{ invoice.discount | money(invoice.currency) }}</td>
+                    <td class="text-end">{{ invoice.discount |format_currency(invoice.currency ?? default_currency) }}</td>
                   </tr>
                   {% endif %}
                   <tr>
                     <td colspan="3" class="fw-bold text-uppercase text-end">{{ 'Total'|trans }}</td>
-                    <td class="fw-bold text-end">{{ invoice.total | money(invoice.currency) }}</td>
+                    <td class="fw-bold text-end">{{ invoice.total |format_currency(invoice.currency ?? default_currency) }}</td>
                   </tr>
                 </table>
                 
                 {% if invoice.text_1 %}
-                    <p class="text-secondary text-center mt-5">{{ invoice.text_1|markdown }}</p>
+                    <p class="text-secondary text-center mt-5">{{ invoice.text_1|markdown_to_html }}</p>
                 {% endif %}
                 {% if invoice.text_2 %}
-                    <p class="text-secondary text-center mt-5">{{ invoice.text_2|markdown }}</p>
+                    <p class="text-secondary text-center mt-5">{{ invoice.text_2|markdown_to_html }}</p>
                 {% endif %}
               </div>
             </div>
@@ -189,7 +189,7 @@
 
     function paymentPrompt(id, supportsSubscription, title){
         invoiceHash = "{{ invoice.hash }}";
-        backLink    = "{{ 'invoice/banklink'|link }}";
+        backLink    = "{{ 'invoice/banklink'|url }}";
         paymentLink = new URL(backLink.concat('/', invoiceHash, '/', id));
         invoiceSubscribable = {{ invoice.subscribable ? 'true' : 'false' }};
 

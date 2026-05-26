@@ -10,7 +10,7 @@
                 </div>
                 <div>
                     {% set cart = guest.cart_get %}
-                    <a href="{{ 'orderbutton?checkout=1'|link }}" class="btn btn-light position-relative">
+                    <a href="{{ 'orderbutton?checkout=1'|url }}" class="btn btn-light position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>&nbsp;{{ 'Cart'|trans }}
                         <span class="badge bg-green text-green-fg ms-1">
                             {{ cart.items | length }}
@@ -27,7 +27,7 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane show active" id="sign-in" role="tabpanel" aria-labelledby="in-tab"
                                  tabindex="0">
-                                <form method="post" class="api-form" action="{{ 'api/guest/client/login'|link }}" data-api-jsonp="onLogin">
+                                <form class="api-form" action="{{ 'client/login'|api_url(role='guest') }}" {{ fb_api_form({ callback: 'onLogin' }) }}>
                                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                     <div class="row">
                                         <div class="form-floating col-md-7 mb-3">
@@ -58,7 +58,7 @@
                                 </form>
                             </div>
                             <div class="tab-pane" id="sign-up" role="tabpanel" aria-labelledby="up-tab" tabindex="0">
-                                <form class="api-form" action="{{ 'api/guest/client/create'|link }}" method="post" data-api-jsonp="onAccountCreate">
+                                <form class="api-form" action="{{ 'client/create'|api_url(role='guest') }}" {{ fb_api_form({ callback: 'onAccountCreate' }) }}>
                                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                     {% set r = guest.client_required %}
                                     <div class="row">
@@ -273,7 +273,7 @@
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 {# TODO: Make this translatable once support for placeholders is implemented #}
-                                                <span>I agree to the <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
+                                                <span>I agree to the <a href="{{ '/tos'|url }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|url }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
                                             </label>
                                         </div>
                                     {% endif %}
@@ -288,7 +288,7 @@
                                     {% if settings.signup_tos == 'implicit' %}
                                         <div class="mb-1">
                                             {# TODO: Make this translatable once support for placeholders is implemented #}
-                                            <span class="text-muted mb-1">By creating an account, you agree to our <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
+                                            <span class="text-muted mb-1">By creating an account, you agree to our <a href="{{ '/tos'|url }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|url }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
                                         </div>
                                     {% endif %}
                                 </form>

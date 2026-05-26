@@ -55,9 +55,9 @@
                                         <td>{{ 'Invoice'|trans }} #{{ invoice.serie ~ "%05s"|format(invoice.nr) }}</td>
                                         <td>{{ invoice.created_at|date("Y-m-d") }}</td>
                                         <td>{{ invoice.due_at|date("Y-m-d") }}</td>
-                                        <td>{{ invoice.total | money(invoice.currency) }}</td>
+                                        <td>{{ invoice.total |format_currency(invoice.currency ?? default_currency) }}</td>
                                         <td><a class="btn btn-sm btn-success"
-                                            href="{{ 'invoice'|link }}/{{ invoice.hash }}">{{ 'Pay'|trans }}</a>
+                                            href="{{ 'invoice'|url }}/{{ invoice.hash }}">{{ 'Pay'|trans }}</a>
                                         </td>
                                     </tr>
                                 {% else %}
@@ -88,8 +88,8 @@
                                         <td>{{ 'Invoice'|trans }} #{{ invoice.serie ~ "%05s"|format(invoice.nr) }}</td>
                                         <td>{{ invoice.created_at|date("Y-m-d") }}</td>
                                         <td>{{ invoice.paid_at|date("Y-m-d") }}</td>
-                                        <td>{{ invoice.total | money(invoice.currency) }}</td>
-                                        <td><a href="{{ 'invoice'|link }}/{{ invoice.hash }}"
+                                        <td>{{ invoice.total |format_currency(invoice.currency ?? default_currency) }}</td>
+                                        <td><a href="{{ 'invoice'|url }}/{{ invoice.hash }}"
                                             class="btn btn-outline-secondary btn-sm">{{ 'View'|trans }}</a></td>
                                     </tr>
                                 {% else %}

@@ -14,6 +14,7 @@
 {% block content_before %}{% endblock %}
 
 {% block content %}
+{% set cart_currency = guest.cart_get_currency %}
 <div class="row row-deck row-cards">
     <div class="col-md-12">
         <div class="card card-md">
@@ -24,7 +25,7 @@
                     </div>
                     <div>
                         {% set cart = guest.cart_get %}
-                        <a href="{{ 'orderbutton?checkout=1'|link }}" class="btn btn-light position-relative">
+                        <a href="{{ 'orderbutton?checkout=1'|url }}" class="btn btn-light position-relative">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>&nbsp;{{ 'Cart'|trans }}
                             <span class="badge bg-green text-green-fg ms-1">
                                 {{ cart.items | length }}
@@ -37,7 +38,7 @@
                 {% for i, category in guest.product_category_get_list.list %}
                 {% if not loop.first %}<hr />{% endif %}
                 <h2{% if not loop.first %} class="mt-4"{% endif %}>{{ category.title }}</h2>
-                <span>{{ category.description|markdown }}</span>
+                <span>{{ category.description|markdown_to_html }}</span>
                 <div class="row row-cards">
                    {% for i, product in category.products|sort((a, b) => a.priority <=> b.priority) %}
                    <div class="{% if loop.length == 1 %}col-sm-12 col-lg-12{% elseif loop.length == 2 %}col-sm-6 col-lg-6{% elseif loop.length == 3 %}col-sm-6 col-lg-4{% else %}col-sm-6 col-lg-3{% endif %}">
@@ -92,10 +93,10 @@
                             <div class="text-uppercase text-muted font-weight-medium mb-4">{{ product.type }}</div>
                             <h3>{{ product.title }}</h3>
                             {% if product.type != 'domain' and product.price_starting_from is defined and product.price_starting_from is not empty %}
-                              <div class="h2 my-3">{{ product.price_starting_from|money_convert }}</div>
+                              <div class="h2 my-3">{{ (product.price_starting_from * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</div>
                             {% endif %}
                             <div class="text-center mt-4">
-                               <a href="{{ ('/order/' ~ product.slug) | link }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-cyan{% endif %} w-100">{{ 'Choose'|trans }}</a>
+                               <a href="{{ ('/order/' ~ product.slug) |url }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-cyan{% endif %} w-100">{{ 'Choose'|trans }}</a>
                             </div>
                          </div>
                       </div>

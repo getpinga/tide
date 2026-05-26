@@ -6,7 +6,7 @@
 
 {% block body_class %}support-contact-us-conversation{% endblock %}
 {% block breadcrumb %}
-<li class="breadcrumb-item"><a href="{{ 'support/contact-us' | link}}">{{ 'Contact us'|trans }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'support/contact-us' |url}}">{{ 'Contact us'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ ticket.subject }}</li>
 {% endblock %}
 
@@ -22,7 +22,7 @@
                 <h3 class="card-title">{{ 'Ticket information'|trans }}</h3>
                 <div class="ms-auto">
                     <a class="btn btn-info btn-sm" href="#reply-to">{{ 'Reply'|trans }}</a>
-                    <button class="btn btn-secondary btn-sm" href="{{ 'api/guest/support/ticket_close'|link({ 'hash': ticket.hash, 'CSRFToken': CSRFToken })}}" id="new-ticket-button" data-api-reload="1"> {{ 'Close ticket'|trans }}</button>
+                    <button class="btn btn-secondary btn-sm" type="button" id="new-ticket-button">{{ 'Close ticket'|trans }}</button>
                 </div>
             </div>
         </div>    
@@ -68,7 +68,7 @@
                             {% endif %}
                         </header>
                         <section>
-                            <div class="well" id="message-{{message.id}}">{{ message.content|markdown }}</div>
+                            <div class="well" id="message-{{message.id}}">{{ message.content|markdown_to_html }}</div>
                         </section>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
         </div>
         <div class="card-footer" id="reply-to">
             {% if ticket.status != 'closed' %}
-                <form method="post" action="" class="api_form" data-api-url="guest/support/ticket_reply" data-api-reload="1">
+                <form action="{{ 'support/ticket_reply'|api_url(role='guest') }}" class="api-form" {{ fb_api_form({ reload: true }) }}>
                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <input type="hidden" name="hash" value="{{ ticket.hash }}" />
                     

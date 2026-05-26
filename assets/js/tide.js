@@ -91,3 +91,12 @@ function initLanguageSelector() {
 }
 
 document.addEventListener("DOMContentLoaded", initLanguageSelector);
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof API !== "undefined" && document.querySelector("form[data-fb-api]")) {
+    API._apiForm();
+  }
+  if (typeof API !== "undefined" && document.querySelector("a[data-fb-api]")) {
+    API._apiLink();
+  }
+});

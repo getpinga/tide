@@ -55,7 +55,7 @@
                         <h3 class="card-title mb-0">{{ 'Contacts'|trans }}</h3>
 
                         {% if profile is defined and profile and (profile.id ?? 0) %}
-                        <a href="{{ 'client/profile'|link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ 'client/profile'|url }}" target="_blank" class="btn btn-sm btn-outline-primary">
                           {{ 'Update profile'|trans }}
                         </a>{% endif %}
                       </div>

@@ -8,7 +8,7 @@
 
 {% block body_class %}order-manage{% endblock %}
 {% block breadcrumb %}
-<li class="breadcrumb-item"><a href="{{ 'order/service' | link}}">{{ 'Services'|trans }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'order/service' |url}}">{{ 'Services'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ order.title }}</li>
 {% endblock %}
 
@@ -44,7 +44,7 @@
                       </div>
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Payment amount'|trans }}</div>
-                        <div class="datagrid-content">{{ order.total|money(order.currency) }}</div>
+                        <div class="datagrid-content">{{ order.total|format_currency(order.currency ?? default_currency) }}</div>
                       </div>
                       {% if order.period %}
                       <div class="datagrid-item">
@@ -73,13 +73,13 @@
                       {% if order.notes %}
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Order notes'|trans }}</div>
-                        <div class="datagrid-content">{{ order.notes|markdown }}</div>
+                        <div class="datagrid-content">{{ order.notes|markdown_to_html }}</div>
                       </div>
                       {% endif %}
                       {% if order.active_tickets > 0 %}
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Active support tickets'|trans }}</div>
-                        <div class="datagrid-content"><div class="num"><a href="{{ 'support'|link }}" class="redNum">{{ order.active_tickets }}</a></div></div>
+                        <div class="datagrid-content"><div class="num"><a href="{{ 'support'|url }}" class="redNum">{{ order.active_tickets }}</a></div></div>
                       </div>
                       {% endif %}
                     </div>
@@ -131,14 +131,14 @@
                             {% for i, addon in addons %}
                                 <tr>
                                     <td>{{ addon.title }}</td>
-                                    <td>{{ addon.total|money(addon.currency) }}</td>
+                                    <td>{{ addon.total|format_currency(addon.currency ?? default_currency) }}</td>
                                     <td>{{ addon.period|period_title }}</td>
                                     <td>{% if addon.expires_at %}{{ addon.expires_at|format_date }}{% else %}-{% endif %}</td>
                                     <td>
                                         <span class="badge {% if addon.status == 'active' %}bg-success{% elseif addon.status == 'pending_setup' %}bg-warning{% endif %}">{{ mf.status_name(addon.status) }}</span>
                                     </td>
                                     <td class="actions">
-                                        <a class="btn btn-outline-primary btn-sm" href="{{ '/order/service/manage'|link }}/{{ addon.id }}">{{ 'Manage'|trans }}</a>
+                                        <a class="btn btn-outline-primary btn-sm" href="{{ '/order/service/manage'|url }}/{{ addon.id }}">{{ 'Manage'|trans }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -312,7 +312,7 @@
                     if (confirm("This will generate new invoice. Are you sure you want to continue?")) {
                         API.client.post('invoice/renewal_invoice', { order_id: {{ order.id }} },
                             (result) => {
-                                window.location = "{{ 'invoice'|link }}" + '/' + result;
+                                window.location = "{{ 'invoice'|url }}" + '/' + result;
                             });
                     }
                 });

@@ -15,14 +15,15 @@
 {% set loader_nr = request.loader | default("8")%}
 {% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
 {% set product = request.order ? guest.product_get({"id":request.order}) : null %}
+{% set cart_currency = guest.cart_get_currency %}
 
 {% block body_class %}order-index{% endblock %}
 {% block breadcrumb %}
 {% if request.order matches '/^\\d+$/' %}
-<li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'order' |url}}">{{ 'Order'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ (request.order == 1 ? 'Domain Configuration' : 'Product Configuration')|trans }}</li>
 {% elseif request.checkout matches '/^\\d+$/' %}
-<li class="breadcrumb-item"><a href="{{ 'order' | link}}">{{ 'Order'|trans }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'order' |url}}">{{ 'Order'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ 'Cart'|trans }}</li>
 {% endif %}
 {% endblock %}
@@ -44,7 +45,7 @@
                 </div>
                 <div>
                     {% set cart = guest.cart_get %}
-                    <a href="{{ 'orderbutton?checkout=1'|link }}" class="btn btn-light position-relative">
+                    <a href="{{ 'orderbutton?checkout=1'|url }}" class="btn btn-light position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>&nbsp;{{ 'Cart'|trans }}
                         <span class="badge bg-green text-green-fg ms-1">
                             {{ cart.items | length }}
@@ -55,12 +56,13 @@
          </div>
          <div class="card-body">
             {% if product %}
-            <form method="post" style="background:none;" class="api-form form-{{ product.form_id ? guest.formbuilder_get( {"id":product.form_id}).style.type : 0 }}" action="{{ 'api/guest/cart/add_item'|link }}" data-api-msg="{{ 'Product was added to shopping cart'|trans }}" data-api-redirect="{{ 'orderbutton'|link({ 'checkout' : 1 }) }}" + "{% if request.show_custom_form_values %}&show_custom_form_values=1{% endif %}">
+            {% set add_item_redirect = 'orderbutton'|url({ 'checkout' : 1 }) ~ (request.show_custom_form_values ? '&show_custom_form_values=1' : '') %}
+            <form style="background:none;" class="api-form form-{{ product.form_id ? guest.formbuilder_get( {"id":product.form_id}).style.type : 0 }}" action="{{ 'cart/add_item'|api_url(role='guest') }}" {{ fb_api_form({ message: 'Product was added to shopping cart'|trans, redirect: add_item_redirect }) }}>
                 <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                 {% set product_details %}
                 <div class="card card-borderless bg-primary-lt mb-4">
                   <div class="card-body">
-                    <h3 class="card-title">{{ product.title }} <div class="card-subtitle">{% if product.description %}{{ product.description | markdown }}{% endif %}</div></h3>
+                    <h3 class="card-title">{{ product.title }} <div class="card-subtitle">{% if product.description %}{{ product.description |markdown_to_html }}{% endif %}</div></h3>
                         <h5><strong>{{ 'Billing'|trans }}</strong></h5>
                         <div class="row">
                             <div class="col-12 col-md-4 col-xl-3">
@@ -76,14 +78,14 @@
                                 <select class="form-select" name="period" id="period-selector">
                                     {% for code,prices in product.pricing.recurrent %}
                                         {% if prices.enabled %}
-                                            <option value="{{code}}" data-bb-price="{{ prices.price | money_convert }}" name="period">{{ prices.price | money_convert }} ({{ periods[code] }})</option>
+                                            <option value="{{code}}" data-bb-price="{{ (prices.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}" name="period">{{ (prices.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }} ({{ periods[code] }})</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
                                 {% elseif product.pricing.type == 'free' %}
-                                <span class="badge bg-success text-success-fg">{{ 0 | money_convert }}</span>
+                                <span class="badge bg-success text-success-fg">{{ 0|format_currency(cart_currency.code) }}</span>
                                 {% else %}
-                                <span class="badge bg-success text-success-fg">{{ product.pricing.once.price | money_convert }}</span>
+                                <span class="badge bg-success text-success-fg">{{ (product.pricing.once.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -167,10 +169,10 @@
                            </td>
                            <td>
                               {% if item.discount_price %}
-                              <del>{{ item.total | money_convert }}</del>
-                              <strong class="text-success">{{ (item.total-item.discount_price) | money_convert }}</strong>
+                               <del>{{ (item.total * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</del>
+                               <strong class="text-success">{{ ((item.total-item.discount_price) * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</strong>
                               {% else %}
-                              {{ (item.total) | money_convert }}
+                               {{ (item.total * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                               {% endif %}
                            </td>
                            <td>
@@ -233,10 +235,10 @@
                            <td>{{ item.title }} {{ 'setup'|trans }}</td>
                            <td>
                               {% if item.discount_setup %}
-                              <del>{{ item.setup_price | money_convert }}</del>
-                              {{ (item.setup_price - item.discount_setup) | money_convert }}
+                               <del>{{ (item.setup_price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</del>
+                               {{ ((item.setup_price - item.discount_setup) * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                               {% else %}
-                              {{ item.setup_price | money_convert }}
+                               {{ (item.setup_price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                            </td>
                            {% endif %}
                         </tr>
@@ -250,7 +252,7 @@
                   <a href="#" id="show-promo-field">{{ 'Have a coupon code?'|trans }}</a>
                </div>
                {% endif %}
-               <form action="{{ 'api/guest/cart/apply_promo'|link }}" method="post" class="api-form well" data-api-msg="{{ 'Promo code was applied for your order'|trans }}" data-api-reload="1" {% if not cart.promocode %}style="display:none"{% endif %} id="apply-promo">
+               <form action="{{ 'cart/apply_promo'|api_url(role='guest') }}" class="api-form well" {{ fb_api_form({ message: 'Promo code was applied for your order'|trans, reload: true }) }} {% if not cart.promocode %}style="display:none"{% endif %} id="apply-promo">
                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <div class="mb-3">
                         <div class="row">
@@ -259,7 +261,7 @@
                             </div>
                             <div class="col-4 col-md-4">
                                 {% if cart.promocode %}
-                                    <a class="btn btn-warning mb-1 api-link" href="{{ 'api/guest/cart/remove_promo'|link({ 'CSRFToken': CSRFToken }) }}" type="button" data-api-reload="1"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <a class="btn btn-warning mb-1 api-link" href="{{ 'cart/remove_promo'|api_url(role='guest') }}" type="button" {{ fb_api_link({ reload: true }) }}><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                    <path d="M12 8h8a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4m-4 0h-8a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1h4"></path>
                                    <path d="M12 12v9"></path>
@@ -287,11 +289,11 @@
                      {% if cart.discount >0 %}
                      <tr>
                         <td><strong>{{ 'Subtotal:'|trans }}</strong></td>
-                        <td><strong>{{ (cart.subtotal)| money_convert }}</strong></td>
+                        <td><strong>{{ (cart.subtotal * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</strong></td>
                      </tr>
                      <tr>
                         <td><strong>{{ 'Discount:'|trans }}</strong></td>
-                        <td><strong>- {{ cart.discount | money_convert }}</strong></td>
+                        <td><strong>- {{ (cart.discount * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</strong></td>
                      </tr>
                      {% endif %}
                      {% set tax_amount = 0 %}
@@ -300,12 +302,12 @@
                      {% set tax_amount = cart.total * tax_rate / 100 %}
                      <tr>
                         <td><strong>{{ 'VAT'|trans }} ({{ tax_rate }}%) :</strong></td>
-                        <td><strong>{{ tax_amount | money_convert }}</strong></td>
+                        <td><strong>{{ (tax_amount * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</strong></td>
                      </tr>
                      {% endif %}
                      <tr>
                         <td><strong>{{ 'Total:'|trans }}</strong></td>
-                        <td><strong>{{ (cart.total + tax_amount) | money_convert }}</strong></td>
+                        <td><strong>{{ ((cart.total + tax_amount) * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</strong></td>
                      </tr>
                   </table>
                </div>
@@ -449,7 +451,7 @@
                    });
                });
                </script>
-               <form class="api-form" method="post" action="{{ 'api/client/cart/checkout'|link }}" data-api-jsonp="onOrderCheckout">
+                <form class="api-form" action="{{ 'cart/checkout'|api_url(role='client') }}" {{ fb_api_form({ callback: 'onOrderCheckout' }) }}>
                   <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                   <fieldset class="form-fieldset mt-3">
                      {% set enough_in_balance = client.client_balance_get_total >= cart.total %}
@@ -558,7 +560,7 @@
                         document.getElementById('checkout').remove();
                         bootstrap.Collapse.getOrCreateInstance(paymentHtmlEl).show();
                     } else {
-                        const link = '{{ "invoice/banklink"|link }}' + '/' + result.invoice_hash + '/' + result.gateway_id;
+                        const link = '{{ "invoice/banklink"|url }}' + '/' + result.invoice_hash + '/' + result.gateway_id;
                         document.getElementById('payment-html-inner').innerHTML = '<a href="' + link + '" target="_parent" id="redirect-to-gateway">Redirect to payment gateway</a>';
                         bootstrap.Collapse.getOrCreateInstance(checkoutEl).hide();
                         document.getElementById('checkout-inner').remove();
@@ -567,13 +569,13 @@
                     }
                 });
         } else {
-            window.top.location.href = ('{{ "order/service/manage"|link }}' + '/' + result.order_id);
+            window.top.location.href = ('{{ "order/service/manage"|url }}' + '/' + result.order_id);
         }
     }
 
     function onLogin(result){
         FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
-        window.location.href = "{{ 'orderbutton'|link({ 'checkout': 1 }) }}";
+        window.location.href = "{{ 'orderbutton'|url({ 'checkout': 1 }) }}";
         let registerEl = document.getElementById('register');
         new bootstrap.Collapse('#register').hide();
         document.querySelector("#checkoutButton").hidden = false;
@@ -592,7 +594,7 @@
         API.guest.post('client/login', login_details,
             () => {
                 FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
-                window.location.href = "{{ 'orderbutton'|link({ 'checkout': 1 }) }}";
+                window.location.href = "{{ 'orderbutton'|url({ 'checkout': 1 }) }}";
                 let registerEl = document.getElementById('register');
                 new bootstrap.Collapse('#register').hide();
                 document.querySelector("#checkoutButton").hidden = false;

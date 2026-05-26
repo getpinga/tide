@@ -96,7 +96,7 @@
                 </div>
                 <div class="card-body">
 
-                  <form class="api-form" action="{{ 'api/client/servicedomain/update_nameservers'|link }}" data-api-msg="{{ 'Nameservers updated'|trans }}" method="post">
+                  <form class="api-form" action="{{ 'servicedomain/update_nameservers'|api_url(role='client') }}" {{ fb_api_form({ message: 'Nameservers updated'|trans }) }}>
                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <input type="hidden" name="order_id" value="{{ order.id }}">
 
@@ -141,7 +141,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                    <form class="api-form" action="{{ 'api/client/domainx/ds_add'|link }}" data-api-msg="{{ 'DS record added'|trans }}" method="post">
+                    <form class="api-form" action="{{ 'domainx/ds_add'|api_url(role='client') }}" {{ fb_api_form({ message: 'DS record added'|trans }) }}>
                         <input type="hidden" name="domain" value="{{ service.domain }}" />
                         <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                         <input type="hidden" name="order_id" value="{{ order.id }}">
@@ -202,7 +202,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                  <form class="api-form" method="post" action="{{ 'api/client/servicedomain/update_contacts'|link }}" data-api-msg="{{ 'Contact details updated'|trans }}">
+                  <form class="api-form" action="{{ 'servicedomain/update_contacts'|api_url(role='client') }}" {{ fb_api_form({ message: 'Contact details updated'|trans }) }}>
                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <input type="hidden" name="order_id" value="{{ order.id }}">
 

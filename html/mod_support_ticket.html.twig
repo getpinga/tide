@@ -11,7 +11,7 @@
 
 {% block body_class %}support-ticket{% endblock %}
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{{ 'support' | link }}">{{ 'Support tickets'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ 'support' |url }}">{{ 'Support tickets'|trans }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ ticket.subject }}</li>
 {% endblock %}
 
@@ -51,7 +51,7 @@
                       {% if ticket.rel_type == 'order' and ticket.rel_id %}
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Related to'|trans }}</div>
-                        <div class="datagrid-content"><a href="{{ 'order/service/manage'|link }}/{{ ticket.rel_id }}">{{ 'Service #'|trans }} {{ ticket.rel_id }}</a></div>
+                        <div class="datagrid-content"><a href="{{ 'order/service/manage'|url }}/{{ ticket.rel_id }}">{{ 'Service #'|trans }} {{ ticket.rel_id }}</a></div>
                       </div>
                       {% endif %}
                     </div>
@@ -97,7 +97,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <article class="markdown-body bg-transparent text-reset" id="message-{{ message.id }}">
-                                            {{ message.content|markdown }}
+                                            {{ message.content|markdown_to_html }}
                                         </article>
                                     </div>
                                 </div>
