@@ -1,0 +1,14 @@
+{
+  "name": "tide",
+  "scripts": {
+    "build": "node ./esbuild.mjs",
+    "dev": "node ./esbuild.mjs --watch"
+  },
+  "dependencies": {
+    "@tabler/core": "^1.2.0",
+    "tom-select": "^2.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.0"
+  }
+}

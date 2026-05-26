@@ -43,7 +43,7 @@
     <link rel="shortcut icon" href="{{ guest.system_company.favicon_url }}">
 
     {{ "Api/API.js" | library_url | script_tag }}
-    <script src="{{ 'js/atrix.js' | asset_url }}"></script>
+    <script src="{{ 'build/js/tide-bundle.js' | asset_url }}"></script>
 
     {% block head %}{% endblock %}
     {% block js %}{% endblock %}
