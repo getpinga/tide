@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>{{ settings.meta_title_prefix }} {% block meta_title %}{% endblock %} {{ settings.meta_title_suffix }}</title>
 
-    <meta property="bb:url" content="{{ constant('SYSTEM_URL') }}">
-
     <meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}">
     <meta name="keywords" content="{{ settings.meta_keywords }}">
     <meta name="robots" content="{{ settings.meta_robots }}">
@@ -69,6 +67,5 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1070;"></div>
     </div>
     {{ include('partial_pending_messages.html.twig', ignore_missing: true) }}
-    <script src="{{ 'js/tide.js' | asset_url }}"></script>
 </body>
 </html>
