@@ -147,10 +147,10 @@
                 </table>
                 
                 {% if invoice.text_1 %}
-                    <p class="text-secondary text-center mt-5">{{ invoice.text_1|markdown_to_html }}</p>
+                    <p class="text-secondary text-center mt-5">{{ (invoice.text_1 ?? '')|markdown_to_html }}</p>
                 {% endif %}
                 {% if invoice.text_2 %}
-                    <p class="text-secondary text-center mt-5">{{ invoice.text_2|markdown_to_html }}</p>
+                    <p class="text-secondary text-center mt-5">{{ (invoice.text_2 ?? '')|markdown_to_html }}</p>
                 {% endif %}
               </div>
             </div>

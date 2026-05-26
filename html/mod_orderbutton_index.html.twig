@@ -62,7 +62,7 @@
                 {% set product_details %}
                 <div class="card card-borderless bg-primary-lt mb-4">
                   <div class="card-body">
-                    <h3 class="card-title">{{ product.title }} <div class="card-subtitle">{% if product.description %}{{ product.description |markdown_to_html }}{% endif %}</div></h3>
+                    <h3 class="card-title">{{ product.title }} <div class="card-subtitle">{% if product.description %}{{ (product.description ?? '')|markdown_to_html }}{% endif %}</div></h3>
                         <h5><strong>{{ 'Billing'|trans }}</strong></h5>
                         <div class="row">
                             <div class="col-12 col-md-4 col-xl-3">

@@ -38,7 +38,7 @@
                 {% for i, category in guest.product_category_get_list.list %}
                 {% if not loop.first %}<hr />{% endif %}
                 <h2{% if not loop.first %} class="mt-4"{% endif %}>{{ category.title }}</h2>
-                <span>{{ category.description|markdown_to_html }}</span>
+                <span>{{ (category.description ?? '')|markdown_to_html }}</span>
                 <div class="row row-cards">
                    {% for i, product in category.products|sort((a, b) => a.priority <=> b.priority) %}
                    <div class="{% if loop.length == 1 %}col-sm-12 col-lg-12{% elseif loop.length == 2 %}col-sm-6 col-lg-6{% elseif loop.length == 3 %}col-sm-6 col-lg-4{% else %}col-sm-6 col-lg-3{% endif %}">

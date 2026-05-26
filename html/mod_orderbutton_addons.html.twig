@@ -18,7 +18,7 @@
         <div class="col">
           <div class="fw-bold">{{ addon.title }}</div>
           <div class="text-secondary small">
-            {{ addon.description|markdown_to_html }}
+            {{ (addon.description ?? '')|markdown_to_html }}
           </div>
         </div>
 

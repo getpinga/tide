@@ -73,7 +73,7 @@
                       {% if order.notes %}
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Order notes'|trans }}</div>
-                        <div class="datagrid-content">{{ order.notes|markdown_to_html }}</div>
+                        <div class="datagrid-content">{{ (order.notes ?? '')|markdown_to_html }}</div>
                       </div>
                       {% endif %}
                       {% if order.active_tickets > 0 %}
