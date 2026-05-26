@@ -40,7 +40,6 @@
                         <p class="card-text fs-7 text-muted">{{ 'Keep your personal data up to date.'|trans }}</p>
                         <form action="{{ 'profile/update'|api_url(role='client') }}" id="profile-update" class="api-form"
                               {{ fb_api_form({ message: 'Profile updated'|trans }) }}>
-                            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}">
                             <div class="row">
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label" for="first_name">{{ 'First Name'|trans }}</label>
@@ -165,7 +164,6 @@
                         <h5 class="card-title mb-1">{{ 'Change Password'|trans }}</h5>
                         <p class="card-text fs-7 text-muted">{{ 'Enter your new password twice to avoid mistakes. '|trans }}</p>
                         <form action="{{ 'profile/change_password'|api_url(role='client') }}" class="api-form" {{ fb_api_form({ message: 'Password changed'|trans }) }}>
-                            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}">
                             <div class="mb-3">
                                 <label class="form-label" for="current_password">{{ 'Current Password'|trans }}</label>
                                 <input class="form-control" type="password" name="current_password"
@@ -189,7 +187,6 @@
                         <p class="card-text fs-7 text-muted">{{ 'API key allows integration with external applications. You will need this key for authentication.'|trans }}</p>
                         <form class="api-form" action="{{ 'profile/api_key_reset'|api_url(role='client') }}" id="change-api-key"
                               {{ fb_api_form({ message: 'API key was changed'|trans }) }}>
-                            <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                             {% if client.profile_api_key_get %}
                                 <div class="alert alert-warning" role="alert">
                                     <strong>{{ 'Warning!'|trans }}</strong>&nbsp;{{ 'Resetting the key will break existing applications using it!'|trans }}

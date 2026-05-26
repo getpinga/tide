@@ -82,7 +82,6 @@
             <div class="tab-pane fade" role="tabpanel" id="password">
                 <h3>{{ 'Change your control panel/FTP/SSH password'|trans }}</h3>
                 <form class="api-form" action="{{ 'servicehosting/change_password'|api_url(role='client') }}" {{ fb_api_form({ message: 'Password changed'|trans }) }}>
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <fieldset>
                         <div class="control-group">
                             <label class="col-form-label" >{{ 'Password'|trans }}: </label>
@@ -110,7 +109,6 @@
             <div class="tab-pane fade" role="tabpanel" id="domain">
                 <h3>{{ 'Change domain'|trans }}</h3>
                 <form class="api-form" action="{{ 'servicehosting/change_domain'|api_url(role='client') }}" {{ fb_api_form({ message: 'Domain name changed'|trans }) }}>
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <fieldset>
                         <div class="mb-3">
                             <label class="form-label">{{ 'New domain'|trans }}:</label>
@@ -143,7 +141,6 @@
             <div class="tab-pane fade" role="tabpanel" id="username">
                 <h3>{{ 'Change username'|trans }}</h3>
                 <form class="api-form" action="{{ 'servicehosting/change_username'|api_url(role='client') }}" {{ fb_api_form({ message: 'Username changed'|trans }) }}>
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <fieldset>
                     <div class="control-group">
                         <label class="col-form-label" >{{ 'Username'|trans }}: </label>

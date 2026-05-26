@@ -58,7 +58,6 @@
             {% if product %}
             {% set add_item_redirect = 'orderbutton'|url({ 'checkout' : 1 }) ~ (request.show_custom_form_values ? '&show_custom_form_values=1' : '') %}
             <form style="background:none;" class="api-form form-{{ product.form_id ? guest.formbuilder_get( {"id":product.form_id}).style.type : 0 }}" action="{{ 'cart/add_item'|api_url(role='guest') }}" {{ fb_api_form({ message: 'Product was added to shopping cart'|trans, redirect: add_item_redirect }) }}>
-                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                 {% set product_details %}
                 <div class="card card-borderless bg-primary-lt mb-4">
                   <div class="card-body">
@@ -253,7 +252,6 @@
                </div>
                {% endif %}
                <form action="{{ 'cart/apply_promo'|api_url(role='guest') }}" class="api-form well" {{ fb_api_form({ message: 'Promo code was applied for your order'|trans, reload: true }) }} {% if not cart.promocode %}style="display:none"{% endif %} id="apply-promo">
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-8 col-md-8">
@@ -452,7 +450,6 @@
                });
                </script>
                 <form class="api-form" action="{{ 'cart/checkout'|api_url(role='client') }}" {{ fb_api_form({ callback: 'onOrderCheckout' }) }}>
-                  <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                   <fieldset class="form-fieldset mt-3">
                      {% set enough_in_balance = client.client_balance_get_total >= cart.total %}
                      {% if cart.total and not enough_in_balance %}

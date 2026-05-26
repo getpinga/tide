@@ -20,7 +20,6 @@
         {% endif %}
         </div>
         <form class="api-form auth card card-md" action="{{ 'client/create'|api_url(role='guest') }}" {{ fb_api_form({ redirect: '/'|url }) }}>
-          <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
           {% set r = guest.client_required %}
           <div class="card-body">
             <h2 class="card-title text-center mb-4">{{ 'Create a new account'|trans }}</h2>

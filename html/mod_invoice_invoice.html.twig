@@ -26,7 +26,6 @@
                 </div>
                 <div class="card-body">
                     <form action="{{ 'invoice/payment'|api_url(role='guest') }}" class="api-form" {{ fb_api_form({ redirect: ('invoice/'~invoice.hash)|url({ 'auto_redirect': 1 }) }) }}>
-                        <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                         <input type="hidden" name="hash" value="{{ invoice.hash }}"/>
                         <div class="d-flex gap-3">
                             {% for gtw in guest.invoice_gateways %}
