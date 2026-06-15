@@ -1,4 +1,5 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'services' %}
 
 {% import "macro_functions.html.twig" as mf %}
 
@@ -8,7 +9,7 @@
 
 {% block body_class %}order-manage{% endblock %}
 {% block breadcrumb %}
-<li class="breadcrumb-item"><a href="{{ 'order/service' | link}}">{{ 'Services'|trans }}</a></li>
+<li class="breadcrumb-item"><a href="{{ 'order/service'|url}}">{{ 'Services'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ order.title }}</li>
 {% endblock %}
 
@@ -16,10 +17,12 @@
 {% set upgradables = client.order_upgradables({ 'id': order.id }) %}
 
 {% block head %}
-    {{ mf.wysiwyg('.editor-textarea') }}
+    {{ wysiwyg('.editor-textarea') }}
 {% endblock %}
 
 {% block content %}
+    {{ render_widgets('client.order.manage.content.start', { 'order': order }) }}
+
     <div class="row">
         <div class="col-md-12">
             {# Order info #}
@@ -27,7 +30,7 @@
                 <div class="card-header py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h1 class="mb-1">{{ 'Service details'|trans }}</h1>
+                            <h1 class="mb-1">{{ 'Service Details'|trans }}</h1>
                             <span class="small text-secondary">{{ 'All information about your service'|trans }}</span>
                         </div>
                     </div>
@@ -39,70 +42,75 @@
                         <div class="datagrid-content">#{{ order.id }}</div>
                       </div>
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Product name'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Product Name'|trans }}</div>
                         <div class="datagrid-content"><strong>{{ order.title }}</strong></div>
                       </div>
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Payment amount'|trans }}</div>
-                        <div class="datagrid-content">{{ order.total|money(order.currency) }}</div>
+                        <div class="datagrid-title">{{ 'Payment Amount'|trans }}</div>
+                        <div class="datagrid-content">{{ order.total|format_currency(order.currency ?? default_currency) }}</div>
                       </div>
                       {% if order.period %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Billing cycle'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Billing Cycle'|trans }}</div>
                         <div class="datagrid-content">{{ order.period|period_title }}</div>
                       </div>
                       {% endif %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Order status'|trans }}</div>
-                        <div class="datagrid-content"><span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span></div>
+                        <div class="datagrid-title">{{ 'Order Status'|trans }}</div>
+                        <div class="datagrid-content">{{ mf.status_badge(order.status, 'order') }}</div>
                       </div>
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Order created'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Order Created'|trans }}</div>
                         <div class="datagrid-content">{{ order.created_at|date('Y-m-d H:i:s') }}</div>
                       </div>
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Activated at'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Activated At'|trans }}</div>
                         <div class="datagrid-content">{% if order.activated_at %}{{ order.activated_at|date('Y-m-d H:i:s') }}{% else %}-{% endif %}</div>
                       </div>
                       {% if order.period %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Renewal date'|trans }} {% if order.expires_at %} in {{ order.expires_at|daysleft }} day(s) {% endif %}</div>
+                        <div class="datagrid-title">{{ 'Renewal Date'|trans }} {% if order.expires_at %} in {{ order.expires_at|daysleft }} day(s) {% endif %}</div>
                         <div class="datagrid-content">{% if order.expires_at %}{{ order.expires_at|date('Y-m-d H:i:s') }}{% else %}-{% endif %}</div>
                       </div>
                       {% endif %}
                       {% if order.notes %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Order notes'|trans }}</div>
-                        <div class="datagrid-content">{{ order.notes|markdown }}</div>
+                        <div class="datagrid-title">{{ 'Order Notes'|trans }}</div>
+                        <div class="datagrid-content">{{ (order.notes ?? '')|markdown_to_html }}</div>
                       </div>
                       {% endif %}
                       {% if order.active_tickets > 0 %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Active support tickets'|trans }}</div>
-                        <div class="datagrid-content"><div class="num"><a href="{{ 'support'|link }}" class="redNum">{{ order.active_tickets }}</a></div></div>
+                        <div class="datagrid-title">{{ 'Active Support Tickets'|trans }}</div>
+                        <div class="datagrid-content"><div class="num"><a href="{{ 'support'|url }}" class="redNum">{{ order.active_tickets }}</a></div></div>
                       </div>
                       {% endif %}
                     </div>
+                    {{ render_widgets('client.order.manage.details.after', { 'order': order }) }}
                 </div>
                 <div class="card-footer">
                     {% if order.period and order.status != 'failed_renew' %}
-                        <button class="btn btn-primary btn-sm" type="button" id="renewal-button">{{ 'Renew now'|trans }}</button>
+                        <button class="btn btn-primary btn-sm" type="button" id="renewal-button">{{ 'Renew Now'|trans }}</button>
                     {% endif %}
                     {% if upgradables %}
                         <button class="btn btn-success btn-sm" type="button" id="request-upgrade" data-bs-toggle="modal" data-bs-target="#upgrade-request-modal">{{ 'Request Upgrade'|trans }}</button>
                     {% endif %}
-                    <button class="btn btn-info btn-sm" type="button" id="open-ticket" data-bs-toggle="modal" data-bs-target="#open-ticket-modal">{{ 'Open ticket'|trans }}</button>
+                    <button class="btn btn-info btn-sm" type="button" id="open-ticket" data-bs-toggle="modal" data-bs-target="#open-ticket-modal">{{ 'Open Ticket'|trans }}</button>
                     {% if order.status == 'active' %}
-                        <button class="btn btn-danger btn-sm" type="button" id="request-cancel" data-bs-toggle="modal" data-bs-target="#cancel-request-modal">{{ 'Request cancellation'|trans }}</button>
+                        <button class="btn btn-danger btn-sm" type="button" id="request-cancel" data-bs-toggle="modal" data-bs-target="#cancel-request-modal">{{ 'Request Cancellation'|trans }}</button>
                     {% endif %}
+                    {{ render_widgets('client.order.manage.actions.end', { 'order': order }) }}
                 </div>
             </div>
 
             {# Service management #}
-            {% if guest.system_template_exists({ 'file': service_partial }) %}
+            {% set service = null %}
+            {{ render_widgets('client.order.manage.service.before', { 'order': order, 'service': service }) }}
+            {% if order.status == 'active' and guest.system_template_exists({ 'file': service_partial }) %}
                 {% set service = client.order_service({ 'id': order.id }) %}
                 {{ include(service_partial, { 'order': order, 'service': service }) }}
             {% endif %}
+            {{ render_widgets('client.order.manage.service.after', { 'order': order, 'service': service }) }}
 
             {# Order addons #}
             {% if order.group_master == 1 and addons|length > 0 %}
@@ -122,7 +130,7 @@
                                 <th>{{ 'Product/Service'|trans }}</th>
                                 <th>{{ 'Price'|trans }}</th>
                                 <th>{{ 'Billing Cycle'|trans }}</th>
-                                <th>{{ 'Next due date'|trans }}</th>
+                                <th>{{ 'Next Due Date'|trans }}</th>
                                 <th>{{ 'Status'|trans }}</th>
                                 <th>{{ 'Actions'|trans }}</th>
                             </tr>
@@ -131,14 +139,12 @@
                             {% for i, addon in addons %}
                                 <tr>
                                     <td>{{ addon.title }}</td>
-                                    <td>{{ addon.total|money(addon.currency) }}</td>
+                                    <td>{{ addon.total|format_currency(addon.currency ?? default_currency) }}</td>
                                     <td>{{ addon.period|period_title }}</td>
                                     <td>{% if addon.expires_at %}{{ addon.expires_at|format_date }}{% else %}-{% endif %}</td>
-                                    <td>
-                                        <span class="badge {% if addon.status == 'active' %}bg-success{% elseif addon.status == 'pending_setup' %}bg-warning{% endif %}">{{ mf.status_name(addon.status) }}</span>
-                                    </td>
+                                    <td>{{ mf.status_badge(addon.status, 'order') }}</td>
                                     <td class="actions">
-                                        <a class="btn btn-outline-primary btn-sm" href="{{ '/order/service/manage'|link }}/{{ addon.id }}">{{ 'Manage'|trans }}</a>
+                                        <a class="btn btn-outline-primary btn-sm" href='{{ "order/service/manage/#{addon.id}"|url }}'>{{ 'Manage'|trans }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -152,17 +158,16 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5">{{ 'Submit cancellation request'|trans }}</h1>
+                            <h1 class="modal-title fs-5">{{ 'Submit Cancellation Request'|trans }}</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
                         </div>
                         <form action="" method="post" id="cancel-request-form" class="request-cancellation">
                             <div class="modal-body">
-                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                 <input type="hidden" name="rel_type" value="order">
                                 <input type="hidden" name="rel_id" value="{{ order.id }}">
                                 <input type="hidden" name="rel_task" value="cancel">
                                 <div class="mb-3">
-                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help Desk'|trans }}</label>
                                     {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
                                 </div>
                                 <div class="mb-3">
@@ -186,16 +191,15 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5">{{ 'Submit new support ticket'|trans }}</h1>
+                            <h1 class="modal-title fs-5">{{ 'Submit New Support Ticket'|trans }}</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
                         </div>
                         <form action="" method="post" id="open-ticket-form" class="open-ticket">
                             <div class="modal-body">
-                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                 <input type="hidden" name="rel_type" value="order">
                                 <input type="hidden" name="rel_id" value="{{ order.id }}">
                                 <div class="mb-3">
-                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help Desk'|trans }}</label>
                                     {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
                                 </div>
                                 <div class="mb-3">
@@ -208,7 +212,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">{{ 'Open ticket'|trans }}</button>
+                                <button type="submit" class="btn btn-primary">{{ 'Open Ticket'|trans }}</button>
                             </div>
                         </form>
                     </div>
@@ -219,17 +223,16 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5">{{ 'Submit upgrade request'|trans }}</h1>
+                            <h1 class="modal-title fs-5">{{ 'Submit Upgrade Request'|trans }}</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
                         </div>
                         <form action="" method="post" id="upgrade-request-form" class="request-upgrade">
                             <div class="modal-body">
-                                <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                 <input type="hidden" name="rel_type" value="order">
                                 <input type="hidden" name="rel_id" value="{{ order.id }}">
                                 <input type="hidden" name="rel_task" value="upgrade">
                                 <div class="mb-3">
-                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help desk'|trans }}</label>
+                                    <label for="support-helpdesk-id" class="form-label">{{ 'Help Desk'|trans }}</label>
                                     {{ mf.selectbox('support_helpdesk_id', client.support_helpdesk_get_pairs, request.support_helpdesk_id, 1) }}
                                 </div>
                                 <div class="mb-3">
@@ -237,7 +240,7 @@
                                     <input class="form-control" type="text" name="subject" id="subject" value="{{ request.subject|e }}" required />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="rel_new_value" class="form-label">{{ 'Upgrade to'|trans }}</label>
+                                    <label for="rel_new_value" class="form-label">{{ 'Upgrade To'|trans }}</label>
                                     {{ mf.selectbox('rel_new_value', upgradables, '', 1) }}
                                 </div>
                                 <div class="mb-3">
@@ -258,66 +261,70 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-
+{% autoescape "js" %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             const cancelRequestForm = document.getElementById('cancel-request-form');
             const upgradeRequestForm = document.getElementById('upgrade-request-form');
             const openTicketForm = document.getElementById('open-ticket-form');
 
-            cancelRequestForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                API.client.post('support/ticket_create',
-                    new FormData(cancelRequestForm).serializeObject(),
+            cancelRequestForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                FOSSBilling.api.client.post('support/ticket_create', FOSSBilling.tools.serializeFormDataToObject(new FormData(cancelRequestForm)),
                     () => {
                         FOSSBilling.message('Service cancellation request received');
                         const cancelRequestModal = bootstrap.Modal.getInstance(document.getElementById('cancel-request-modal'))
                         cancelRequestModal.hide();
                     },
-                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
-                )
+                    (res) => {
+                        FOSSBilling.message(`${res.message} (${res.code})`, 'error');
+                    });
             });
 
-            upgradeRequestForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                API.client.post('support/ticket_create',
-                    new FormData(upgradeRequestForm).serializeObject(),
+            upgradeRequestForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                FOSSBilling.api.client.post('support/ticket_create', FOSSBilling.tools.serializeFormDataToObject(new FormData(upgradeRequestForm)),
                     () => {
                         FOSSBilling.message('Service upgrade request received');
                         const upgradeRequestModal = bootstrap.Modal.getInstance(document.getElementById('upgrade-request-modal'))
                         upgradeRequestModal.hide();
                     },
-                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
-                )
+                    (res) => {
+                        FOSSBilling.message(`${res.message} (${res.code})`, 'error')
+                    });
             });
 
-            openTicketForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                API.client.post('support/ticket_create',
-                    new FormData(openTicketForm).serializeObject(),
+            openTicketForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                FOSSBilling.api.client.post('support/ticket_create', FOSSBilling.tools.serializeFormDataToObject(new FormData(openTicketForm)),
                     () => {
                         FOSSBilling.message('Ticket was submitted. If you want to track conversation please go to support section');
                         let openTicketModal = bootstrap.Modal.getInstance(document.getElementById('open-ticket-modal'));
                         openTicketModal.hide();
                     },
-                    (res) => FOSSBilling.message(`${res.message} (${res.code})`, 'error')
-                )
+                    (res) => {
+                        FOSSBilling.message(`${res.message} (${res.code})`, 'error')
+                    });
             });
 
-            const renewalButton = document.getElementById('renewal-button');
-            if (renewalButton) {
-                renewalButton.addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    if (confirm("This will generate new invoice. Are you sure you want to continue?")) {
-                        API.client.post('invoice/renewal_invoice', { order_id: {{ order.id }} },
-                            (result) => {
-                                window.location = "{{ 'invoice'|link }}" + '/' + result;
-                            });
-                    }
-                });
-            }
-
         });
+
+        const renewalButton = document.getElementById('renewal-button');
+        if (renewalButton) {
+            renewalButton.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if (confirm("This will generate new invoice. Are you sure you want to continue?")) {
+                    FOSSBilling.api.client.post('invoice/renewal_invoice', { order_id: {{ order.id }} },
+                        (result) => {
+                            window.location = "{{ 'invoice'|url }}" + '/' + result;
+                        });
+                }
+            });
+        }
     </script>
+{% endautoescape %}
 {% endblock %}

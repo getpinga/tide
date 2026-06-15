@@ -3,7 +3,7 @@
 {% block meta_title %}{{ 'Email'|trans }}{% endblock %}
 
 {% block breadcrumb %}
-<li class="breadcrumb-item" aria-current="page"><a href="{{ 'email'|link }}">{{ 'Emails'|trans }}</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="{{ 'email'|url }}">{{ 'Emails'|trans }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ email.subject }}</li>
 {% endblock %}
 {% block body_class %}email-email{% endblock %}
@@ -32,11 +32,11 @@
                 </div>
             </div>
             <div class="card-body">
-                <iframe class="ratio ratio-1x1 email" id="email-content" src="about:blank" style="height: 30em"></iframe>
+                <iframe class="ratio ratio-1x1 email" id="email-content" src="about:blank" sandbox="allow-popups" style="height: 30em"></iframe>
                 <script>
                     (function () {
-                        frame = document.getElementById("email-content");
-                        frame.srcdoc = `{{ email.content_html|raw }}`;
+                        const frame = document.getElementById("email-content");
+                        frame.srcdoc = '{{ email.content_html|e('js') }}';
                     })();
                 </script>
             </div>
@@ -47,7 +47,7 @@
 
 {% block js %}
 {% autoescape "js" %}
-<script type="text/javascript">
+<script>
     document.addEventListener("DOMContentLoaded", () => {
         const resendEmailBtn = document.querySelectorAll('.email-resend');
         const deleteEmailBtn = document.querySelectorAll('.email-delete');
@@ -56,12 +56,12 @@
             resendBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleLoader();
-                API.client.post('email/resend',
-                    {id: resendBtn.dataset.id, CSRFToken: "{{ CSRFToken }}"},
+                FOSSBilling.api.client.post('email/resend',
+                    {id: resendBtn.dataset.id },
                     () => {
                         flashMessage({
                             message: 'Email resent',
-                            reload: '{{ 'email'|link }}'
+                            reload: '{{ 'email'|url }}'
                         });
                     },
                     (res) => {
@@ -77,12 +77,12 @@
                 e.preventDefault();
                 if (confirm('Are you sure?')) {
                     toggleLoader();
-                    API.client.post('email/delete',
-                        {id: deleteBtn.dataset.id, CSRFToken: "{{ CSRFToken }}"},
+                    FOSSBilling.api.client.post('email/delete',
+                        {id: deleteBtn.dataset.id },
                         () => {
                             flashMessage({
                                 message: 'Email #'+ deleteBtn.dataset.id +' deleted',
-                                reload: '{{ 'email'|link }}'
+                                reload: '{{ 'email'|url }}'
                             });
                         },
                         (res) => {

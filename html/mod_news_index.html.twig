@@ -1,4 +1,5 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'news' %}
 
 {% block meta_title %}{{ 'News'|trans }}{% endblock %}
 
@@ -27,13 +28,13 @@
                                 <span class="text-muted">{{ post.updated_at|format_datetime }}</span>
                                 <p>
                                     {% if post.excerpt %}
-                                        {{ post.excerpt|truncate(200)|markdown }}
+                                        {{ post.excerpt|truncate(200)|markdown_to_html }}
                                     {% else %}
-                                        {{ post.content|truncate(200)|markdown }}
+                                        {{ post.content|truncate(200)|markdown_to_html }}
                                     {% endif %}
                                 </p>
                                 <a class="link-offset-2 link-underline"
-                                   href="{{ '/news'|link }}/{{ post.slug }}">{{ 'Continue reading'|trans }}
+                                   href="{{ '/news'|url }}/{{ post.slug }}">{{ 'Continue reading'|trans }}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
                                 </a>
                             </div>

@@ -1,17 +1,18 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'support' %}
 
 {% import "macro_functions.html.twig" as mf %}
 
 {% block meta_title %}{{ ticket.subject }}{% endblock %}
 
 {% block head %}
-    <link rel='stylesheet' type='text/css' href="{{ 'css/markdown.css' | asset_url }}">
-    {{ mf.wysiwyg('.editor-textarea') }}
+    {{ 'css/markdown.css' | public_asset_url | stylesheet_tag }}
+    {{ wysiwyg('.editor-textarea') }}
 {% endblock %}
 
 {% block body_class %}support-ticket{% endblock %}
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{{ 'support' | link }}">{{ 'Support tickets'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ 'support'|url }}">{{ 'Support Tickets'|trans }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ ticket.subject }}</li>
 {% endblock %}
 
@@ -28,7 +29,7 @@
                                     <button class="btn btn-info btn-sm" id="reply-to-btn">{{ 'Reply'|trans }}</button>
                                 {% endif %}
                                 {% if ticket.status != 'closed' %}
-                                    <button class="btn btn-secondary btn-sm" type="button" id="ticket-close">{{ 'Close ticket'|trans }}</button>
+                                    <button class="btn btn-secondary btn-sm" type="button" id="ticket-close">{{ 'Close Ticket'|trans }}</button>
                                 {% endif %}
                             </div>
                         </div>
@@ -37,21 +38,21 @@
                 <div class="card-body">
                     <div class="datagrid">
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Help desk'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Help Desk'|trans }}</div>
                         <div class="datagrid-content">{{ ticket.helpdesk.name }}</div>
                       </div>
                       <div class="datagrid-item">
                         <div class="datagrid-title">{{ 'Status'|trans }}</div>
-                        <div class="datagrid-content"><div class="badge {% if ticket.status=='open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% else %}bg-danger text-danger-fg{% endif %}">{{ mf.status_name(ticket.status) }}</div></div>
+                        <div class="datagrid-content">{{ mf.status_badge(ticket.status, 'ticket') }}</div>
                       </div>
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Time opened'|trans }}</div>
+                        <div class="datagrid-title">{{ 'Time Opened'|trans }}</div>
                         <div class="datagrid-content">{{ ticket.created_at|format_date }}</div>
                       </div>
-                      {% if ticket.rel_type == 'order' and ticket.rel_id %}
+                      {% if ticket.rel_type|default('') == 'order' and ticket.rel_id %}
                       <div class="datagrid-item">
-                        <div class="datagrid-title">{{ 'Related to'|trans }}</div>
-                        <div class="datagrid-content"><a href="{{ 'order/service/manage'|link }}/{{ ticket.rel_id }}">{{ 'Service #'|trans }} {{ ticket.rel_id }}</a></div>
+                        <div class="datagrid-title">{{ 'Related To'|trans }}</div>
+                        <div class="datagrid-content"><a href='{{ "order/service/manage/#{ticket.rel_id}"|url }}'>{{ 'Service #'|trans }} {{ ticket.rel_id }}</a></div>
                       </div>
                       {% endif %}
                     </div>
@@ -62,15 +63,15 @@
             {% for i, message in ticket.messages %}
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card {% if message.admin_id %}border-primary{% endif %}">
+                        <div class="card {% if message.author.role == 'admin' %}border-primary{% endif %}">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="avatar bg-green-lt">{{ profile.first_name|slice(0, 2)|upper }}</span>
+                                    <span class="avatar bg-green-lt">{{ message.author.name|slice(0, 2)|upper }}</span>
                                     <div class="d-flex flex-column">
                                         <span class="text-muted">
                                             {{ message.author.name }}
                                         </span>
-                                        {% if message.admin_id %}
+                                        {% if message.author.role == 'admin' %}
                                             <span class="badge bg-primary text-primary-fg">
                                                     {{ 'Operator'|trans }}
                                                 </span>
@@ -87,7 +88,7 @@
                                         <span class="text-muted fs-7">#{{ message.id }}</span>
                                         <button class="btn btn-outline-secondary btn-quote-reply"
                                                 message-quote="{{ mf.markdown_quote(message.content) }}"
-                                                data-bs-toggle="tooltip" data-bs-title="{{ 'Quote reply'|trans }}">
+                                                data-bs-toggle="tooltip" data-bs-title="{{ 'Quote Reply'|trans }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5a2 2 0 0 1 2 2v6c0 3.13 -1.65 5.193 -4.757 5.97a1 1 0 1 1 -.486 -1.94c2.227 -.557 3.243 -1.827 3.243 -4.03v-1h-3a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-3a2 2 0 0 1 2 -2z" /><path d="M18 5a2 2 0 0 1 2 2v6c0 3.13 -1.65 5.193 -4.757 5.97a1 1 0 1 1 -.486 -1.94c2.227 -.557 3.243 -1.827 3.243 -4.03v-1h-3a2 2 0 0 1 -1.995 -1.85l-.005 -.15v-3a2 2 0 0 1 2 -2z" /></svg>
                                         </button>
                                     </div>
@@ -97,7 +98,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <article class="markdown-body bg-transparent text-reset" id="message-{{ message.id }}">
-                                            {{ message.content|markdown }}
+                                            {{ (message.content ?? '')|markdown_to_html }}
                                         </article>
                                     </div>
                                 </div>
@@ -119,7 +120,6 @@
                         <div class="card mt-3" id="reply-to">
                             <div class="card-body">
                                 <form id="ticket-reply-form">
-                                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                                     <input type="hidden" name="id" value="{{ ticket.id }}">
                                     <textarea name="content" cols="5" rows="10" class="editor-textarea form-control" required="required"
                                               id="ticket-reply-text"></textarea>
@@ -145,10 +145,9 @@
             const replyToMessageBtn = document.querySelectorAll('.btn-quote-reply');
             const ticketReplyTextArea = document.getElementById('ticket-reply-text');
 
-            ticketReplyForm.addEventListener('submit', (e) => {
+            ticketReplyForm?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                API.client.post('support/ticket_reply',
-                    new FormData(ticketReplyForm).serializeObject(),
+                FOSSBilling.api.client.post('support/ticket_reply', FOSSBilling.tools.serializeFormDataToObject(new FormData(ticketReplyForm)),
                     () => {
                         flashMessage({
                             message: 'Posted reply',
@@ -159,11 +158,10 @@
                 )
             });
 
-            closeTicketBtn.addEventListener('click', (e) => {
+            closeTicketBtn?.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleLoader();
-                API.client.post('support/ticket_close',
-                    new FormData(ticketReplyForm).serializeObject(),
+                FOSSBilling.api.client.post('support/ticket_close', FOSSBilling.tools.serializeFormDataToObject(new FormData(ticketReplyForm)),
                     () => {
                         flashMessage({
                             message: 'Closed ticket #{{ ticket.id }}',
@@ -174,7 +172,7 @@
                 )
             });
 
-            postReplyBtn.addEventListener('click', () => {
+            postReplyBtn?.addEventListener('click', () => {
                 if (document.getElementById('ticket-reply-text').value.length > 0) {
                     toggleLoader();
                 }
@@ -184,17 +182,30 @@
                 reply.addEventListener('click', (e) => {
                     e.preventDefault();
                     let quote = e.currentTarget.getAttribute('message-quote');
-                    ticketReplyTextArea.textContent = quote.replace(/^\s*$(?:\r\n?|\n)/gm, '');
-                    ticketReplyTextArea.focus();
+                    quote = quote.replace(/^\s*$(?:\r\n?|\n)/gm, '');
+                    if (ticketReplyTextArea.editor) {
+                        ticketReplyTextArea.editor.setData(quote);
+                        ticketReplyTextArea.editor.focus();
+                    } else {
+                        ticketReplyTextArea.textContent = quote;
+                        ticketReplyTextArea.focus();
+                    }
                 });
             })
 
-            document.getElementById('reply-to-btn').addEventListener('click', () => {
-                ticketReplyTextArea.focus();
+            document.getElementById('reply-to-btn')?.addEventListener('click', () => {
+                if (ticketReplyTextArea.editor) {
+                    ticketReplyTextArea.editor.focus();
+                } else {
+                    ticketReplyTextArea.focus();
+                }
             });
 
             const toggleLoader = () => {
                 let loader = document.querySelector('.wait');
+                if (!loader) {
+                    return;
+                }
                 if (loader.style.display === 'none') {
                     loader.style.display = 'block';
                 } else {

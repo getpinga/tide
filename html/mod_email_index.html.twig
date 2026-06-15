@@ -2,7 +2,8 @@
 
 {% block meta_title %}{{ 'Emails'|trans }}{% endblock %}
 {% block breadcrumb %}
-<li class="active breadcrumb-item" aria-current="page">{{ 'Emails'|trans }}</li>{% endblock %}
+    <li class="active breadcrumb-item" aria-current="page">{{ 'Emails'|trans }}</li>{% endblock %}
+
 {% set emails = client.email_get_list({"per_page":10, "page":request.page}) %}
 
 {% block body_class %}email-index{% endblock %}
@@ -10,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mb-4">
-                <div class="card-header py-3 py-3">
+                <div class="card-header py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h1 class="mb-1">{{ 'Emails'|trans }}</h1>
@@ -20,9 +21,8 @@
                 </div>
                 <div class="card-body p-0">
                     {% if emails.list is empty %}
-                    <div class="d-flex justify-content-center my-2 py-4">
-                        <span class="blockquote m-0">{{ 'There are no emails to display'|trans }}</span>
-                    </div>
+                    <div class="m-2 alert alert-info"
+                         id="information-block">{{ 'There are no emails to display'|trans }}</div>
                     {% else %}
                     <div class="d-flex">
                         <div class="nav nav-tabs flex-column col-md-4 border-0">
@@ -31,7 +31,7 @@
                                     <a class="list-group-item list-group-item-action mt-0{% if loop.first %} active{% endif %}"
                                        href="#mail-{{ loop.index }}" data-bs-toggle="list" role="tab">
                                         <div class="flex-column py-1">
-                                            <p class="m-0" style="font-size: 80%;">{{ email.subject | truncate }}</p>
+                                            <p class="m-0" style="font-size: 80%;">{{ email.subject|truncate }}</p>
                                             <span class="text-muted small" style="font-size: 80%;">{{ email.created_at|format_datetime }}</span>
                                         </div>
                                     </a>
@@ -44,22 +44,22 @@
                                 <div class="tab-pane fade{% if loop.first %} show active{% endif %}"
                                      id="mail-{{ loop.index }}" role="tabpanel">
                                     <div class="card-body">
-                                        <h4 class="mb-0">{{ email.subject }}</h4>
+                                        <h6 class="mb-0">{{ email.subject }}</h6>
                                         <div class="card-header px-0">
-                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                            <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex flex-column gap-1">
                                                     <span class="d-block"><span class="text-muted me-2">{{ 'From'|trans }}</span>{{ email.sender }}</span>
                                                     <span class="d-block"><span class="text-muted me-2">{{ 'To'|trans }}</span>{{ email.recipients }}</span>
                                                 </div>
                                                 <div class="d-flex flex-column gap-2">
                                                     <div class="btn-group d-flex" role="group" aria-label="{{ 'Mail Action'|trans }}">
-                                                        <a class="btn btn-icon btn-outline btn-primary border-end-0" href="{{ 'email'|link }}/{{ email.id }}" data-bs-toggle="tooltip" data-bs-title="{{ 'View'|trans }}">
+                                                        <a class="btn btn-icon btn-outline-secondary border-end-0" href='{{ "email/#{email.id}"|url }}' data-bs-toggle="tooltip" data-bs-title="{{ 'View'|trans }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
                                                         </a>
-                                                        <a class="btn btn-icon btn-outline btn-secondary email-resend" href="#" data-id="{{ email.id }}" data-bs-toggle="tooltip" data-bs-title="{{ 'Resend'|trans }}">
+                                                        <a class="btn btn-icon btn-outline-secondary email-resend" href="#" data-id="{{ email.id }}" data-bs-toggle="tooltip" data-bs-title="{{ 'Resend'|trans }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-iconh"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>
                                                         </a>
-                                                        <a class="btn btn-icon btn-outline btn-danger email-delete" href="#" data-id="{{ email.id }}" data-bs-toggle="tooltip" data-bs-title="{{ 'Delete'|trans }}">
+                                                        <a class="btn btn-icon btn-outline-danger border-start-0 email-delete" href="#" data-id="{{ email.id }}" data-bs-toggle="tooltip" data-bs-title="{{ 'Delete'|trans }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                                         </a>
                                                     </div>
@@ -69,11 +69,11 @@
                                         </div>
                                         <div class="card-body">
                                             {# Workaround: email styling can effect the style of this page, so instead we use JS to insert the email contents into an iframe. A default height is set in case of errors #}
-                                            <iframe class="ratio ratio-1x1 email" id="email-content-{{ i }}" src="about:blank" style="height: 30em"></iframe>
+                                            <iframe class="ratio ratio-1x1 email" id="email-content-{{ i }}" src="about:blank" sandbox="allow-same-origin allow-popups" style="height: 30em"></iframe>
                                             <script>
                                                 (function () {
-                                                    frame = document.getElementById("email-content-{{ i }}");
-                                                    frame.srcdoc = `{{ email.content_html|raw }}`;
+                                                    const frame = document.getElementById("email-content-{{ i }}");
+                                                    frame.srcdoc = '{{ email.content_html|e('js') }}';
                                                 })();
                                             </script>
                                         </div>
@@ -85,7 +85,7 @@
                 </div>
                     {% if emails.pages >= 2 %}
                         <div class="card-footer">
-                            {{ include('partial_pagination.html.twig', { 'list': emails }) }}
+                            {{ include('partial_pagination.html.twig', { 'list': emails, 'url': 'email' }) }}
                         </div>
                     {% endif %}
                 {% endif %}
@@ -96,7 +96,7 @@
 
 {% block js %}
     {% autoescape "js" %}
-        <script type="text/javascript">
+        <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const resendEmailBtn = document.querySelectorAll('.email-resend');
                 const deleteEmailBtn = document.querySelectorAll('.email-delete');
@@ -105,12 +105,11 @@
                     resendBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         toggleLoader();
-                        API.client.post('email/resend',
-                            {id: resendBtn.dataset.id, CSRFToken: "{{ CSRFToken }}"},
+                        FOSSBilling.api.client.post('email/resend', { id: resendBtn.dataset.id },
                             () => {
                                 flashMessage({
                                     message: 'Email resent',
-                                    reload: '{{ 'email'|link }}'
+                                    reload: '{{ 'email'|url }}'
                                 });
                             },
                             (res) => {
@@ -126,12 +125,11 @@
                         e.preventDefault();
                         if (confirm('Are you sure?')) {
                             toggleLoader();
-                            API.client.post('email/delete',
-                                {id: deleteBtn.dataset.id, CSRFToken: "{{ CSRFToken }}"},
+                            FOSSBilling.api.client.post('email/delete', { id: deleteBtn.dataset.id },
                                 () => {
                                     flashMessage({
                                         message: 'Email #'+ deleteBtn.dataset.id +' deleted',
-                                        reload: '{{ 'email'|link }}'
+                                        reload: '{{ 'email'|url }}'
                                     });
                                 },
                                 (res) => {

@@ -72,11 +72,11 @@ function initLanguageSelector() {
 
       if (!lang) return;
 
-      setCookie("BBLANG", lang, 7);
+      setCookie("fb_locale", lang, 365);
       location.reload();
     });
 
-    const current = getCookie("BBLANG");
+    const current = getCookie("fb_locale");
 
     if (current) {
       if (
@@ -91,3 +91,12 @@ function initLanguageSelector() {
 }
 
 document.addEventListener("DOMContentLoaded", initLanguageSelector);
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof API !== "undefined" && document.querySelector("form[data-fb-api]")) {
+    API._apiForm();
+  }
+  if (typeof API !== "undefined" && document.querySelector("a[data-fb-api]")) {
+    API._apiLink();
+  }
+});

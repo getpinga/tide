@@ -1,13 +1,15 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'invoices' %}
 
-{% block meta_title %}{{ 'Thank you'|trans }}{% endblock %}
-{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page">{{ 'Thank you'|trans }}</li>{% endblock %}
+{% block meta_title %}{{ 'Thank You'|trans }}{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active" aria-current="page">{{ 'Thank You'|trans }}</li>{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="card ms-0 ms-md-3 w-100">
         <div class="card-header">
-            <h3 class="card-title">{{ 'Thank you'|trans }}</h3>
+            <h1>{{ 'Thank You'|trans }}</h1>
+            <p>{{ 'Your payment has been submitted and will be processed shortly. It may take some time for your invoice to be marked as paid.'|trans }}</p>
         </div>
         <div class="card-body">
             <p>{{ 'Payment for invoice received'|trans }}</p>
@@ -18,7 +20,7 @@
 
             <script>
                 setTimeout(function() {
-                    window.location = "{{ ('/invoice/' ~ invoice.hash)|link }}";
+                    window.location = '{{ "invoice/#{invoice.hash}"|url }}';
                 }, 1 * 60 * 1000);
             </script>
         </div>

@@ -19,8 +19,7 @@
             </div>
         {% endif %}
         </div>
-        <form class="api-form auth card card-md" action="{{ 'api/guest/client/create'|link }}" method="post" data-api-redirect="{{ '/'|link }}">
-          <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+        <form class="api-form auth card card-md" action="{{ 'client/create'|api_url(role='guest') }}" {{ fb_api_form({ redirect: '/'|url }) }}>
           {% set r = guest.client_required %}
           <div class="card-body">
             <h2 class="card-title text-center mb-4">{{ 'Create a new account'|trans }}</h2>
@@ -219,7 +218,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                     <label class="form-check-label" for="flexCheckDefault">
-                        <span>I agree to the <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}.</a></span>
+                        <span>I agree to the <a href="{{ '/tos'|url }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|url }}" target="_blank">{{ 'privacy policy'|trans }}.</a></span>
                     </label>
                 </div>
             </div>
@@ -227,7 +226,7 @@
 
             {% if settings.signup_tos == 'implicit' %}
             <div class="mb-3">
-                <span class="text-muted mb-1">By creating an account, you agree to our <a href="{{ '/tos'|link }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|link }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
+                <span class="text-muted mb-1">By creating an account, you agree to our <a href="{{ '/tos'|url }}" target="_blank">{{ 'terms of service'|trans }}</a> and <a href="{{ '/privacy-policy'|url }}" target="_blank">{{ 'privacy policy'|trans }}</a>.</span>
             </div>
             {% endif %}
 
@@ -236,7 +235,7 @@
             </div>
           </div>
         </form>
-        <div class="text-center text-secondary mt-3">{{ 'Already a user?'|trans }} <a href="{{ 'login'|link }}" tabindex="-1">{{ 'Login'|trans }}</a></div>
+        <div class="text-center text-secondary mt-3">{{ 'Already a user?'|trans }} <a href="{{ 'login'|url }}" tabindex="-1">{{ 'Login'|trans }}</a></div>
       </div>
     </div>
 <script>

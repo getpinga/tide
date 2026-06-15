@@ -1,14 +1,16 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'kb' %}
 
 {% block meta_title %}{{ article.title }}{% endblock %}
+{% block meta_description %}{{ (article.content ?? '')|markdown_to_html|striptags|trim|truncate(160) }}{% endblock %}
 
 {% block body_class %}kb-article{% endblock %}
 {% block breadcrumb %}
 <li class="breadcrumb-item">
-    <a href="{{ 'support/kb'|link }}">{{ 'Knowledge Base'|trans }}</a>
+    <a href="{{ 'support/kb'|url }}">{{ 'Knowledge Base'|trans }}</a>
 </li>
 <li class="breadcrumb-item">
-    <a href="{{ 'support/kb'|link }}/{{ article.category.slug }}">{{ article.category.title }}</a>
+    <a href='{{ "support/kb/#{article.category.slug}"|url }}'>{{ article.category.title }}</a>
 </li>
 <li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
 {% endblock %}
@@ -18,17 +20,17 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header py-3 py-3">
-                <h3 class="card-title">{{ article.title }} <span class="card-subtitle">{{ article.views }} {{ 'views'|trans }}</span></h3>
+                <h3 class="card-title">{{ article.title }} <span class="card-subtitle">{{ article.views }} {{ 'Views'|trans }}</span></h3>
             </div>
             <div class="card-body">
                 <div class="list-group ms-2">
-                    {{ article.content|markdown }}
+                    {{ (article.content ?? '')|markdown_to_html }}
                 </div>
             </div>
             <div class="card-footer">
-                <a href="{{ 'support/kb'|link }}" class="btn btn-primary btn-sm" type="button">{{ 'Go back'|trans }}</a>
+                <a href="{{ 'support/kb'|url }}" class="btn btn-primary btn-sm" type="button">{{ 'Go Back'|trans }}</a>
 
-                <a href="{{ 'support/kb'|link }}/{{ article.category.slug }}" class="btn btn-primary btn-sm" type="button">{{ 'Similar articles'|trans }}</a>
+                <a href='{{ "support/kb/#{article.category.slug}"|url }}' class="btn btn-primary btn-sm" type="button">{{ 'Similar Articles'|trans }}</a>
             </div>
         </div>
     </div>

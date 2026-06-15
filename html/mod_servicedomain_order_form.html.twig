@@ -1,6 +1,9 @@
 {% set periods = guest.system_periods %}
 {% set pricing = product.pricing %}
 {% set transfer_tlds = guest.serviceDomain_tlds({ "allow_transfer": 1 })%}
+{% set cart_currency = guest.cart_get_currency %}
+{% set active_menu = 'order' %}
+
 <div class="card">
     <div class="card-body" id="register">
     {% if guest.extension_is_on({"mod":"domainsbot"}) %}
@@ -55,7 +58,7 @@
                         <h3 class="card-title mb-0">{{ 'Contacts'|trans }}</h3>
 
                         {% if profile is defined and profile and (profile.id ?? 0) %}
-                        <a href="{{ 'client/profile'|link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ 'client/profile'|url }}" target="_blank" class="btn btn-sm btn-outline-primary">
                           {{ 'Update profile'|trans }}
                         </a>{% endif %}
                       </div>
@@ -221,7 +224,7 @@
                                     <div class="text-secondary">{{ 'Registration'|trans }}</div>
                                     <div class="fw-bold text-primary">
                                         {% if details.allow_register == 1 %}
-                                            {{ currency.format|replace({'{{price}}': (details.price_registration * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                            {{ (details.price_registration * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                                         {% else %}
                                             <span class="text-secondary">—</span>
                                         {% endif %}
@@ -231,7 +234,7 @@
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <div class="text-secondary">{{ 'Renewal'|trans }}</div>
                                     <div class="fw-semibold">
-                                        {{ currency.format|replace({'{{price}}': (details.price_renew * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                        {{ (details.price_renew * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                                     </div>
                                 </div>
 
@@ -239,7 +242,7 @@
                                     <div class="text-secondary">{{ 'Transfer'|trans }}</div>
                                     <div class="fw-semibold">
                                         {% if details.allow_transfer == 1 %}
-                                            {{ currency.format|replace({'{{price}}': (details.price_transfer * currency.conversion_rate)|number_format(2, '.', ',') }) }}
+                                            {{ (details.price_transfer * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}
                                         {% else %}
                                             <span class="text-secondary">—</span>
                                         {% endif %}
@@ -502,7 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (tldInput) tldInput.value = tld;
             if (actionInput) actionInput.value = 'transfer';
 
-            API.guest.post(
+            FOSSBilling.api.guest.post(
                 'servicedomain/can_be_transferred',
                 { sld: sld, tld: tld },
                 function (result) {
@@ -575,7 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (tldInput) tldInput.value = tld;
             if (actionInput) actionInput.value = 'register';
 
-            API.guest.post(
+            FOSSBilling.api.guest.post(
                 'servicedomain/check',
                 { sld: sld, tld: tld },
                 function (result) {
@@ -619,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setPricing(tld) {
-        API.guest.post(
+        FOSSBilling.api.guest.post(
             'servicedomain/pricing',
             { tld: tld },
             function (result) {
@@ -628,22 +631,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 yearsSelect.innerHTML = '';
 
-                const regPrice = Number(result.price_registration);
-                let renewPrice = Number(result.price_renew);
+                const regPrice = Number(result.price_registration || 0);
+                let renewPrice = Number(result.price_renew || regPrice);
 
-                if (!Number.isFinite(renewPrice)) {
-                    renewPrice = regPrice;
-                }
+                const conversionRate = Number('{{ cart_currency.conversion_rate|default(1) }}');
 
                 for (let years = 1; years <= 5; years++) {
                     const totalPrice =
                         years === 1 ? regPrice : regPrice + (years - 1) * renewPrice;
 
-                    const formattedPrice = formatMoney(totalPrice * {{ currency.conversion_rate }});
+                    const convertedPrice = totalPrice * conversionRate;
+
+                    const formattedPrice = new Intl.NumberFormat(undefined, {
+                        style: 'currency',
+                        currency: '{{ cart_currency.code }}'
+                    }).format(convertedPrice);
 
                     const label = years === 1
-                      ? `${years} {{ 'year'|trans }}`
-                      : `${years} {{ 'years'|trans }}`;
+                        ? `${years} {{ 'year'|trans }}`
+                        : `${years} {{ 'years'|trans }}`;
 
                     const opt = new Option(label, String(years));
                     opt.dataset.price = formattedPrice;
@@ -678,7 +684,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setTransferPricing(tld) {
-        API.guest.post(
+        FOSSBilling.api.guest.post(
             'servicedomain/pricing',
             { tld: tld },
             function (result) {

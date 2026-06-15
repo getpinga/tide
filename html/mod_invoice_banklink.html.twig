@@ -1,9 +1,10 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
+{% set active_menu = 'invoices' %}
 
-{% block meta_title %}{{ 'Processing payment ...'|trans }}{% endblock %}
+{% block meta_title %}{{ 'Processing Payment...'|trans }}{% endblock %}
 
     {% block breadcrumb %}
-        <li class="breadcrumb-item"><a href="{{ '/invoice'|link }}">{{ 'Invoices'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ 'invoice'|url }}">{{ 'Invoices'|trans }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Payment</li>
     {% endblock %}
 
@@ -13,17 +14,16 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header">
-                <h3 class="card-title">{{ 'Processing payment ...'|trans }}</h3>
+                <h1>{{ 'Processing Payment...'|trans }}</h1>
+                <p>{{ 'Thank you for your patience.'|trans }}</p>
             </div>
             <div class="card-body">
-                <p class="mb-2 fw-bold">{{ 'Thank you for your patience.'|trans }}</p>
                 {% if payment.type == 'html' %}
                     {{ payment.result|raw }}
                 {% endif %}
                 {% if payment.type == 'form' %}
-                    <h2>{{ 'Redirecting to payment gateway...'|trans }}</h2>
+                    <h2>{{ 'Redirecting to Payment Gateway...'|trans }}</h2>
                     <form method="post" action="{{ payment.service_url }}" name="payment_form">
-                        <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                             {% for key, value in payment.result %}
                                 <input type="hidden" name="{{ key }}" value="{{ value }}" />
                             {% endfor %}

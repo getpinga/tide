@@ -1,4 +1,5 @@
-{% set url = request._url|default('') %}
+{% set url = guest.system_current_url %}
+{% set url = url|split('?')|first|trim('/') %}
 {% set parts = url|split('/') %}
 {% set last = parts|last %}
 

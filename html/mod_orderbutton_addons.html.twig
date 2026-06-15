@@ -1,4 +1,4 @@
-{% if product.addons|length > 0 %}
+{% if product.addons is defined and product.addons|length > 0 %}
 <h5 class="mt-4 mb-3"><strong>{{ 'Addons & extras'|trans }}</strong></h5>
 
 <div class="card mb-3">
@@ -17,7 +17,7 @@
         <div class="col">
           <div class="fw-bold">{{ addon.title }}</div>
           <div class="text-secondary small">
-            {{ addon.description|markdown }}
+            {{ addon.description|markdown_to_html }}
           </div>
         </div>
 
@@ -27,11 +27,11 @@
             <div class="text-start text-md-end" style="min-width: 110px;">
               {% if addon.pricing.type is same as('once') %}
                 <span class="badge bg-success text-success-fg">
-                  {{ (addon.pricing.once.price + addon.pricing.once.setup) | money_convert }}
+                  {{ (addon.pricing.once.price + addon.pricing.once.setup) |format_currency(profile.currency ?? default_currency) }}
                 </span>
               {% elseif addon.pricing.type is same as('free') %}
                 <span class="badge bg-success text-success-fg">
-                  {{ 0 | money_convert }}
+                  {{ 0 |format_currency(profile.currency ?? default_currency) }}
                 </span>
               {% elseif addon.pricing.type is same as('recurrent') %}
                 {% set periods = guest.system_periods %}
@@ -41,9 +41,9 @@
                   {% for code, prices in addon.pricing.recurrent %}
                     {% if prices.enabled %}
                     <option value="{{ code }}">
-                      {{ prices.price | money_convert }}
+                      {{ prices.price |format_currency(profile.currency ?? default_currency) }}
                       {% if prices.setup != '0.00' %}
-                        + {{ prices.setup | money_convert }} {{ 'setup'|trans }}
+                        + {{ prices.setup |format_currency(profile.currency ?? default_currency) }} {{ 'setup'|trans }}
                       {% endif %}
                       ({{ periods[code] }})
                     </option>
