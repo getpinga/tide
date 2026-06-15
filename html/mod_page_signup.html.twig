@@ -24,19 +24,17 @@
           <div class="card-body">
             <h2 class="card-title text-center mb-4">{{ 'Create a new account'|trans }}</h2>
 
-            <div class="mb-3">
-                <label class="form-label" for="first-name">{{ 'First Name'|trans }}</label>
-                <input class="form-control" id="first-name" type="text" name="first_name"
-                       value="{{ request.first_name }}" required="required"/>
-            </div>
-
-            {% if 'last_name' in r %}
-                <div class="mb-3">
-                    <label class="form-label" for="last_name">{{ 'Last Name'|trans }}</label>
-                    <input class="form-control" id="last_name" type="text" name="last_name"
-                           value="{{ request.last_name }}" required="required"/>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="first-name">{{ 'First Name'|trans }}</label>
+                    <input class="form-control" id="first-name" type="text" name="first_name" value="{{ request.first_name }}" required="required"/>
                 </div>
-            {% endif %}
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="last_name">{{ 'Last Name'|trans }}</label>
+                    <input class="form-control" id="last_name" type="text" name="last_name" value="{{ request.last_name }}"{% if 'last_name' in r %} required="required"{% endif %}/>
+                </div>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label" for="reg-email">{{ 'Email Address'|trans }}</label>
