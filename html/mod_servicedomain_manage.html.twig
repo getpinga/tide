@@ -96,8 +96,7 @@
                 </div>
                 <div class="card-body">
 
-                  <form class="api-form" action="{{ 'api/client/servicedomain/update_nameservers'|link }}" data-api-msg="{{ 'Nameservers updated'|trans }}" method="post">
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                  <form method="post" action="{{ 'servicedomain/update_nameservers'|api_url }}" {{ fb_api_form({message: 'Nameservers Updated'|trans}) }}>
                     <input type="hidden" name="order_id" value="{{ order.id }}">
 
                     <div class="row g-3">
@@ -141,8 +140,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                    <form class="api-form" action="{{ 'api/client/domainx/ds_add'|link }}" data-api-msg="{{ 'DS record added'|trans }}" method="post">
-                        <input type="hidden" name="domain" value="{{ service.domain }}" />
+                    <form method="post" action="{{ 'domainx/ds_add'|api_url }}" {{ fb_api_form({message: 'DS record added'|trans}) }}>
                         <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
                         <input type="hidden" name="order_id" value="{{ order.id }}">
 
@@ -202,8 +200,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                  <form class="api-form" method="post" action="{{ 'api/client/servicedomain/update_contacts'|link }}" data-api-msg="{{ 'Contact details updated'|trans }}">
-                    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+                  <form method="post" action="{{ 'servicedomain/update_contacts'|api_url }}" {{ fb_api_form({message: 'Contact Details Updated'|trans}) }}>
                     <input type="hidden" name="order_id" value="{{ order.id }}">
 
                     <div class="row g-3">
@@ -370,7 +367,7 @@ function apiFailToast(err) {
 document.getElementById('domain-lock').addEventListener('click', function (event) {
     event.preventDefault();
 
-    API.client.post(
+    FOSSBilling.api.client.post(
         'servicedomain/lock',
         { order_id: {{ order.id }} },
         () => {
@@ -385,7 +382,7 @@ document.getElementById('domain-lock').addEventListener('click', function (event
 document.getElementById('domain-unlock').addEventListener('click', function (event) {
     event.preventDefault();
 
-    API.client.post(
+    FOSSBilling.api.client.post(
         'servicedomain/unlock',
         { order_id: {{ order.id }} },
         () => {
@@ -400,7 +397,7 @@ document.getElementById('domain-unlock').addEventListener('click', function (eve
 document.getElementById('domain-enable-pp').addEventListener('click', function (event) {
     event.preventDefault();
 
-    API.client.post(
+    FOSSBilling.api.client.post(
         'servicedomain/enable_privacy_protection',
         { order_id: {{ order.id }} },
         () => {
@@ -415,7 +412,7 @@ document.getElementById('domain-enable-pp').addEventListener('click', function (
 document.getElementById('domain-disable-pp').addEventListener('click', function (event) {
     event.preventDefault();
 
-    API.client.post(
+    FOSSBilling.api.client.post(
         'servicedomain/disable_privacy_protection',
         { order_id: {{ order.id }} },
         () => {
@@ -436,7 +433,7 @@ document.getElementById('epp-code-reveal').addEventListener('click', function (e
     btn.disabled = true;
     btn.textContent = TXT_LOADING;
 
-    API.client.post(
+    FOSSBilling.api.client.post(
         'servicedomain/get_transfer_code',
         { order_id: {{ order.id }} },
         (result) => {
