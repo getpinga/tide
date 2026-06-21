@@ -369,18 +369,13 @@ function unlockDomainInput() {
   input.focus();
 }
 
-const CURRENCY_FORMAT = "{{ currency.format|e('js') }}";
-const PRICE_TOKEN = "{{ '{{' ~ 'price' ~ '}}' }}";
+const CURRENCY_CODE = "{{ profile.currency|default(default_currency)|e('js') }}";
 
 function formatMoney(amount) {
-  const value = Number(amount).toFixed(2);
-
-  const parts = value.split('.');
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  const formatted = parts.join('.');
-
-  return CURRENCY_FORMAT.split(PRICE_TOKEN).join(formatted);
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: CURRENCY_CODE
+  }).format(Number(amount));
 }
 
 function fadeIn(el, display = 'block', durationMs = 150) {

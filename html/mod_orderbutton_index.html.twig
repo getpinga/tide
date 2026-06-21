@@ -66,14 +66,14 @@
                         <h5><strong>{{ 'Billing'|trans }}</strong></h5>
                         <div class="row">
                             <div class="col-12 col-md-4 col-xl-3">
-                                {% if product.pricing.type == 'recurrent' %}
+                                {% if product.pricing.type is defined and product.pricing.type == 'recurrent' %}
                                 <span>{{ 'Billing cycle'|trans }}</span>
                                 {% else %}
                                 <span>{{ 'One-time payment'|trans }}</span>
                                 {% endif %}
                             </div>
                             <div class="col">
-                                {% if product.pricing.type == 'recurrent' %}
+                                {% if product.pricing.type is defined and product.pricing.type == 'recurrent' %}
                                 {% set periods = guest.system_periods %}
                                 <select class="form-select" name="period" id="period-selector">
                                     {% for code,prices in product.pricing.recurrent %}
@@ -82,10 +82,14 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
-                                {% elseif product.pricing.type == 'free' %}
+                                {% elseif product.pricing.type is defined and product.pricing.type == 'free' %}
                                 <span class="badge bg-success text-success-fg">{{ 0|format_currency(cart_currency.code) }}</span>
                                 {% else %}
-                                <span class="badge bg-success text-success-fg">{{ (product.pricing.once.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</span>
+                                    {% if product.pricing.once is defined and product.pricing.once.price is defined %}
+                                        <span class="badge bg-success text-success-fg">{{ (product.pricing.once.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary text-secondary-fg">-</span>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>

@@ -38,7 +38,7 @@
 
     {{ 'js/fossbilling.js' | public_asset_url | script_tag }}
     {{ 'js/api.js' | public_asset_url | script_tag }}
-    <script src="{{ 'js/atrix.js' | asset_url }}"></script>
+    <script type="module" src="{{ 'js/atrix.js' | asset_url }}"></script>
     <script src="{{ 'js/tide.js' | asset_url }}"></script>
 
     {{ debug_bar_render_head() }}
@@ -87,9 +87,9 @@
 {% set support_url = client ? 'support'|url : guest_support_url %}
 
 {% if settings.theme == 'dark' %}
-    {% set logo_url =  company.logo_url_dark %}
+    {% set logo_url = company.logo_url_dark %}
 {% else %}
-    {% set logo_url =  company.logo_url %}
+    {% set logo_url = company.logo_url %}
 {% endif %}
 <div class="page">
       {% if settings.announcement_bar_enabled %}
@@ -145,7 +145,7 @@
                     </div>
                 </div>
                 {% endif %}
-                {% set orders = client.order_get_list({"per_page":10, "page":request.page, "hide_addons":1}) %}
+                {% set orders = client ? client.order_get_list({"per_page":10, "page":request.page|default(1), "hide_addons":1}) : {"list":[]} %}
                 {% if not orders.list %}
                     {% set currencies = guest.currency_get_pairs %}
                     {% if currencies|length > 1 %}
@@ -405,51 +405,23 @@
             <div class="row text-center align-items-center flex-row-reverse">
               <div class="col-lg-auto ms-lg-auto">
                 <ul class="list-inline list-inline-dots mb-0">
-                  {% if settings.footer_link_1_enabled %}
-                  <li class="list-inline-item">
-                      {% if 'http://' in settings.footer_link_1_page or  'https://' in settings.footer_link_1_page %}
-                          <a href="{{ settings.footer_link_1_page }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
-                      {% else %}
-                          <a href="{{ settings.footer_link_1_page | url }}" class="link-secondary">{{ settings.footer_link_1_title }}</a>
-                      {% endif %}
-                  </li>
-                  {% endif %}
-                  {% if settings.footer_link_2_enabled %}
-                  <li class="list-inline-item">
-                      {% if 'http://' in settings.footer_link_2_page or  'https://' in settings.footer_link_2_page %}
-                          <a href="{{ settings.footer_link_2_page }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
-                      {% else %}
-                          <a href="{{ settings.footer_link_2_page | url }}" class="link-secondary">{{ settings.footer_link_2_title }}</a>
-                      {% endif %}
-                  </li>
-                  {% endif %}
-                  {% if settings.footer_link_3_enabled %}
-                  <li class="list-inline-item">
-                      {% if 'http://' in settings.footer_link_3_page or  'https://' in settings.footer_link_3_page %}
-                          <a href="{{ settings.footer_link_3_page }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
-                      {% else %}
-                          <a href="{{ settings.footer_link_3_page | url }}" class="link-secondary">{{ settings.footer_link_3_title }}</a>
-                      {% endif %}
-                  </li>
-                  {% endif %}
-                  {% if settings.footer_link_4_enabled %}
-                  <li class="list-inline-item">
-                      {% if 'http://' in settings.footer_link_4_page or  'https://' in settings.footer_link_4_page %}
-                          <a href="{{ settings.footer_link_4_page }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
-                      {% else %}
-                          <a href="{{ settings.footer_link_4_page | url }}" class="link-secondary">{{ settings.footer_link_4_title }}</a>
-                      {% endif %}
-                  </li>
-                  {% endif %}
-                  {% if settings.footer_link_5_enabled %}
-                  <li class="list-inline-item">
-                      {% if 'http://' in settings.footer_link_5_page or  'https://' in settings.footer_link_5_page %}
-                          <a href="{{ settings.footer_link_5_page }}" class="link-secondary">{{ settings.footer_link_5_title }}</a>
-                      {% else %}
-                          <a href="{{ settings.footer_link_5_page | url }}" class="link-secondary">{{ settings.footer_link_5_title }}</a>
-                      {% endif %}
-                  </li>
-                  {% endif %}
+                  {% for i in 1..5 %}
+                    {% set enabled_key = 'footer_link_' ~ i ~ '_enabled' %}
+                    {% set page_key = 'footer_link_' ~ i ~ '_page' %}
+                    {% set title_key = 'footer_link_' ~ i ~ '_title' %}
+                    {% set link_enabled = attribute(settings, enabled_key) is defined ? attribute(settings, enabled_key) : false %}
+                    {% if link_enabled %}
+                        {% set link_page = attribute(settings, page_key)|default('') %}
+                        {% set link_title = attribute(settings, title_key)|default('') %}
+                        <li class="list-inline-item">
+                        {% if 'http://' in link_page or 'https://' in link_page %}
+                            <a href="{{ link_page }}" class="link-secondary">{{ link_title }}</a>
+                        {% else %}
+                            <a href="{{ link_page|url }}" class="link-secondary">{{ link_title }}</a>
+                        {% endif %}
+                        </li>
+                    {% endif %}
+                  {% endfor %}
                 </ul>
               </div>
               <div class="col-12 col-lg-auto mt-3 mt-lg-0">
@@ -462,14 +434,6 @@
                         <b>{{'Payment Information'|trans}}</b> - {{'Bank Name'|trans}}: {{ company.bank_name }} | {{'BIC / SWIFT Code'|trans}}: {{ company.bic }} | {{'Account Number'|trans}}: {{ company.account_number }}
                     {% endif %}
                   </li>
-                  {% if guest.extension_is_on({"mod":'branding'}) %}
-                  <li class="list-inline-item">
-                    <span>{{ 'Powered by the'|trans }}&nbsp;</span>
-                    <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                     href="https://fossbilling.org" title="Billing Software"
-                     target="_blank">{{ 'FOSSBilling Community'|trans }}</a>
-                  </li>
-                  {% endif %}
                 </ul>
               </div>
             </div>
