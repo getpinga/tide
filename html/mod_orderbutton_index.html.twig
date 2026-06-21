@@ -30,7 +30,7 @@
 {% endblock %}
 {% block content_before %}{% endblock %}
 
-{% if not product %}
+{% if product is not defined or not product %}
     {% set product = request.product ? guest.product_get({"id":request.product}) : null %}
 {% endif %}
 
@@ -78,7 +78,7 @@
                                 <select class="form-select" name="period" id="period-selector">
                                     {% for code,prices in product.pricing.recurrent %}
                                         {% if prices.enabled %}
-                                            <option value="{{code}}" data-bb-price="{{ (prices.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }}" name="period">{{ (prices.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }} ({{ periods[code] }})</option>
+                                            <option value="{{ code }}"{% if request.period == code %} selected="selected"{% endif %}>{{ (prices.price * cart_currency.conversion_rate)|format_currency(cart_currency.code) }} ({{ periods[code] }})</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -176,13 +176,14 @@
                               {% endif %}
                            </td>
                            <td>
-                              <button data-cart-item-id="{{ item.id }}" class="btn btn-warning btn-icon remove-cart-item" title="{{ 'Remove item'|trans }}">
+                               <a class="btn btn-warning btn-icon" title="{{ 'Remove item'|trans }}"
+                                  {{ fb_api_link({href: 'cart/remove_item'|api_url(query: {id: item.id}, role: 'guest'), modal: {type: 'confirm', title: 'Are you sure?'|trans, content: 'Are you sure you want to remove this item from cart?'|trans}, reload: true}) }}>
                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
                                     <path d="M10 10l4 4m0 -4l-4 4"></path>
                                  </svg>
-                              </button>
+                               </a>
                            </td>
                         </tr>
                         {% if request.show_custom_form_values %}
@@ -528,21 +529,6 @@
             });
         });
 
-        document.querySelectorAll('.remove-cart-item').forEach(function(button) {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                if (confirm("{{ 'Are you sure you want to remove this item from cart?'|trans }}")) {
-                    var item_id = this.getAttribute('data-cart-item-id');
-
-                    FOSSBilling.api.guest.post("cart/remove_item", { id: item_id },
-                        () => {
-                            FOSSBilling.message("{{ 'Item was removed from cart'|trans }}");
-                            window.location.reload();
-                        });
-                }
-            });
-        });
     });
 
     function onOrderCheckout(result){
@@ -554,7 +540,9 @@
                     if (r.iframe) {
                         document.getElementById('payment-html-inner').innerHTML = r.result;
                         bootstrap.Collapse.getOrCreateInstance(checkoutEl).hide();
-                        document.getElementById('checkout').remove();
+                        if (checkoutEl) {
+                            checkoutEl.remove();
+                        }
                         bootstrap.Collapse.getOrCreateInstance(paymentHtmlEl).show();
                     } else {
                         const link = '{{ "invoice/banklink"|url }}' + '/' + result.invoice_hash + '/' + result.gateway_id;
@@ -574,12 +562,13 @@
         FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
         window.location.href = "{{ 'orderbutton'|url({ 'checkout': 1 }) }}";
         let registerEl = document.getElementById('register');
-        new bootstrap.Collapse('#register').hide();
+        let checkoutEl = document.getElementById('checkout');
+        bootstrap.Collapse.getOrCreateInstance(registerEl).hide();
         document.querySelector("#checkoutButton").hidden = false;
         document.querySelector("#loginMessage").hidden = true;
         setTimeout(() => {
             registerEl.parentElement.remove();
-            new bootstrap.Collapse('#checkout').show();
+            bootstrap.Collapse.getOrCreateInstance(checkoutEl).show();
         }, 500);
     }
 
@@ -593,12 +582,12 @@
                 FOSSBilling.message("{{ 'You logged in successfully'|trans }}");
                 window.location.href = "{{ 'orderbutton'|url({ 'checkout': 1 }) }}";
                 let registerEl = document.getElementById('register');
-                new bootstrap.Collapse('#register').hide();
+                bootstrap.Collapse.getOrCreateInstance(registerEl).hide();
                 document.querySelector("#checkoutButton").hidden = false;
                 document.querySelector("#loginMessage").hidden = true;
                 setTimeout(() => {
                     registerEl.parentElement.remove();
-                    new bootstrap.Collapse('#checkout').show();
+                    bootstrap.Collapse.getOrCreateInstance(document.getElementById('checkout')).show();
                     }, 500);
             });
     }
