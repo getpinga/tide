@@ -75,7 +75,7 @@
                       {% if seller.phone|trim %}{{ seller.phone }}<br>{% endif %}
                       {% if seller.email|trim %}{{ seller.email }}<br>{% endif %}
                       {% if seller.account_number|trim %}{{ seller.account_number }}<br>{% endif %}
-                      {% if seller.note|trim %}{{ seller.note }}{% endif %}
+                      {% if seller.note|default('')|trim %}{{ seller.note }}{% endif %}
                     </address>
                   </div>
                   <div class="col-6 text-end">
@@ -134,7 +134,7 @@
                     <td class="text-end">{{ invoice.tax |format_currency(invoice.currency ?? default_currency) }}</td>
                   </tr>
                   {% endif %}
-                  {% if invoice.discount > 0 %}
+                  {% if invoice.discount|default(0) > 0 %}
                   <tr>
                     <td colspan="3" class="strong text-end">{{ 'Discount'|trans }}</td>
                     <td class="text-end">{{ invoice.discount |format_currency(invoice.currency ?? default_currency) }}</td>

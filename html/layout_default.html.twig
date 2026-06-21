@@ -283,17 +283,6 @@
                     </li>
                     {% endif %}
 
-                    {% if client %}
-                    <li class="nav-item{% if current_active_menu == 'support' %} active{% endif %}">
-                      <a class="nav-link" href="{{ '/support'|url }}">
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
-                        </span>
-                        <span class="nav-link-title"> {{ 'Support'|trans }} </span>
-                      </a>
-                    </li>
-                    {% endif %}
-
                     {% if guest.extension_is_on({"mod":"news"}) %}
                     <li class="nav-item{% if current_active_menu == 'news' %} active{% endif %}">
                       <a class="nav-link" href="{{ '/news'|url }}">
@@ -328,6 +317,7 @@
                     </li>
                     {% endif %}
 
+                    {% if not client %}
                     <li class="nav-item{% if current_active_menu == 'support' %} active{% endif %}">
                       <a class="nav-link" href="{{ '/support/contact-us'|url }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -336,6 +326,16 @@
                         <span class="nav-link-title"> {{ 'Contact us'|trans }} </span>
                       </a>
                     </li>
+                    {% else %}
+                    <li class="nav-item{% if current_active_menu == 'support' %} active{% endif %}">
+                      <a class="nav-link" href="{{ '/support'|url }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M15 15l3.35 3.35" /><path d="M9 15l-3.35 3.35" /><path d="M5.65 5.65l3.35 3.35" /><path d="M18.35 5.65l-3.35 3.35" /></svg>
+                        </span>
+                        <span class="nav-link-title"> {{ 'Support'|trans }} </span>
+                      </a>
+                    </li>
+                    {% endif %}
 
                   </ul>
                 </div>

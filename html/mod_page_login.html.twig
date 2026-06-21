@@ -1,8 +1,9 @@
 {% extends "layout_public.html.twig" %}
 
-{% set company = guest.system_company %}
+{% set company = guest.system_company|default('') %}
 
 {% block meta_title %}{{ 'Login'|trans }}{% endblock %}
+{% block meta_description %}{{ 'Log in to manage your services, invoices, support tickets, and account details.'|trans }}{% endblock %}
 
 {% block body_class %}page-login{% endblock %}
 {% block body %}

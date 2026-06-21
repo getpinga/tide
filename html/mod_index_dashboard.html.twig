@@ -29,6 +29,9 @@
     {% endif %}
 
     {% if client %}
+        {% set dashboard = client.index_get_dashboard %}
+        {% set profile = dashboard.profile %}
+
         {{ render_widgets('client.index.dashboard.client.before', { 'dashboard': dashboard, 'profile': profile }) }}
 
         {% set tickets = client.support_ticket_get_list({ "status": 'on_hold' }) %}
