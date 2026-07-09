@@ -86,7 +86,7 @@
 {% set guest_support_url = guest.support_guest_tickets_enabled() ? 'support/contact-us'|url : 'login'|url %}
 {% set support_url = client ? 'support'|url : guest_support_url %}
 
-{% if settings.theme == 'dark' %}
+{% if settings.theme|default('light') == 'dark' %}
     {% set logo_url = company.logo_url_dark %}
 {% else %}
     {% set logo_url = company.logo_url %}
@@ -108,7 +108,7 @@
           <div class="navbar-brand p-0 me-auto">
             {% if logo_url and settings.show_company_logo %}
             <a class="navbar-brand" href="{{ '/'|url }}">
-              <img id="company-logo" src="{{ settings.theme == 'dark' ? company.logo_url_dark : company.logo_url }}" data-logo-light="{{ company.logo_url }}" data-logo-dark="{{ company.logo_url_dark }}" alt="{{ company.name }}" title="{{ company.name }}" class="navbar-brand-image responsive-logo">
+              <img id="company-logo" src="{{ settings.theme|default('light') == 'dark' ? company.logo_url_dark : company.logo_url }}" data-logo-light="{{ company.logo_url }}" data-logo-dark="{{ company.logo_url_dark }}" alt="{{ company.name }}" title="{{ company.name }}" class="navbar-brand-image responsive-logo">
             </a>
             {% else %}
             <a class="navbar-brand" href="{{ '/'|url }}">
