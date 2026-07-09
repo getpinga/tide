@@ -21,6 +21,7 @@
         <div class="card card-md">
           <div class="card-body">
             <h2 class="h2 text-center mb-4">{{ 'Login to your account'|trans }}</h2>
+            {{ render_widgets('client.page.login.form.before') }}
             <form class="api-form auth" action="{{ 'client/login'|api_url(role='guest') }}" {{ fb_api_form({ redirect: redirect_uri|default('/')|url }) }}>
               <div class="mb-3">
                 <label class="form-label">{{ 'Email'|trans }}</label>
@@ -61,6 +62,7 @@
                 <button type="submit" class="btn btn-primary w-100">{{ 'Login'|trans }}</button>
               </div>
             </form>
+            {{ render_widgets('client.page.login.form.after') }}
           </div>
         </div>
         {% if settings.show_signup_link %}
