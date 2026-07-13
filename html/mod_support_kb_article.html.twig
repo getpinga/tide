@@ -2,37 +2,275 @@
 {% set active_menu = 'kb' %}
 
 {% block meta_title %}{{ article.title }}{% endblock %}
-{% block meta_description %}{{ (article.content ?? '')|markdown_to_html|striptags|trim|truncate(160) }}{% endblock %}
+
+{% block meta_description %}
+    {{ (article.content ?? '')|markdown_to_html|striptags|trim|truncate(160) }}
+{% endblock %}
 
 {% block body_class %}kb-article{% endblock %}
+
+{% block head %}
+    {{ 'css/markdown.css'|public_asset_url|stylesheet_tag }}
+
+    <style>
+        .kb-article-content {
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+
+        .kb-article-content > :first-child {
+            margin-top: 0;
+        }
+
+        .kb-article-content > :last-child {
+            margin-bottom: 0;
+        }
+
+        .kb-related-link {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            padding: .875rem 1rem;
+            color: inherit;
+            text-decoration: none;
+            border-top: 1px solid var(--tblr-border-color);
+            transition:
+                background-color .15s ease,
+                color .15s ease;
+        }
+
+        .kb-related-link:first-child {
+            border-top: 0;
+        }
+
+        .kb-related-link:hover {
+            color: var(--tblr-primary);
+            background: var(--tblr-bg-surface-secondary);
+        }
+
+        .kb-related-link-title {
+            min-width: 0;
+            line-height: 1.4;
+        }
+
+        .kb-related-link-icon {
+            flex: 0 0 auto;
+            margin-top: .125rem;
+            color: var(--tblr-secondary);
+        }
+
+        @media (min-width: 992px) {
+            .kb-sidebar-sticky {
+                position: sticky;
+                top: calc(var(--tblr-page-padding-y, 1.5rem) + 1rem);
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block breadcrumb %}
-<li class="breadcrumb-item">
-    <a href="{{ 'support/kb'|url }}">{{ 'Knowledge Base'|trans }}</a>
-</li>
-<li class="breadcrumb-item">
-    <a href='{{ "support/kb/#{article.category.slug}"|url }}'>{{ article.category.title }}</a>
-</li>
-<li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
+    <li class="breadcrumb-item">
+        <a href="{{ 'support/kb'|url }}">
+            {{ 'Knowledge Base'|trans }}
+        </a>
+    </li>
+
+    <li class="breadcrumb-item">
+        <a href="{{ "support/kb/#{article.category.slug}"|url }}">
+            {{ article.category.title }}
+        </a>
+    </li>
+
+    <li class="breadcrumb-item active" aria-current="page">
+        {{ article.title }}
+    </li>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card mb-4">
-            <div class="card-header py-3 py-3">
-                <h3 class="card-title">{{ article.title }} <span class="card-subtitle">{{ article.views }} {{ 'Views'|trans }}</span></h3>
-            </div>
-            <div class="card-body">
-                <div class="list-group ms-2">
-                    {{ (article.content ?? '')|markdown_to_html }}
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ 'support/kb'|url }}" class="btn btn-primary btn-sm" type="button">{{ 'Go Back'|trans }}</a>
+    {% set related_articles = guest.support_kb_article_get_list({
+        'kb_article_category_id': article.category.id,
+        'per_page': 6
+    }).list
+        |filter(related_article => related_article.id != article.id)
+        |slice(0, 5)
+    %}
 
-                <a href='{{ "support/kb/#{article.category.slug}"|url }}' class="btn btn-primary btn-sm" type="button">{{ 'Similar Articles'|trans }}</a>
+    <header class="mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <h1 class="mb-1">
+                    {{ article.title }}
+                </h1>
+
+                {% if article.updated_at or guest.support_kb_article_views_enabled %}
+                    <div class="text-secondary mt-2">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
+                            {% if article.updated_at %}
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
+
+                                    {{ 'Updated'|trans }}
+                                    {{ '%time% ago'|trans({
+                                        '%time%': article.updated_at|timeago
+                                    }) }}
+                                </span>
+                            {% endif %}
+
+                            {% if guest.support_kb_article_views_enabled %}
+                                <span class="d-inline-flex align-items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+
+                                    {{ article.views }}
+                                    {{ 'views'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
+    </header>
+
+    <div class="row row-cards">
+        <main class="col-lg-8 col-xl-9">
+            <div class="card">
+                <div class="card-status-top bg-primary"></div>
+
+                <div class="card-body p-4 p-md-5">
+                    <div class="markdown kb-article-content">
+                        {{ (article.content ?? '')|markdown_to_html }}
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <a
+                            href="{{ 'support/kb'|url }}"
+                            class="btn btn-outline-secondary"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+
+                            {{ 'Browse all articles'|trans }}
+                        </a>
+
+                        <a
+                            href="{{ "support/kb/#{article.category.slug}"|url }}"
+                            class="btn btn-outline-secondary"
+                        >
+                            {{ 'More in this category'|trans }}
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon ms-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary-lt border-primary-subtle mt-4">
+                <div class="card-body">
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            <span class="avatar bg-primary text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12" /></svg>
+                            </span>
+                        </div>
+
+                        <div class="col">
+                            <h2 class="h3 mb-1">
+                                {{ 'Still need help?'|trans }}
+                            </h2>
+
+                            <div class="text-secondary">
+                                {{ 'If this article did not answer your question, our support team can help.'|trans }}
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-auto">
+                            <a
+                                href="{{ 'support/contact-us'|url }}"
+                                class="btn btn-primary w-100"
+                            >
+                                {{ 'Contact support'|trans }}
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon ms-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="col-lg-4 col-xl-3">
+            <div class="kb-sidebar-sticky">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="subheader mb-2">
+                            {{ 'Category'|trans }}
+                        </div>
+
+                        <h2 class="card-title mb-3">
+                            <a
+                                href="{{ "support/kb/#{article.category.slug}"|url }}"
+                                class="text-reset text-decoration-none"
+                            >
+                                {{ article.category.title }}
+                            </a>
+                        </h2>
+
+                        <a
+                            class="btn btn-outline-primary w-100"
+                            href="{{ "support/kb/#{article.category.slug}"|url }}"
+                        >
+                            {{ 'View category'|trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            {{ 'Related articles'|trans }}
+                        </h2>
+                    </div>
+
+                    {% if related_articles|length > 0 %}
+                        <div>
+                            {% for related_article in related_articles %}
+                                <a
+                                    class="kb-related-link"
+                                    href="{{ "support/kb/#{related_article.category.slug}/#{related_article.slug}"|url }}"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9.707 5.293l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 1 1 -1.414 -1.414l5.293 -5.293l-5.293 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+
+                                    <span class="kb-related-link-title">
+                                        {{ related_article.title }}
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="card-body">
+                            <div class="empty py-3">
+                                <div class="empty-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M12 17v.01" /><path d="M12 14a1.5 1.5 0 1 0 -1.14 -2.474" /></svg>
+                                </div>
+
+                                <p class="empty-title">
+                                    {{ 'No related articles yet.'|trans }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-footer">
+                        <a
+                            class="btn btn-ghost-secondary w-100"
+                            href="{{ 'support/kb'|url }}"
+                        >
+                            {{ 'Browse Knowledge Base'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
     </div>
-</div>
 {% endblock %}
