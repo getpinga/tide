@@ -227,14 +227,20 @@
                           <input class="form-control" type="text" name="contact[last_name]" id="whois_last_name" value="{{ request.last_name|default(service.contact.last_name) }}" required>
                         </div>
 
+                        <div class="col-12 col-md-12">
+                          <label for="whois_company" class="form-label">{{ 'Company'|trans }}</label>
+                          <input class="form-control" type="text" name="contact[company]" id="whois_company" value="{{ request.company|default(service.contact.company) }}">
+                        </div>
+
                         <div class="col-12 col-md-6">
                           <label for="whois_email" class="form-label">{{ 'Email'|trans }}</label>
                           <input class="form-control" type="text" name="contact[email]" id="whois_email" value="{{ request.email|default(service.contact.email) }}" autocapitalize="off" required>
                         </div>
 
                         <div class="col-12 col-md-6">
-                          <label for="whois_company" class="form-label">{{ 'Company'|trans }}</label>
-                          <input class="form-control" type="text" name="contact[company]" id="whois_company" value="{{ request.company|default(service.contact.company) }}">
+                          <label for="whois_phone" class="form-label">{{ 'Phone number'|trans }}</label>
+                          <input type="hidden" name="contact[phone_cc]" id="whois_phone_cc" value="{{ request.phone_cc|default(service.contact.phone_cc) }}">
+                          <input class="form-control js-phone-input" type="tel" name="contact[phone]" id="whois_phone" value="{{ request.phone|default(service.contact.phone) }}" autocomplete="tel" data-initial-country="{{ request.country|default(service.contact.country)|lower }}" required>
                         </div>
 
                         <div class="col-12 col-md-6">
@@ -273,12 +279,6 @@
                               </option>
                             {% endfor %}
                           </select>
-                        </div>
-
-                        <div class="col-12">
-                          <label for="whois_phone" class="form-label">{{ 'Phone number'|trans }}</label>
-                          <input type="hidden" name="contact[phone_cc]" id="whois_phone_cc" value="{{ request.phone_cc|default(service.contact.phone_cc) }}">
-                          <input class="form-control js-phone-input" type="tel" name="contact[phone]" id="whois_phone" value="{{ request.phone|default(service.contact.phone) }}" autocomplete="tel" data-initial-country="{{ request.country|default(service.contact.country)|lower }}" required>
                         </div>
                     </div>
 
