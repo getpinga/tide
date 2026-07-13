@@ -1,0 +1,83 @@
+{
+  "name": "intl-tel-input",
+  "version": "29.1.2",
+  "description": "A JavaScript library for entering, formatting, and validating international telephone numbers",
+  "type": "module",
+  "license": "MIT",
+  "author": "Jack O'Connor (http://jackocnr.com)",
+  "main": "./dist/js/intlTelInput.js",
+  "types": "./dist/js/intlTelInput.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/js/intlTelInput.d.ts",
+      "import": "./dist/js/intlTelInput.mjs"
+    },
+    "./intlTelInputWithUtils": {
+      "types": "./dist/js/intlTelInput.d.ts",
+      "import": "./dist/js/intlTelInputWithUtils.mjs"
+    },
+    "./data": {
+      "types": "./dist/js/data.d.ts",
+      "import": "./dist/js/data.mjs"
+    },
+    "./utils": {
+      "types": "./dist/js/utils.d.ts",
+      "import": "./dist/js/utils.js"
+    },
+    "./locale": {
+      "types": "./dist/js/locale.d.ts",
+      "import": "./dist/js/locale/index.js"
+    },
+    "./locale/*": {
+      "types": "./dist/js/locale.d.ts",
+      "import": "./dist/js/locale/*.js"
+    },
+    "./styles": {
+      "types": "./dist/css/styles.d.ts",
+      "default": "./dist/css/intlTelInput.css"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "dist/js/intlTelInput.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist/*",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackocnr/intl-tel-input.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://intl-tel-input.com",
+  "bugs": "https://github.com/jackocnr/intl-tel-input/issues",
+  "keywords": [
+    "international",
+    "country",
+    "country-picker",
+    "dial-code",
+    "telephone",
+    "phone",
+    "phone-number",
+    "tel",
+    "mobile",
+    "input",
+    "flag",
+    "dropdown",
+    "javascript",
+    "vanilla-js",
+    "vanilla",
+    "css",
+    "validation",
+    "libphonenumber",
+    "formatting",
+    "typescript"
+  ]
+}

@@ -9,6 +9,19 @@
 
 {% block body_class %}page-signup{% endblock %}
 {% block body %}
+    <link rel="stylesheet" href="{{ 'libs/intl-tel-input/dist/css/intlTelInput.min.css'|asset_url }}">
+    <style>
+    .iti {
+        display: block;
+        width: 100%;
+    }
+
+    .iti .form-control,
+    .iti__tel-input {
+        width: 100%;
+    }
+    </style>
+
     <div class="page page-center">
       <div class="container container-tight py-4">
         <div class="text-center mb-4">
@@ -137,12 +150,8 @@
             {% if 'phone' in r %}
                 <div class="mb-3">
                     <label class="form-label" for="phone">{{ 'Phone Number'|trans }}</label>
-                    <div class="input-group">
-                        <input class="form-control" id="phone" type="text" name="phone_cc" value=""
-                               style="width: 20%"/>
-                        <input class="form-control" id="phone" type="text" name="phone"
-                               value="{{ request.phone }}" style="width: 70%"/>
-                    </div>
+                    <input type="hidden" id="phone_cc" name="phone_cc" value="{{ request.phone_cc }}">
+                    <input class="form-control js-phone-input" id="phone" type="tel" name="phone" value="{{ request.phone }}" autocomplete="tel" data-initial-country="{{ request.country|default(guest.system_default_country)|lower }}" required="required"/>
                 </div>
             {% endif %}
 
@@ -261,6 +270,7 @@
         <div class="text-center text-secondary mt-3">{{ 'Already a user?'|trans }} <a href="{{ 'login'|url }}" tabindex="-1">{{ 'Login'|trans }}</a></div>
       </div>
     </div>
+<script src="{{ 'libs/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'|asset_url }}"></script>
 <script>
 document.querySelectorAll('.toggle-password').forEach(btn => {
 

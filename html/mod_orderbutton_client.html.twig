@@ -1,4 +1,16 @@
 {% import "macro_functions.html.twig" as mf %}
+<link rel="stylesheet" href="{{ 'libs/intl-tel-input/dist/css/intlTelInput.min.css'|asset_url }}">
+<style>
+.iti {
+    display: block;
+    width: 100%;
+}
+
+.iti .form-control,
+.iti__tel-input {
+    width: 100%;
+}
+</style>
 
 <div class="row row-deck row-cards mb-3">
    <div class="col-md-12">
@@ -235,19 +247,9 @@
 
                                     {% if 'phone' in r %}
                                         <div class="row">
-                                            <div class="col-md-7 mb-3">
-                                                <div class="row g-2">
-                                                    <div class="col-4">
-                                                        <input class="form-control form-control-sm" type="text" name="phone_cc" id="phone_cc"
-                                                               value="{{ request.phone_cc }}"
-                                                               placeholder="{{ 'Phone Code'|trans }}">
-                                                    </div>
-                                                    <div class="col-8">
-                                                        <input class="form-control form-control-sm" type="text" name="phone" id="phone"
-                                                               value="{{ request.phone }}"
-                                                               placeholder="{{ 'Phone Number'|trans }}">
-                                                    </div>
-                                                </div>
+                                            <div class="form-floating col-md-7 mb-3">
+                                                <input type="hidden" name="phone_cc" id="phone_cc" value="{{ request.phone_cc }}">
+                                                <input class="form-control form-control-sm js-phone-input" type="tel" name="phone" id="phone" value="{{ request.phone }}" autocomplete="tel" data-initial-country="{{ request.country|default(guest.system_default_country)|lower }}" required="required" placeholder="{{ 'Phone Number'|trans }}">
                                             </div>
                                         </div>
                                     {% endif %}
@@ -300,3 +302,4 @@
       </div>
    </div>
 </div>
+<script src="{{ 'libs/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'|asset_url }}"></script>
