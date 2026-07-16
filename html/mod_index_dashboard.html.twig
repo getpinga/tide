@@ -50,6 +50,46 @@
         {% endif %}
 
         <div>
+            <div class="row align-items-center mb-3">
+              <div class="col">
+                <h2 class="page-title">
+                  <span class="d-none d-md-inline">
+                    {{ 'Welcome'|trans }}, {{ profile.first_name }} {{ profile.last_name }}
+                  </span>
+
+                  <span class="d-md-none">
+                    <span class="d-block">{{ 'Welcome'|trans }},</span>
+                    <span class="d-block">{{ profile.first_name }} {{ profile.last_name }}</span>
+                  </span>
+                </h2>
+              </div>
+              <div class="col-auto ms-auto">
+                <a href="{{ '/client/balance'|url }}" class="card card-link">
+                  <div class="card-body py-2 px-3">
+                    <div class="d-flex align-items-center gap-3">
+
+                      <span class="text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" /><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" /></svg>
+                      </span>
+
+                      <div class="lh-sm">
+                        <div class="text-muted small mb-1">
+                          {{ 'Balance'|trans }}
+                        </div>
+                        <div class="fw-bold">
+                          {{ profile.balance|format_currency(profile.currency ?? default_currency) }}
+                        </div>
+                      </div>
+
+                      <span class="ms-2 text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9.707 5.293l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 1 1 -1.414 -1.414l5.293 -5.293l-5.293 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+                      </span>
+
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
             <div class="row row-cards mb-3">
                 <div class="col-sm-6 col-lg-4">
                   <a class="card card-link" href="{{ 'order/service'|url }}">
@@ -119,40 +159,6 @@
                       </div>
                     </div>
                   </a>
-                </div>
-            </div>
-            <div class="row row-cards mb-3">
-                <div class="col-12">
-                  <div class="card card-sm">
-                    <div class="card-body">
-                      <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
-                        <div class="d-flex align-items-center gap-3 min-w-0">
-                          <span class="avatar avatar-sm avatar-md bg-primary-lt text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
-                          </span>
-                          <div class="min-w-0">
-                            <div class="fw-semibold text-truncate">
-                              {{ profile.email }}
-                            </div>
-                            <div class="text-muted small">
-                              {{ 'Client ID'|trans }} #{{ profile.id }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between w-100 gap-3 ms-md-auto justify-content-md-end">
-                          <div class="text-start text-md-end">
-                            <div class="text-muted small">{{ 'Balance'|trans }}</div>
-                            <div class="fw-bold">
-                              {{ profile.balance|format_currency(profile.currency ?? default_currency) }}
-                            </div>
-                          </div>
-                          <a href="{{ 'client/profile'|url }}" class="btn btn-outline-primary btn-sm">
-                            {{ 'Update'|trans }}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
             </div>
             <div class="row row-cards">
@@ -243,9 +249,9 @@
                           {% endfor %}
                         </div>
                         {% else %}
-                                <div class="d-flex justify-content-center my-2 p-2">
-                                    <span class="m-0">{{ 'No recent support tickets'|trans }}</span>
-                                </div>
+                        <div class="d-flex justify-content-center my-2 p-2">
+                            <span class="m-0">{{ 'No recent support tickets'|trans }}</span>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
