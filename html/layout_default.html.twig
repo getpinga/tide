@@ -124,16 +124,8 @@
                 {% set currentLang = guest.system_locale %}
                 {% set countryCode = currentLang | slice(3, 2) %}
                 <div class="dropdown small-dropdown">
-                    <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-label="Language">
-                    <span class="flag flag-country-{{ countryCode | lower }}"></span>
-                      <span class="ms-2 d-none d-sm-inline">
-                      {% for lang in languages %}
-                        {% if lang.locale == currentLang %}
-                          {% set parts = lang.title|split(' (') %}
-                          {{ parts|length > 1 ? parts|slice(0, -1)|join(' (') : lang.title }}
-                        {% endif %}
-                      {% endfor %}
-                      </span>
+                    <a href="#" class="nav-link px-2 py-2 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-label="Change language" title="Change language">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M3.6 9h16.8" /><path d="M3.6 15h16.8" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end language-selector">
                         {% for lang in languages %}
@@ -159,9 +151,22 @@
                     </div>
                     {% endif %}
                 {% endif %}
+                <div class="d-flex align-items-center justify-content-center">
+                  <a href="?theme=dark" class="nav-link px-2 py-2 hide-theme-dark js-theme-toggler" title="Enable dark mode" aria-label="Enable dark mode">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                        <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                      </svg>
+                  </a>
+                  <a href="?theme=light" class="nav-link px-2 hide-theme-light js-theme-toggler" title="Enable light mode" aria-label="Enable light mode">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                        <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                        <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                      </svg>
+                  </a>
+                </div>
                 {% if not client %}
                 <div class="d-none d-md-inline-flex gap-2">
-                    <a href="{{ 'login'|url }}" class="btn btn-primary">
+                    <a href="{{ 'login'|url }}" class="btn btn-outline-secondary">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
@@ -169,7 +174,7 @@
                       </svg>
                       {{ 'Login'|trans }}
                     </a>
-                    <a href="{{ 'signup'|url }}" class="btn btn-secondary">
+                    <a href="{{ 'signup'|url }}" class="btn btn-primary">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -182,19 +187,6 @@
                 </div>
                 {% endif %}
               </div>
-            </div>
-            <div class="d-flex me-1 me-sm-2 me-md-3 gap-1 gap-sm-2">
-              <a href="?theme=dark" class="nav-link px-0 hide-theme-dark js-theme-toggler" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-                  </svg>
-              </a>
-              <a href="?theme=light" class="nav-link px-0 hide-theme-light js-theme-toggler" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                    <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
-                  </svg>
-              </a>
             </div>
             {% if settings.top_menu_signout %}
             {% if client %}
@@ -229,7 +221,7 @@
         <div class="collapse navbar-collapse" id="navbar-menu">
           <div class="navbar">
             <div class="container-xl">
-              <div class="row flex-column flex-md-row flex-fill align-items-center">
+              <div class="row g-0 flex-column flex-md-row flex-fill align-items-center">
                 <div class="col">
                   <ul class="navbar-nav">
                     {% if settings.top_menu_dashboard %}
@@ -337,27 +329,35 @@
                     </li>
                     {% endif %}
 
+                    {% if not client %}
+                      <li class="nav-item d-md-none mt-3 pt-3 px-3 pb-3 border-top w-100">
+                        <div class="d-flex gap-2 w-100">
+                          <a href="{{ 'login'|url }}" class="btn btn-outline-secondary flex-fill">
+                            <span class="nav-link-icon">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path>
+                                <path d="M20 12h-13l3 -3m0 6l-3 -3"></path>
+                              </svg>
+                            </span>
+                            {{ 'Login'|trans }}
+                          </a>
+
+                          <a href="{{ 'signup'|url }}" class="btn btn-primary flex-fill">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                              <path d="M16 19h6"></path>
+                              <path d="M19 16v6"></path>
+                              <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                            </svg>
+                            {{ 'Register'|trans }}
+                          </a>
+                        </div>
+                      </li>
+                    {% endif %}
                   </ul>
                 </div>
-                {% if not client %}
-                <div class="col col-md-auto">
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#profile" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false"
-                      >
-                        <span class="nav-link-icon d-md-none d-lg-inline-block">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
-                        </span>
-                        <span class="nav-link-title">{{ 'Profile'|trans }}</span>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="{{ '/login'|url }}">{{ 'Login'|trans }}</a>
-                        <a class="dropdown-item" href="{{ '/signup'|url }}">{{ 'Register'|trans }}</a>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                {% endif %}
               </div>
             </div>
           </div>
