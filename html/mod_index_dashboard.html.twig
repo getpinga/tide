@@ -166,10 +166,10 @@
                     <div class="card">
                         <div class="card-header py-3">
                           <div class="d-flex align-items-center justify-content-between w-100">
-                            <h3 class="card-title mb-0">{{ 'Recent orders'|trans }}</h3>
+                            <h3 class="card-title mb-0"><span class="status-dot status-green"></span> {{ 'Recent Orders'|trans }}</h3>
                             <div class="btn-list">
                               <a href="{{ 'order/service'|url }}" class="btn btn-sm btn-outline-secondary">
-                                {{ 'All orders'|trans }}
+                                {{ 'Orders'|trans }}
                               </a>
                               <a href="{{ 'order'|url }}" class="btn btn-sm btn-primary btn-animate-icon btn-animate-icon-rotate">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
@@ -183,19 +183,19 @@
                           {% for i, order in client.order_get_list({ "per_page": 5, "page": request.page, "hide_addons": 1 }).list %}
                             <a href="{{ 'order/service/manage'|url }}/{{ order.id }}" class="list-group-item py-3 list-group-item-action text-reset">
                               <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex flex-column text-truncate">
-                                  <div class="d-flex align-items-center gap-2">
-                                    <span class="fw-bold">#{{ order.id }}</span>
-                                    <span>{{ order.title|truncate(45) }}</span>
-                                  </div>
-                                  <span class="text-secondary small" title="{{ order.updated_at|format_date }}">
-                                    {{ order.updated_at|timeago }} {{ 'ago'|trans }}
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                  <span class="fw-bold">
+                                    {{ order.title starts with 'Domain ' and (order.title ends with ' registration' or order.title ends with ' transfer') ? order.title|split(' ')[1] : order.title }}
                                   </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                  <div class="text-secondary text-end">
-                                    <span class="badge {% if order.status == 'active' %}bg-success text-success-fg{% elseif order.status == 'pending_setup' %}bg-warning text-warning-fg{% elseif order.status == 'failed_setup' or order.status == 'suspended' or order.status == 'failed_renew' %}bg-danger text-danger-fg{% elseif order.status == 'canceled' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(order.status) }}</span>
+                                  <div class="text-secondary small text-end">
+                                    <div class="text-muted small">{{ 'Registered On'|trans }}</div>
+                                    <div class="text-secondary fw-semibold">{{ order.activated_at|date('Y-m-d H:i:s') }}</div>
                                   </div>
+                                  <span class="text-muted">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                                  </span>
                                 </div>
                               </div>
                             </a>
@@ -213,10 +213,10 @@
                     <div class="card">
                         <div class="card-header py-3">
                           <div class="d-flex align-items-center justify-content-between w-100">
-                            <h3 class="card-title mb-0">{{ 'Support tickets'|trans }}</h3>
+                            <h3 class="card-title mb-0">{{ 'Support Tickets'|trans }}</h3>
                             <div class="btn-list">
                               <a href="{{ 'support'|url }}" class="btn btn-sm btn-outline-secondary">
-                                {{ 'All tickets'|trans }}
+                                {{ 'Tickets'|trans }}
                               </a>
                               <a href="{{ 'support'|url({ 'ticket': 1 }) }}" class="btn btn-sm btn-primary btn-animate-icon btn-animate-icon-rotate">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
@@ -230,19 +230,20 @@
                           {% for i, ticket in client.support_ticket_get_list({ "per_page": 5 }).list %}
                             <a href="{{ 'support/ticket'|url }}/{{ ticket.id }}" class="list-group-item py-3 list-group-item-action text-reset">
                               <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex flex-column text-truncate">
-                                  <div class="d-flex align-items-center gap-2">
-                                    <span class="fw-bold">#{{ ticket.id }}</span>
-                                    <span>{{ ticket.subject|truncate(45) }}</span>
-                                  </div>
-                                  <span class="text-secondary small" title="{{ ticket.updated_at|format_date }}">
-                                    {{ ticket.updated_at|timeago }} {{ 'ago'|trans }}
+                                <div class="d-flex align-items-center gap-2 text-truncate">
+                                  <span class="fw-bold">
+                                    {{ ticket.subject|truncate(45) }}
                                   </span>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                  <div class="text-secondary text-end">
-                                    <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
+                                  <div class="text-secondary small text-end">
+                                    <div class="text-muted small">{{ 'Time Opened'|trans }}</div>
+                                    <div class="text-secondary fw-semibold">{{ ticket.activated_at|date('Y-m-d H:i:s') }}</div>
                                   </div>
+                                  <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
+                                  <span class="text-muted">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                                  </span>
                                 </div>
                               </div>
                             </a>
