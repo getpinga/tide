@@ -31,7 +31,7 @@
         </div>
     {% endif %}
 
-    <div class="row row-cards">
+    <div class="row g-3">
         <div class="col-12 col-md-6">
             <div class="card">
                 <form method="post" action="client/profile/update" id="profile-update" {{ fb_api_form({message: 'Profile Updated'|trans}) }}>
@@ -143,7 +143,60 @@
             </div>
         </div>
         <div class="col-12 col-md-6">
-            <div class="card mb-2 ">
+            {% if guest.extension_is_on({ 'mod': 'domaincontactvalidation' }) %}
+            {% set verification = client.domaincontactvalidation_get_status %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div>
+                        <h3 class="card-title">{{ 'Contact Verification'|trans }}</h3>
+                        <p class="card-subtitle">
+                            {{ 'Your registrant contact verification record.'|trans }}
+                        </p>
+                    </div>
+                </div>
+                {% if verification.status == 'validated' %}<div class="ribbon bg-green-lt">{{ 'Validated'|trans }}</div>{% elseif verification.status == 'pending' %}<div class="ribbon bg-orange-lt">{{ 'Pending'|trans }}</div>{% else %}<div class="ribbon bg-red-lt">{{ 'Not Validated'|trans }}</div>{% endif %}
+                <div class="card-body">
+                    {% if verification.is_validated %}
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-4">
+                                <div class="text-muted small">{{ 'Verified By'|trans }}</div>
+                                <div>{{ verification.verified_by|default('—', true) }}</div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="text-muted small">{{ 'Verified At'|trans }}</div>
+                                <div>
+                                    {% if verification.verified_at %}
+                                        {{ verification.verified_at|date('Y-m-d H:i:s') }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="text-muted small">{{ 'Method'|trans }}</div>
+                                <div>
+                                    {{ verification.verification_method
+                                        |default('—', true)
+                                        |replace({'_': ' '})
+                                        |title }}
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif verification.status == 'pending' %}
+                        <div class="alert alert-warning mb-0">
+                            {{ 'Your contact verification is currently pending.'|trans }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mb-0">
+                            {{ 'Your contact details have not yet been verified.'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="card mb-3">
                 <form method="post" action="{{ 'profile/change_password'|api_url }}" {{ fb_api_form() }}>
                     <div class="card-header">
                         <div>
