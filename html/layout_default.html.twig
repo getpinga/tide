@@ -2,10 +2,13 @@
 {% set active_locale = guest.system_locale|default('en')|replace({'_': '-'}) %}
 {% set canonical_url = guest.system_current_url|url %}
 {% set current_active_menu = active_menu|default('') %}
+{% set page_title = block('meta_title')|trim %}
+{% set title_prefix = settings.meta_title_prefix|default('')|trim %}
+{% set title_suffix = settings.meta_title_suffix|default('')|trim %}
 <html lang="{{ active_locale }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}"{% if settings.theme_color_enabled %} data-bs-theme-primary="{% if settings.theme_color == 1 %}primary{% elseif settings.theme_color == 2 %}purple{% elseif settings.theme_color == 3 %}pink{% elseif settings.theme_color == 4 %}red{% elseif settings.theme_color == 5 %}orange{% elseif settings.theme_color == 6 %}yellow{% elseif settings.theme_color == 7 %}green{% elseif settings.theme_color == 8 %}teal{% else %}indigo{% endif %}"{% endif %}>
 <head>
     <meta charset="utf-8">
-    <title>{{ (settings.meta_title_prefix|default('') ~ ' ' ~ block('meta_title') ~ ' ' ~ settings.meta_title_suffix|default(''))|trim }}</title>
+    <title>{{ [title_prefix, page_title, title_suffix]|filter(v => v is not empty)|join(' ') }}</title>
 
     <meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}">
     <meta name="keywords" content="{{ settings.meta_keywords }}">
@@ -19,7 +22,7 @@
     {% endblock %}
 
     {% block opengraph %}
-        <meta property="og:title" content="{{ (settings.meta_title_prefix|default('') ~ ' ' ~ block('meta_title') ~ ' ' ~ settings.meta_title_suffix|default(''))|trim }}" />
+        <meta property="og:title" content="{{ [title_prefix, page_title, title_suffix]|filter(v => v is not empty)|join(' ') }}" />
         <meta property="og:type" content="website" />
         <meta property="og:description" content="{{ block('meta_description') }}" />
         <meta property="og:url" content="{{ canonical_url }}" />

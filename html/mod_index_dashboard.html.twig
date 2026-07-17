@@ -2,8 +2,8 @@
 {% set active_menu = 'dashboard' %}
 {% set cart_currency = guest.cart_get_currency %}
 
-{% block meta_title %}{{ 'Dashboard'|trans }}{% endblock %}
-{% block page_header %}{{ 'Dashboard'|trans }}{% endblock %}
+{% block meta_title %}{% if client %}{{ 'Dashboard'|trans }}{% else %}{{ 'Home'|trans }}{% endif %}{% endblock %}
+{% block page_header %}{% if client %}{{ 'Dashboard'|trans }}{% else %}{{ 'Home'|trans }}{% endif %}{% endblock %}
 
 {% block body_class %}dashboard{% endblock %}
 
