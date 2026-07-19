@@ -164,9 +164,9 @@
 
                             <div class="dropdown-menu dropdown-menu-end currency-selector-menu">
                                 {% for code, title in currencies %}
-                                    <a href="#"
-                                       class="dropdown-item js-currency-option{% if code == selectedCurrency %} active{% endif %}"
-                                       data-currency="{{ code }}">
+                                    <button type="button"
+                                            class="dropdown-item js-currency-option{% if code == selectedCurrency %} active{% endif %}"
+                                            data-currency="{{ code }}">
 
                                         <span class="me-2">{{ code }}</span>
 
@@ -188,7 +188,7 @@
                                                 <path d="M5 12l5 5l10 -10"/>
                                             </svg>
                                         {% endif %}
-                                    </a>
+                                    </button>
                                 {% endfor %}
                             </div>
 
