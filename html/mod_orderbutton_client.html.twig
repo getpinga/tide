@@ -5,10 +5,59 @@
     display: block;
     width: 100%;
 }
-
 .iti .form-control,
 .iti__tel-input {
     width: 100%;
+}
+.phone-floating {
+    position: relative;
+    z-index: 20;
+}
+.phone-floating .iti {
+    width: 100%;
+}
+.phone-floating > label {
+    transform: scale(.85) translateY(-.5rem);
+    transform-origin: 0 0;
+    left: 3.25rem;
+    color: var(--tblr-secondary);
+    pointer-events: none;
+    z-index: 5;
+}
+.phone-floating .iti__tel-input {
+    height: calc(3.5rem + 2px);
+    min-height: calc(3.5rem + 2px);
+    padding-top: 1.625rem;
+    padding-bottom: .625rem;
+}
+.iti__dropdown-content {
+    background: var(--tblr-bg-surface, #fff);
+    opacity: 1;
+    z-index: 1056;
+}
+.iti__country-list {
+    background: var(--tblr-bg-surface, #fff);
+}
+.iti__search-input {
+    background: var(--tblr-bg-surface, #fff);
+}
+[data-bs-theme="dark"] .iti__dropdown-content,
+[data-bs-theme="dark"] .iti__country-list,
+[data-bs-theme="dark"] .iti__search-input {
+    background: var(--tblr-bg-surface);
+    color: var(--tblr-body-color);
+}
+.phone-floating > label,
+.phone-floating .iti__tel-input {
+    transition: opacity .15s ease, padding .15s ease;
+}
+.phone-floating:has(.iti__tel-input:not(:placeholder-shown)) > label {
+    opacity: 0;
+    visibility: hidden;
+}
+.phone-floating:has(.iti__tel-input:not(:placeholder-shown)) .iti__tel-input {
+    padding-top: .625rem;
+    padding-bottom: .625rem;
 }
 </style>
 
@@ -41,7 +90,7 @@
                                  tabindex="0">
                                 <form method="post" action="{{ 'client/login'|api_url(role: 'guest') }}" {{ fb_api_form({callback: 'onLogin'}) }}>
                                     <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
+                                        <div class="form-floating col-md-6 mb-3">
                                             <input class="form-control form-control-sm" type="email" name="email" id="email"
                                                    required="required"
                                                    value="{{ request.email }}"
@@ -49,7 +98,7 @@
                                                    data-validation-required-message="{{ 'You must fill in your email.'|trans }}">
                                             <label for="email" class="ms-2">{{ 'Email Address'|trans }}</label>
                                         </div>
-                                        <div class="form-floating col-md-7 mb-3">
+                                        <div class="form-floating col-md-6 mb-3">
                                             <input class="form-control form-control-sm" type="password" name="password" id="password"
                                                    required="required"
                                                    value="{{ request.password }}"
@@ -73,7 +122,31 @@
 
                                     {% set r = guest.client_required %}
                                     <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-floating">
+                                                <input class="form-control form-control-sm" type="text" name="first_name" id="first-name"
+                                                       required="required"
+                                                       value="{{ request.first_name }}"
+                                                       placeholder="{{ 'First Name'|trans }}">
+                                                <label for="first-name" class="ms-2">{{ 'First Name'|trans }}</label>
+                                            </div>
+                                        </div>
+ 
+                                        <div class="col-md-3 mb-3">
+                                            {% if 'last_name' in r %}
+                                            <div class="form-floating">
+                                                <input class="form-control form-control-sm" type="text" name="last_name" id="last_name"
+                                                       required="required"
+                                                       value="{{ request.last_name }}"
+                                                       placeholder="{{ 'Last Name'|trans }}">
+                                                <label for="last_name" class="ms-2">{{ 'Last Name'|trans }}</label>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-floating col-md-6 mb-3">
                                             <input class="form-control form-control-sm" type="email" name="email" id="reg-email"
                                                    required="required"
                                                    value="{{ request.email }}"
@@ -82,31 +155,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
-                                            <input class="form-control form-control-sm" type="text" name="first_name" id="first-name"
-                                                   required="required"
-                                                   value="{{ request.first_name }}"
-                                                   placeholder="{{ 'First Name'|trans }}">
-                                            <label for="first-name" class="ms-2">{{ 'First Name'|trans }}</label>
-                                        </div>
-                                    </div>
-
-                                    {% if 'last_name' in r %}
-                                    <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
-                                            <input class="form-control form-control-sm" type="text" name="last_name" id="last_name"
-                                                   required="required"
-                                                   value="{{ request.last_name }}"
-                                                   placeholder="{{ 'Last Name'|trans }}">
-                                            <label for="last_name" class="ms-2">{{ 'Last Name'|trans }}</label>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-
                                     {% if 'company' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <input class="form-control form-control-sm" type="text" name="company" id="company"
                                                        value="{{ request.company }}"
                                                        placeholder="{{ 'Company'|trans }}">
@@ -115,7 +166,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <input class="form-control form-control-sm" type="text" name="company_number" id="company_number"
                                                        value="{{ request.company_number }}"
                                                        placeholder="{{ 'Company number'|trans }}">
@@ -124,7 +175,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <input class="form-control form-control-sm" type="text" name="company_vat" id="company_vat"
                                                        value="{{ request.company_vat }}"
                                                        placeholder="{{ 'Company VAT number'|trans }}">
@@ -135,7 +186,7 @@
 
                                     {% if 'birthday' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <input class="form-control form-control-sm" type="date" name="birthday" id="birthday"
                                                        placeholder="{{ 'Birthday'|trans }}">
                                                 <label for="birthday" class="ms-2">{{ 'Birthday'|trans }}</label>
@@ -145,7 +196,7 @@
 
                                     {% if 'gender' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <select class="form-select form-select-sm" name="gender" id="gender">
                                                     <option value="male">Male</option>
                                                     <option value="female">Female</option>
@@ -157,29 +208,11 @@
                                         </div>
                                     {% endif %}
 
-                                    <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
-                                            <input class="form-control form-control-sm" type="password" name="password" id="reg-password"
-                                                   required="required"
-                                                   placeholder="{{ 'Password'|trans }}">
-                                            <label for="reg-password" class="ms-2">{{ 'Password'|trans }}</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
-                                            <input class="form-control form-control-sm" type="password" name="password_confirm" id="password-confirm"
-                                                   required="required"
-                                                   placeholder="{{ 'Confirm password'|trans }}">
-                                            <label for="password-confirm" class="ms-2">{{ 'Confirm password'|trans }}</label>
-                                        </div>
-                                    </div>
-
                                     {% if 'address_1' in r %}
                                     <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
+                                        <div class="form-floating col-md-6 mb-3">
                                             <input class="form-control form-control-sm" type="text" name="address_1" id="address_1"
-                                                   value="{{ request.address_1 }}"
+                                                   value="{{ request.address_1 }}" required="required" 
                                                    placeholder="{{ 'Address'|trans }}">
                                             <label for="address_1" class="ms-2">{{ 'Address'|trans }}</label>
                                         </div>
@@ -188,7 +221,7 @@
 
                                     {% if 'address_2' in r %}
                                     <div class="row">
-                                        <div class="form-floating col-md-7 mb-3">
+                                        <div class="form-floating col-md-6 mb-3">
                                             <input class="form-control form-control-sm" type="text" name="address_2" id="address_2"
                                                    value="{{ request.address_1 }}"
                                                    placeholder="{{ 'Address 2'|trans }}">
@@ -197,20 +230,44 @@
                                     </div>
                                     {% endif %}
 
-                                    {% if 'city' in r %}
+                                    <div class="row">
+                                        {% if 'postcode' in r %}
+                                            <div class="col-md-3 mb-3">
+                                                <div class="form-floating">
+                                                    <input class="form-control form-control-sm" type="text" required="required" name="postcode" id="postcode"
+                                                           value="{{ request.postcode }}"
+                                                           placeholder="{{ 'Zip/Postal Code'|trans }}">
+                                                    <label for="postcode" class="ms-2">{{ 'Zip/Postal Code'|trans }}</label>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if 'city' in r %}
+                                            <div class="col-md-3 mb-3">
+                                                <div class="form-floating">
+                                                    <input class="form-control form-control-sm" type="text" name="city" id="city"
+                                                           value="{{ request.city }}" required="required" 
+                                                           placeholder="{{ 'City'|trans }}">
+                                                    <label for="city" class="ms-2">{{ 'City'|trans }}</label>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if 'state' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
-                                                <input class="form-control form-control-sm" type="text" name="city" id="city"
-                                                       value="{{ request.city }}" required="required" 
-                                                       placeholder="{{ 'City'|trans }}">
-                                                <label for="city" class="ms-2">{{ 'City'|trans }}</label>
+                                            <div class="form-floating col-md-6 mb-3">
+                                                <input class="form-control form-control-sm" type="text" name="state" id="state"
+                                                       value="{{ request.state }}"
+                                                       placeholder="{{ 'State'|trans }}">
+                                                <label for="state" class="ms-2">{{ 'State'|trans }}</label>
                                             </div>
                                         </div>
                                     {% endif %}
 
                                     {% if 'country' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3">
                                                 <select class="form-select form-select-sm" name="country" id="country"
                                                         required="required">
                                                     <option value="">{{ '-- Select country --'|trans }}</option>
@@ -223,42 +280,39 @@
                                         </div>
                                     {% endif %}
 
-                                    {% if 'state' in r %}
-                                        <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
-                                                <input class="form-control form-control-sm" type="text" name="state" id="state"
-                                                       value="{{ request.state }}"
-                                                       placeholder="{{ 'State'|trans }}">
-                                                <label for="state" class="ms-2">{{ 'State'|trans }}</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
-                                    {% if 'postcode' in r %}
-                                        <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
-                                                <input class="form-control form-control-sm" type="text" name="postcode" id="postcode"
-                                                       value="{{ request.postcode }}"
-                                                       placeholder="{{ 'Zip/Postal Code'|trans }}">
-                                                <label for="postcode" class="ms-2">{{ 'Zip/Postal Code'|trans }}</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
                                     {% if 'phone' in r %}
                                         <div class="row">
-                                            <div class="form-floating col-md-7 mb-3">
+                                            <div class="form-floating col-md-6 mb-3 phone-floating">
                                                 <input type="hidden" name="phone_cc" id="phone_cc" value="{{ request.phone_cc }}">
-                                                <input class="form-control form-control-sm js-phone-input" type="tel" name="phone" id="phone" value="{{ request.phone }}" autocomplete="tel" data-initial-country="{{ request.country|default(guest.system_default_country)|lower }}" required="required" placeholder="{{ 'Phone Number'|trans }}">
+                                                <input class="form-control form-control-sm js-phone-input" type="tel" name="phone" id="phone" value="{{ request.phone }}" autocomplete="tel" data-initial-country="{{ request.country|default(guest.system_default_country)|lower }}" required="required" placeholder=" ">
+                                                <label for="phone" class="ms-2">{{ 'Phone Number'|trans }}</label>
                                             </div>
                                         </div>
                                     {% endif %}
+
+                                    <div class="row">
+                                        <div class="form-floating col-md-6 mb-3">
+                                            <input class="form-control form-control-sm" type="password" name="password" id="reg-password"
+                                                   required="required"
+                                                   placeholder="{{ 'Password'|trans }}">
+                                            <label for="reg-password" class="ms-2">{{ 'Password'|trans }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-floating col-md-6 mb-3">
+                                            <input class="form-control form-control-sm" type="password" name="password_confirm" id="password-confirm"
+                                                   required="required"
+                                                   placeholder="{{ 'Confirm password'|trans }}">
+                                            <label for="password-confirm" class="ms-2">{{ 'Confirm password'|trans }}</label>
+                                        </div>
+                                    </div>
 
                                     {% set custom_fields = guest.client_custom_fields %}
                                     {% for field_name, field in custom_fields %}
                                         {% if field.active %}
                                             <div class="row">
-                                                <div class="form-floating col-md-7 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
                                                     <input class="form-control form-control-sm" type="text" name="{{ field_name }}" id="{{ field_name }}"
                                                            value="{{ request.(field_name) }}"
                                                            {% if field.required %}required="required"{% endif %}
