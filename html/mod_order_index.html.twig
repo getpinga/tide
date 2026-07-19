@@ -1,5 +1,6 @@
 {% extends request.ajax ? "layout_blank.html.twig" : "layout_default.html.twig" %}
 {% set active_menu = 'order' %}
+{% set cart_currency = guest.cart_get_currency.code %}
 
 {% block meta_title %}{{ 'Order'|trans }}{% endblock %}
 {% block meta_description %}{{ 'Browse available products and services, compare options, and place your order online.'|trans }}{% endblock %}
@@ -92,7 +93,7 @@
                             <div class="text-uppercase text-muted font-weight-medium mb-4">{{ product.type }}</div>
                             <h3>{{ product.title }}</h3>
                             {% if product.type != 'domain' and product.price_starting_from is defined and product.price_starting_from is not empty %}
-                              <div class="h2 my-3">{{ product.price_starting_from|format_currency(profile.currency ?? default_currency) }}</div>
+                              <div class="h2 my-3">{{ product.price_starting_from|format_currency(cart_currency ?? default_currency) }}</div>
                             {% endif %}
                             <div class="text-center mt-4">
                                <a href="{{ ('/order/' ~ product.slug) | url }}" class="btn {% if product.type == 'domain' %}btn-green{% elseif product.type == 'hosting' %}btn-orange{% elseif product.type == 'downloadable' %}btn-indigo{% elseif product.type == 'license' %}btn-pink{% elseif product.type == 'dns' %}btn-azure{% else %}btn-cyan{% endif %} w-100">{{ 'Choose'|trans }}</a>
