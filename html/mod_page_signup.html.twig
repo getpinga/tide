@@ -99,7 +99,7 @@
                 <div class="mb-3">
                     <label class="form-label" for="address_1">{{ 'Address'|trans }}</label>
                     <input class="form-control" id="address_1" type="text" name="address_1"
-                           value="{{ request.address_1 }}"/>
+                           value="{{ request.address_1 }}" required="required" />
                 </div>
             {% endif %}
 
@@ -111,13 +111,31 @@
                 </div>
             {% endif %}
 
-            {% if 'city' in r %}
+            {% if 'state' in r %}
                 <div class="mb-3">
-                    <label class="form-label" for="city">{{ 'City'|trans }}</label>
-                    <input class="form-control" id="city" type="text" name="city"
-                           value="{{ request.city }}" required="required"/>
+                    <label class="form-label" for="state">{{ 'State'|trans }}</label>
+                    <input class="form-control" id="state" type="text" name="state"
+                           value="{{ request.state }}"/>
                 </div>
             {% endif %}
+
+            <div class="row">
+                {% if 'postcode' in r %}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="postcode">{{ 'Zip/Postal Code'|trans }}</label>
+                        <input class="form-control" id="postcode" type="text" name="postcode"
+                               value="{{ request.postcode }}" required="required"/>
+                    </div>
+                {% endif %}
+
+                {% if 'city' in r %}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="city">{{ 'City'|trans }}</label>
+                        <input class="form-control" id="city" type="text" name="city"
+                               value="{{ request.city }}" required="required"/>
+                    </div>
+                {% endif %}
+            </div>
 
             {% if 'country' in r %}
                 <div class="mb-3">
@@ -131,25 +149,9 @@
                 </div>
             {% endif %}
 
-            {% if 'state' in r %}
-                <div class="mb-3">
-                    <label class="form-label" for="state">{{ 'State'|trans }}</label>
-                    <input class="form-control" id="state" type="text" name="state"
-                           value="{{ request.state }}"/>
-                </div>
-            {% endif %}
-
-            {% if 'postcode' in r %}
-                <div class="mb-3">
-                    <label class="form-label" for="postcode">{{ 'Zip/Postal Code'|trans }}</label>
-                    <input class="form-control" id="postcode" type="text" name="postcode"
-                           value="{{ request.postcode }}"/>
-                </div>
-            {% endif %}
-
             {% if 'phone' in r %}
                 <div class="mb-3">
-                    <label class="form-label" for="phone">{{ 'Phone Number'|trans }}</label>
+                    <label class="form-label required" for="phone">{{ 'Phone Number'|trans }}</label>
                     <input type="hidden" id="phone_cc" name="phone_cc" value="{{ request.phone_cc }}">
                     <input class="form-control js-phone-input" id="phone" type="tel" name="phone" value="{{ request.phone }}" autocomplete="tel" data-initial-country="{{ request.country|default(guest.system_default_country)|lower }}" required="required"/>
                 </div>
