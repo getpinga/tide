@@ -3,36 +3,70 @@
 
 {% import "macro_functions.html.twig" as mf %}
 
-{% block meta_title %}
-    {% if request.order matches '/^\\d+$/' %}
-        {{ 'Order'|trans }}
-    {% elseif request.checkout matches '/^\\d+$/' %}
-        {{ 'Cart'|trans }}
-    {% else %}
-        {{ 'Choose products we offer for selling'|trans }}
-    {% endif %}
-{% endblock %}
-
 {% set loader_nr = request.loader | default("8")%}
 {% set loader_url = ('img/assets/loaders/loader'~loader_nr~'.gif') %}
 {% set product = request.order ? guest.product_get({"id":request.order}) : null %}
 {% set cart_currency = guest.cart_get_currency %}
-
-{% block body_class %}order-index{% endblock %}
-{% block breadcrumb %}
-    {% if request.order matches '/^\\d+$/' %}
-        <li class="breadcrumb-item"><a href="{{ 'order' | url}}">{{ 'Order'|trans }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ (request.order == 1 ? 'Domain Configuration' : 'Product Configuration')|trans }}</li>
-    {% elseif request.checkout matches '/^\\d+$/' %}
-        <li class="breadcrumb-item"><a href="{{ 'order' | url}}">{{ 'Order'|trans }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ 'Cart'|trans }}</li>
-    {% endif %}
-{% endblock %}
-{% block content_before %}{% endblock %}
-
 {% if product is not defined or not product %}
     {% set product = request.product ? guest.product_get({"id":request.product}) : null %}
 {% endif %}
+
+{% set product_type = product.type|default('custom') %}
+
+{% set product_type_labels = {
+    'domain': 'Domains'|trans,
+    'hosting': 'Web Hosting'|trans,
+    'vps': 'VPS Hosting'|trans,
+    'license': 'Software Licenses'|trans,
+    'downloadable': 'Downloads'|trans,
+    'addon': 'Add-ons'|trans,
+    'custom': 'Services'|trans
+} %}
+
+{% set product_type_label = product_type_labels[product_type]|default('Services'|trans) %}
+
+{% if product_type == 'domain' %}
+    {% set product_page_title = 'Find your domain'|trans %}
+{% else %}
+    {% set product_page_title = product.title|default(product_type_label) %}
+{% endif %}
+
+{% block meta_title %}
+    {% if request.order matches '/^\\d+$/' %}
+        {% if product_type == 'domain' %}
+            {{ 'Find your domain'|trans }}
+        {% else %}
+            {{ product.title|default(product_type_label) }} - {{ product_type_label }}
+        {% endif %}
+
+    {% elseif request.checkout matches '/^\\d+$/' %}
+        {{ 'Cart'|trans }}
+
+    {% else %}
+        {{ 'Products'|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block body_class %}order-index{% endblock %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item">
+            <a href="{{ 'order'|url }}">
+                {{ 'Order'|trans }}
+            </a>
+        </li>
+
+    {% if request.order matches '/^\\d+$/' %}
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ product_page_title }}
+        </li>
+
+    {% elseif request.checkout matches '/^\\d+$/' %}
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ 'Cart'|trans }}
+        </li>
+    {% endif %}
+{% endblock %}
+{% block content_before %}{% endblock %}
 
 {% block content %}
 {% if request.order matches '/^\\d+$/' %}
@@ -42,8 +76,25 @@
         <div class="card-header py-3 py-3">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div>
-                    <h2 class="mb-1">{{ (request.order == 1 ? 'Domain Configuration' : 'Product Configuration')|trans }}</h2>
+                    <div class="d-flex align-items-center gap-2">
+                        <h1 class="mb-1">{{ product_page_title }}</h1>
+
+                        {% if product_type != 'domain' %}
+                            <span class="badge bg-primary-lt text-primary">
+                                {{ product_type_label }}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <span class="small text-muted">
+                        {% if product_type == 'domain' %}
+                            {{ 'Search for a new domain or transfer one you already own.'|trans }}
+                        {% else %}
+                            {{ 'Choose your billing cycle and available options.'|trans }}
+                        {% endif %}
+                    </span>
                 </div>
+
                 <div>
                     {% set cart = guest.cart_get %}
                     <a href="{{ 'orderbutton?checkout=1'|url }}" class="btn btn-light position-relative">
