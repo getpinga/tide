@@ -513,13 +513,15 @@
                      <div class="mb-3">
                         <div class="form-label">Payment Options</div>
                         <div>
+                           {% set gateway_selected = false %}
                            {% for gtw in guest.invoice_gateways %}
-                           {% if cart.currency.code in gtw.accepted_currencies %}
+                           {% if cart.currency.code in gtw.accepted_currencies and (gtw.allow_single or (cart.subscribable|default(false) and gtw.allow_recurrent)) %}
                            <label class="form-check form-check-inline">
-                           <input class="form-check-input" type="radio" 
-                           name="gateway_id" id={{gtw.id}} value="{{gtw.id}}" {{ loop.first ? 'checked' : '' }}>
-                           <span class="form-check-label">{{ 'Pay by'|trans }} {{ gtw.title }}</span>
+                               <input class="form-check-input" type="radio" 
+                               name="gateway_id" id={{gtw.id}} value="{{gtw.id}}" {{ not gateway_selected ? 'checked' : '' }}>
+                               <span class="form-check-label">{{ 'Pay by'|trans }} {{ gtw.title }}</span>
                            </label>
+                           {% set gateway_selected = true %}
                            {% endif %}
                            {% endfor %}
                         </div>
