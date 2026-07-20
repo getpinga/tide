@@ -21,7 +21,7 @@
             <div class="card-header py-3 py-3">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div>
-                        <h1 class="mb-1">{{ 'Products'|trans }}</h1>
+                        <h1 class="mb-1">{{ 'Order'|trans }}</h1>
                         <span class="small text-muted">{{ 'Browse available products and services, compare options, and place your order online.'|trans }}</span>
                     </div>
                     <div>
@@ -38,8 +38,10 @@
             <div class="card-body">
                 {% for i, category in guest.product_category_get_list.list %}
                 {% if not loop.first %}<hr />{% endif %}
-                <h2{% if not loop.first %} class="mt-4"{% endif %}>{{ category.title }}</h2>
-                <span>{{ category.description|default('', true)|markdown_to_html }}</span>
+                {% if loop.length > 1 %}
+                    <h2{% if not loop.first %} class="mt-4"{% endif %}>{{ category.title }}</h2>
+                    <span>{{ category.description|default('', true)|markdown_to_html }}</span>
+                {% endif %}
                 <div class="row row-cards">
                    {% for i, product in category.products|sort((a, b) => a.priority <=> b.priority) %}
                    <div class="{% if loop.length == 1 %}col-sm-12 col-lg-12{% elseif loop.length == 2 %}col-sm-6 col-lg-6{% elseif loop.length == 3 %}col-sm-6 col-lg-4{% else %}col-sm-6 col-lg-3{% endif %}">
