@@ -238,7 +238,7 @@
                                 <div class="d-flex align-items-center gap-3">
                                   <div class="text-secondary small text-end">
                                     <div class="text-muted small">{{ 'Time Opened'|trans }}</div>
-                                    <div class="text-secondary fw-semibold">{{ ticket.activated_at|date('Y-m-d H:i:s') }}</div>
+                                    <div class="text-secondary fw-semibold">{{ ticket.created_at|date('Y-m-d H:i:s') }}</div>
                                   </div>
                                   <span class="badge {% if ticket.status == 'open' %}bg-success text-success-fg{% elseif ticket.status == 'on_hold' %}bg-warning text-warning-fg{% elseif ticket.status == 'closed' %}bg-secondary text-secondary-fg{% endif %}">{{ mf.status_name(ticket.status) }}</span>
                                   <span class="text-muted">
