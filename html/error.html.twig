@@ -1,11 +1,11 @@
 {% extends "layout_default.html.twig" %}
 
-{% block meta_title %}{{ 'Error'|trans }} {{ exception.getCode|default(404) }}{% endblock %}
+{% block meta_title %}{{ 'Error'|trans }} {{ exception.getCode ?? 404 }}{% endblock %}
 
 {% block body_class %}error-page{% endblock %}
 
 {% block breadcrumb %}
-    <li class="active breadcrumb-item" aria-current="page">{{ exception.getCode|default(404) }}</li>
+    <li class="active breadcrumb-item" aria-current="page">{{ exception.getCode ?? 404 }}</li>
 {% endblock %}
 
 {% block content %}

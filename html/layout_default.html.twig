@@ -50,7 +50,7 @@
     {% block js %}{% endblock %}
 
     {% if settings.inject_head|default('') %} 
-        {{ settings.inject_head|default('') | raw }} 
+        {{ settings.inject_head|default('')|raw }}
     {% endif %}
 </head>
 
