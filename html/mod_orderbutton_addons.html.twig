@@ -27,11 +27,11 @@
             <div class="text-start text-md-end" style="min-width: 110px;">
               {% if addon.pricing.type is same as('once') %}
                 <span class="badge bg-success text-success-fg">
-                  {{ (addon.pricing.once.price + addon.pricing.once.setup) |format_currency(profile.currency ?? default_currency) }}
+                  {{ (addon.pricing.once.price + addon.pricing.once.setup) |format_currency((profile|default({})).currency|default(default_currency)) }}
                 </span>
               {% elseif addon.pricing.type is same as('free') %}
                 <span class="badge bg-success text-success-fg">
-                  {{ 0 |format_currency(profile.currency ?? default_currency) }}
+                  {{ 0 |format_currency((profile|default({})).currency|default(default_currency)) }}
                 </span>
               {% elseif addon.pricing.type is same as('recurrent') %}
                 {% set periods = guest.system_periods %}
@@ -41,9 +41,9 @@
                   {% for code, prices in addon.pricing.recurrent %}
                     {% if prices.enabled %}
                     <option value="{{ code }}">
-                      {{ prices.price |format_currency(profile.currency ?? default_currency) }}
+                      {{ prices.price |format_currency((profile|default({})).currency|default(default_currency)) }}
                       {% if prices.setup != '0.00' %}
-                        + {{ prices.setup |format_currency(profile.currency ?? default_currency) }} {{ 'setup'|trans }}
+                        + {{ prices.setup |format_currency((profile|default({})).currency|default(default_currency)) }} {{ 'setup'|trans }}
                       {% endif %}
                       ({{ periods[code] }})
                     </option>

@@ -4,17 +4,17 @@
 {% set company = guest.system_company %}
 {% set public_logo_url = company.logo_url %}
 {% set public_dark_logo_url = company.logo_url_dark %}
-{% set page_title = (settings.meta_title_prefix ~ ' ' ~ block('meta_title') ~ ' ' ~ settings.meta_title_suffix)|trim %}
-{% set meta_description = block('meta_description')|default(settings.meta_description) %}
-<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}"{% if settings.theme_color_enabled %} data-bs-theme-primary="{% if settings.theme_color == 1 %}primary{% elseif settings.theme_color == 2 %}purple{% elseif settings.theme_color == 3 %}pink{% elseif settings.theme_color == 4 %}red{% elseif settings.theme_color == 5 %}orange{% elseif settings.theme_color == 6 %}yellow{% elseif settings.theme_color == 7 %}green{% elseif settings.theme_color == 8 %}teal{% else %}indigo{% endif %}"{% endif %}>
+{% set page_title = (settings.meta_title_prefix|default('') ~ ' ' ~ block('meta_title') ~ ' ' ~ settings.meta_title_suffix|default(''))|trim %}
+{% set meta_description = block('meta_description')|default(settings.meta_description|default('')) %}
+<html lang="{{ guest.system_locale|replace({'_': '-'}) }}"{% if guest.system_locale in ['ar_EG', 'ar_SA', 'he_IL'] %} {{ 'dir="rtl"'| raw}}{% endif %} data-bs-theme="{{ settings.theme|default('light') }}"{% if settings.theme_color_enabled|default('') %} data-bs-theme-primary="{% if settings.theme_color|default('') == 1 %}primary{% elseif settings.theme_color|default('') == 2 %}purple{% elseif settings.theme_color|default('') == 3 %}pink{% elseif settings.theme_color|default('') == 4 %}red{% elseif settings.theme_color|default('') == 5 %}orange{% elseif settings.theme_color|default('') == 6 %}yellow{% elseif settings.theme_color|default('') == 7 %}green{% elseif settings.theme_color|default('') == 8 %}teal{% else %}indigo{% endif %}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <title>{{ page_title }}</title>
 
     <meta name="description" content="{% block meta_description %}{{ meta_description }}{% endblock %}">
-    <meta name="keywords" content="{{ settings.meta_keywords }}">
-    <meta name="robots" content="{{ settings.meta_robots }}">
-    <meta name="author" content="{{ settings.meta_author }}">
+    <meta name="keywords" content="{{ settings.meta_keywords|default('') }}">
+    <meta name="robots" content="{{ settings.meta_robots|default('') }}">
+    <meta name="author" content="{{ settings.meta_author|default('') }}">
     <meta name="generator" content="FOSSBilling">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
